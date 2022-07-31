@@ -11,13 +11,61 @@ Page({
     },
     showPlay: true,
     showMoreDeri: false,
+    multiArray: [['生命科学'], ['基础'], ['学习模式']],
+    objectMultiArray: [
+      [
+        {
+          id: 0,
+          name: '无脊柱动物'
+        },
+        {
+          id: 1,
+          name: '脊柱动物'
+        }
+      ], [
+        {
+          id: 0,
+          name: '扁性动物'
+        },
+        {
+          id: 1,
+          name: '线形动物'
+        },
+        {
+          id: 2,
+          name: '环节动物'
+        },
+        {
+          id: 3,
+          name: '软体动物'
+        },
+        {
+          id: 3,
+          name: '节肢动物'
+        }
+      ], [
+        {
+          id: 0,
+          name: '猪肉绦虫'
+        },
+        {
+          id: 1,
+          name: '吸血虫'
+        }
+      ]
+    ],
+    multiIndex: [0, 0, 0],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: async function () {
-    const useDict = app.globalData.useDict
+    console.log("words onLoad start")
+    wx.redirectTo({
+      url: 'pages/index/index',
+    })
+    const useDict = app.globalData.dictInfo.useDict
     var dictionary = wx.getStorageSync(useDict)
     //console.log('dictionary: ', dictionary)
 
@@ -26,17 +74,13 @@ Page({
         title: '获取词库中',
       })
       const db = wx.cloud.database()
-      app.globalData.useDict = 'general'
-      var getRes = await db.collection('dictionary').doc(app.globalData.useDict).get()
+      var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
       const dataTemp = getRes.data
       console.log(dataTemp)
-      wx.setStorageSync(app.globalData.useDict, dataTemp.dictionary)
-      // for (var key in Object.keys(dataTemp.dictionary)) {
-      //   //console.log('key: ', Object.keys(dataTemp.dictionary)[key])
-      //   wx.setStorageSync(app.globalData.useDict, dataTemp.dictionary)
-      // }
+
+      wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp.dictionary)
       
-      const useDict = app.globalData.useDict
+      const useDict = app.globalData.dictInfo.useDict
       var dictionary = wx.getStorageSync(useDict)
       //console.log('dictionary: ', dictionary)
     }
@@ -154,7 +198,17 @@ Page({
 
   onMoreDeri: function () {
     this.setData({
-      showMoreDeri: true
+      showMoreDeri: !this.data.showMoreDeri
+    })
+  },
+
+  onDeriDetail: function (event) {
+    console.log(event.target.id.substr(4,1))
+    var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
+    wx.showModal({
+      title: deri_obj.word,
+      content: deri_obj.bing + '\r\n 词频：' + String(deri_obj.count), 
+      showCancel: false
     })
   },
 
@@ -176,7 +230,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: async function () {
-    await wx.setStorageSync(app.globalData.useDict, this.data.dictionary)
+    wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
     try {
       clearTimeout(app.globalData.timeout)
     } catch {

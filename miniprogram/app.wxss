@@ -1,5 +1,5 @@
-/* 引入 weui 组件 */
-@import './miniprogram_npm/weui-miniprogram/weui-wxss/dist/style/weui.wxss';
+/* 引入 weui 组件
+@import './miniprogram_npm/weui-miniprogram/weui-wxss/dist/style/weui.wxss'; */
 
 page {
   --footer-height: 10vh;
