@@ -1,1 +1,32 @@
 /* pages/menu/menu.wxss */
+
+page {
+  background-color: #F0F0E8;
+}
+
+/* 以下3个样式来自 https://blog.csdn.net/Hero_rong/article/details/96971853 */
+picker-view {
+  background-color: #FFF;
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 55%;
+  border-radius: 30rpx;
+  box-shadow: 0px 7px 6px -9px black;
+}
+
+picker-view-column {
+  border-radius: 30rpx;
+  color: #444444;
+  font-size: 36rpx;
+}
+  
+.pickerCol {
+  width: 50%;
+  height: 96rpx;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right,#FBFBFB,#FFAC30,#FBFBFB) 1 1;
+  margin-left:25%;
+}
+/* 来自https://blog.csdn.net/Hero_rong/article/details/96971853的样式结束 */

@@ -11,50 +11,22 @@ Page({
     },
     showPlay: true,
     showMoreDeri: false,
-    multiArray: [['生命科学'], ['基础'], ['学习模式']],
-    objectMultiArray: [
-      [
-        {
-          id: 0,
-          name: '无脊柱动物'
-        },
-        {
-          id: 1,
-          name: '脊柱动物'
-        }
-      ], [
-        {
-          id: 0,
-          name: '扁性动物'
-        },
-        {
-          id: 1,
-          name: '线形动物'
-        },
-        {
-          id: 2,
-          name: '环节动物'
-        },
-        {
-          id: 3,
-          name: '软体动物'
-        },
-        {
-          id: 3,
-          name: '节肢动物'
-        }
-      ], [
-        {
-          id: 0,
-          name: '猪肉绦虫'
-        },
-        {
-          id: 1,
-          name: '吸血虫'
-        }
-      ]
-    ],
-    multiIndex: [0, 0, 0],
+    useMode: app.globalData.dictInfo.useMode,
+    showChinese: false
+  },
+
+  calFont: async function (deris) {
+    try {
+      var font01 = Math.min(40, 900/(deris[0].word.length+deris[1].word.length+5))
+    } catch {
+      return [40, 38]
+    }
+    try {
+      var font23 = Math.min(38, font01 - 1, 860/(deris[2].word.length+deris[3].word.length+5))
+    } catch {
+      return [font01, 38]
+    }
+    return [font01, font23]
   },
 
   /**
@@ -62,10 +34,15 @@ Page({
    */
   onLoad: async function () {
     console.log("words onLoad start")
-    wx.redirectTo({
-      url: 'pages/index/index',
-    })
     const useDict = app.globalData.dictInfo.useDict
+    switch (app.globalData.dictInfo.useMode) {
+      case '识记模式':
+        this.data.chooseStatus = 'learnt'
+        break
+      case '检验模式':
+        this.data.chooseStatus = 'tested'
+        break
+    }
     var dictionary = wx.getStorageSync(useDict)
     //console.log('dictionary: ', dictionary)
 
@@ -75,19 +52,41 @@ Page({
       })
       const db = wx.cloud.database()
       var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
-      const dataTemp = getRes.data
+      const dataTemp = getRes.data.dictionary
       console.log(dataTemp)
 
-      wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp.dictionary)
+      wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp)
       
       const useDict = app.globalData.dictInfo.useDict
       var dictionary = wx.getStorageSync(useDict)
       //console.log('dictionary: ', dictionary)
+    } 
+    
+    else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict)) {
+      wx.showLoading({
+        title: '更新词库中',
+      })
+      const db = wx.cloud.database()
+      var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
+      var dataTemp = getRes.data.dictionary
+      console.log('更新词库中', dataTemp)
+      for (var i in dictionary) {
+        let theOldItem = dictionary[i]
+        let itemIndex = dataTemp.findIndex((item) => item._id === theOldItem._id)
+        dataTemp[itemIndex].learnt = theOldItem.learnt
+        dataTemp[itemIndex].tested = theOldItem.tested
+        // 本地学习过程中在 dictionary 内添加任何属性均需在这里存入 Storage
+      }
+      wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp)
+      console.log('更新词库完毕~')
+      let dict_need_refresh = wx.getStorageSync('dict_need_refresh')
+      dict_need_refresh.splice(dict_need_refresh.indexOf(app.globalData.dictInfo.useDict), 1)
+      wx.setStorageSync('dict_need_refresh', dict_need_refresh)
     }
 
     var allDone = true
     for (var w in dictionary) {
-      allDone = allDone && dictionary[w].done
+      allDone = allDone && dictionary[w][this.data.chooseStatus]
     }
     if (allDone) {
       wx.showToast({
@@ -95,7 +94,7 @@ Page({
         icon: 'none'
       })
       for (var w in dictionary) {
-        dictionary[w].done = false
+        dictionary[w][this.data.chooseStatus] = false
       }
       wx.setStorageSync(useDict, dictionary)
       this.onLoad()
@@ -105,7 +104,7 @@ Page({
     const revered = indexArray.reverse()
     for (var i in revered) {
       var indexTemp = revered[i]
-      if (dictionary[indexTemp].done) {
+      if (dictionary[indexTemp][this.data.chooseStatus]) {
         var index = Number(indexTemp) + 1
         break
       }
@@ -119,59 +118,73 @@ Page({
     }
 
     // 计算衍生词字号大小
-    var font01 = Math.min(40, 800/(dictionary[index].deris[0].word.length+dictionary[index].deris[1].word.length+5))
-    var font23 = Math.min(38, 800/(dictionary[index].deris[2].word.length+dictionary[index].deris[3].word.length+5))
+    // let font01 = Math.min(40, 800/(dictionary[index].deris[0].word.length+dictionary[index].deris[1].word.length+5))
+    // let font23 = Math.min(38, 800/(dictionary[index].deris[2].word.length+dictionary[index].deris[3].word.length+5))
+    let fontRes = await this.calFont(dictionary[index].deris)
+    console.log("fontRes: ", fontRes)
 
     this.setData({
       dictionary: dictionary,
       indexArray: indexArray,
       index: index,
-      font01: font01,
-      font23: font23
+      font01: fontRes[0],
+      font23: fontRes[1]
     })
 
     this.InnerAudioContext = wx.createInnerAudioContext()
-    this.InnerAudioContext.src = 'http://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
+    this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
     //this.InnerAudioContext.play()
     this.InnerAudioContext.onEnded(() => {
       app.globalData.timeout = setTimeout(this.onPlay, 1000)
     })
   },
 
+  onShowChinese: function () {
+    this.setData({showChinese: true})
+  },
+
   onDone: function () {
-    this.data.dictionary[this.data.index].done = true
+    this.data.dictionary[this.data.index][this.data.chooseStatus] = true
     this.onNext()
   },
 
-  onNext: function () {
+  onNext: async function () {
     //console.log('index: ', this.data.index)
     //console.log('indexArray[-1]: ', this.data.indexArray.length)
     if (this.data.index+1 >= this.data.indexArray.length) {
       var dictionary = this.data.dictionary
       dictionary.sort((a, b) => {
-        return Number(Boolean(b.done)) - Number(Boolean(a.done))
+        return Number(Boolean(b[this.data.chooseStatus])) - Number(Boolean(a[this.data.chooseStatus]))
       })
       //console.log('sortedDict: ', dictionary)
       wx.setStorageSync('dictionary', dictionary)
       wx.showToast({
-        title: '学完一遍啦\r\n正在返回词典菜单',
+        title: '本词典到底啦\r\n重新翻出尚未掌握的',
         icon: 'none',
         success: function () {
-          wx.navigateBack({
-            delta: 1
+          this.setData({
+            index: 0,
+            showChinese: false
           })
         }
       })
+    } else {
+      this.setData({
+        index: this.data.index + 1,
+        showChinese: false
+      })
     }
-    this.setData({
-      index: this.data.index + 1
-    })
+  
     this.InnerAudioContext.destroy()
     this.InnerAudioContext = wx.createInnerAudioContext()
+    let fontRes = await this.calFont(this.data.dictionary[this.data.index].deris)
+    console.log("fontRes: ", fontRes)
     this.setData({
       showPlay: true,
+      font01: fontRes[0],
+      font23: fontRes[1]
     })
-    this.InnerAudioContext.src = 'http://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
+    this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
     this.InnerAudioContext.onEnded(() => {
       app.globalData.timeout = setTimeout(this.onPlay, 1000)
     })
@@ -183,7 +196,6 @@ Page({
       showPlay: false,
     })
   },
-
   onPause: function () {
     try {
       clearTimeout(app.globalData.timeout)
@@ -223,7 +235,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      useMode: app.globalData.dictInfo.useMode
+    })
   },
 
   /**
@@ -268,10 +282,10 @@ Page({
       // 来自页面内转发按钮
       console.log(res.target)
     }
-    var title = '植物科学高频英文单词 扫清文献阅读障碍'
+    let title = '生科SCI高频英文单词 扫清文献阅读障碍'
     return {
       title: title,
-      path: '/pages/index/index',
+      path: '/pages/menu/menu',
       imageUrl: 'cloud://botanydict-v1f9h.626f-botanydict-v1f9h-1300672096/photochemical.jpg',
     }
   },

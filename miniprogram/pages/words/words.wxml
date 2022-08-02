@@ -47,9 +47,10 @@
     </view>
 
     </view>
-    <view class="subcontainer">
+    <view class="subcontainer" catchtap="onShowChinese">
       <!--<text>解释</text>--> 
-      <text class="subtitle">{{dictionary[index].chosen}}</text>
+      <text class="subtitle" wx:if="{{useMode==='识记模式' || showChinese}}">{{dictionary[index].chosen}}</text>
+      <text class="subtitle" wx:else="index==0" style="font-style: oblique;">点击查看释义（核对答案~）</text>
     </view>
     <view class="subcontainer">
       <button type="primary" size='default' class='btn1' bindtap="onDone">我记住了</button>
@@ -81,10 +82,10 @@
     <button type="primary" size='default' class='btn1' catchtap="onMoreDeri" style="margin-top: 50rpx;">返回</button>
 
   </view>
-  <view class="botton-right-float">
+  <!-- <view class="botton-right-float">
     <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
       <text>选择词典</text>
       <text>/模式</text>
     </picker>
-  </view>
+  </view> -->
 </view>
