@@ -1,7 +1,7 @@
 <!--pages/menu/menu.wxml--> 
 
 
-<view class="container1">
+<view class="container1" style="width: 100%;">
   <view class="subcontainer"><text class="title">请选择您要使用的词库和模式</text></view>
   
   <picker-view 
