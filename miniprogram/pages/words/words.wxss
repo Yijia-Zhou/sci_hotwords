@@ -162,12 +162,15 @@ page {
 .table {
   border: 0px solid darkgray;
   width: 100%;
-  margin-top: 12%;
+  position: absolute;
+  top: 50rpx;
+  padding-bottom: 240rpx;
 }
 .tr {
   display: flex;
   width: 100%;
   justify-content: center;
+  min-height: 3rem;
   /* height: 3rem; */
   align-items: center;
 }
