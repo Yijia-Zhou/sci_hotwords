@@ -24,7 +24,7 @@ Page({
     try {
       var font23 = Math.min(38, font01 - 1, 860/(deris[2].word.length+deris[3].word.length+5))
     } catch {
-      return [font01, 38]
+      return [font01, Math.min(38, font01-1)]
     }
     return [font01, font23]
   },
@@ -53,7 +53,6 @@ Page({
       const db = wx.cloud.database()
       var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
       const dataTemp = getRes.data.dictionary
-      console.log(dataTemp)
 
       wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp)
       
@@ -157,15 +156,17 @@ Page({
         return Number(Boolean(b[this.data.chooseStatus])) - Number(Boolean(a[this.data.chooseStatus]))
       })
       //console.log('sortedDict: ', dictionary)
-      wx.setStorageSync('dictionary', dictionary)
+      wx.setStorageSync(app.globalData.dictInfo.useDict, dictionary)
+      var _this = this
       wx.showToast({
         title: '本词典到底啦\r\n重新翻出尚未掌握的',
         icon: 'none',
         success: function () {
-          this.setData({
-            index: 0,
-            showChinese: false
-          })
+          // _this.setData({
+          //   index: 0,
+          //   showChinese: false
+          // })
+          _this.onLoad()
         }
       })
     } else {
@@ -215,7 +216,6 @@ Page({
   },
 
   onDeriDetail: function (event) {
-    console.log(event.target.id.substr(4,1))
     var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
     wx.showModal({
       title: deri_obj.word,
@@ -264,29 +264,18 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
   },
 
   /**
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-      console.log(res.target)
-    }
-    let title = '生科SCI高频英文单词 扫清文献阅读障碍'
-    return {
-      title: title,
-      path: '/pages/menu/menu',
-      imageUrl: 'cloud://botanydict-v1f9h.626f-botanydict-v1f9h-1300672096/photochemical.jpg',
-    }
+    return app.onShareAppMessage(res)
   },
 })

@@ -89,5 +89,19 @@ App({
     })
     if (openid !== "") return openid
     return fromopenid
-  }
+  },
+
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    let title = '生科SCI高频单词 扫清文献阅读障碍'
+    return {
+      title: title,
+      path: '/pages/menu/menu',
+      query: '',
+      imageUrl: '/images/shareImage.png',
+    }
+  },
 })

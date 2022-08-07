@@ -25,7 +25,6 @@ Page({
       const db = wx.cloud.database()
       const dictInfoRes = await db.collection('dictInfo').doc('content').get()
       var dataTemp = dictInfoRes.data
-      console.log('dataTemp: ', dataTemp)
     }
 
     console.log('dataTemp: ', dataTemp)
@@ -35,8 +34,8 @@ Page({
       app.globalData.dictInfo = new Object()
     }
     if (actualLoad && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=dataTemp.marker)) {
-      console.log('app.globalData.dictInfo.marker: ', app.globalData.dictInfo.marker)
-      console.log('dataTemp.marker: ', dataTemp.marker)
+      // console.log('app.globalData.dictInfo.marker: ', app.globalData.dictInfo.marker)
+      // console.log('dataTemp.marker: ', dataTemp.marker)
       wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
 
       // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
@@ -85,7 +84,6 @@ Page({
   bindChange: function (e) {
     const val = e.detail.value
     if (val[0]!=this.data.value[0]) {
-      console.log('1')
       // todo: 根据第一列（大类）的改变决定第二列（domain）选项显示什么
     }
     this.setData({
@@ -115,7 +113,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-
   },
 
   /**
@@ -159,7 +156,7 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage() {
-
+  onShareAppMessage: function (res) {
+    return app.onShareAppMessage(res)
   }
 })

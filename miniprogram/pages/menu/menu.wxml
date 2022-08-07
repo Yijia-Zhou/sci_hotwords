@@ -24,6 +24,6 @@
   </picker-view>
 
   <view class="container1" style="height: 33%;">
-    <button type="primary" size='default' class='btn1' catchtap="onConfirm" style="margin-top: 50rpx;" wx:if="{{showBtn}}">确定</button>
+    <button type="primary" size='default' class='btn1' catchtap="onConfirm" style="margin-top: 50rpx; width: 61.8%;" wx:if="{{showBtn}}">确定</button>
   </view>
 </view>

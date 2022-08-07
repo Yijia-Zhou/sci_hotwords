@@ -2,6 +2,7 @@
 
 page {
   background-color: #F0F0E8;
+  /* background-color: rgba(138, 109, 53, 0.03); */
 }
 
 /* 以下3个样式来自 https://blog.csdn.net/Hero_rong/article/details/96971853 */
