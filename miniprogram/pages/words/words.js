@@ -15,18 +15,26 @@ Page({
     showChinese: false
   },
 
-  calFont: async function (deris) {
+  mCount: function (word) {
     try {
-      var font01 = Math.min(40, 900/(deris[0].word.length+deris[1].word.length+5))
+      var lenRes = word.match(/m/g).length
     } catch {
-      return [40, 38]
+      return 0
     }
+    return lenRes
+  },
+
+  calFont: function (deris) {
+    let fontRes = []
     try {
-      var font23 = Math.min(38, font01 - 1, 860/(deris[2].word.length+deris[3].word.length+5))
-    } catch {
-      return [font01, Math.min(38, font01-1)]
+      fontRes[0] = Math.min(40, 500/(deris[0].word.length+1+this.mCount(deris[0].word)))
+      fontRes[1] = Math.min(fontRes[0]-1, 500/(deris[1].word.length+1+this.mCount(deris[1].word)))
+      fontRes[2] = Math.min(fontRes[1]-1, 500/(deris[2].word.length+1+this.mCount(deris[2].word)))
+      fontRes[3] = Math.min(fontRes[2]-1, 500/(deris[3].word.length+1+this.mCount(deris[3].word)))
+    } catch(err) {
+      console.log(err)
     }
-    return [font01, font23]
+    return fontRes
   },
 
   /**
@@ -116,9 +124,6 @@ Page({
       dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
     }
 
-    // 计算衍生词字号大小
-    // let font01 = Math.min(40, 800/(dictionary[index].deris[0].word.length+dictionary[index].deris[1].word.length+5))
-    // let font23 = Math.min(38, 800/(dictionary[index].deris[2].word.length+dictionary[index].deris[3].word.length+5))
     let fontRes = await this.calFont(dictionary[index].deris)
     console.log("fontRes: ", fontRes)
 
@@ -126,8 +131,7 @@ Page({
       dictionary: dictionary,
       indexArray: indexArray,
       index: index,
-      font01: fontRes[0],
-      font23: fontRes[1]
+      fontRes: fontRes
     })
 
     this.InnerAudioContext = wx.createInnerAudioContext()
@@ -182,8 +186,7 @@ Page({
     console.log("fontRes: ", fontRes)
     this.setData({
       showPlay: true,
-      font01: fontRes[0],
-      font23: fontRes[1]
+      fontRes: fontRes
     })
     this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
     this.InnerAudioContext.onEnded(() => {

@@ -20,10 +20,10 @@
       </view>
     <view class="subcontainer_deri" wx:if='{{dictionary[index].deris[0]}}'>
         <view class="subcontainerHorizonDeri" id="deris01">
-            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[0]}}' style="font-size: {{font01}}rpx;" catchtap="onDeriDetail" id='deri0'>
+            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[0]}}' style="font-size: {{fontRes[0]}}rpx;" catchtap="onDeriDetail" id='deri0'>
               {{dictionary[index].deris[0].word}}
             </text>
-            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[1]}}' style="font-size: {{font01}}rpx;" catchtap="onDeriDetail" id='deri1'>
+            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[1]}}' style="font-size: {{fontRes[1]}}rpx;" catchtap="onDeriDetail" id='deri1'>
               {{dictionary[index].deris[1].word}}
             </text>
             <text wx:else decode="true">
@@ -31,10 +31,10 @@
             </text>
         </view>
         <view class="subcontainerHorizonDeri" id="deris23" wx:if='{{dictionary[index].deris[2]}}'>
-            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[2]}}' style="font-size: {{font23}}rpx;" catchtap="onDeriDetail" id='deri2'>
+            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[2]}}' style="font-size: {{fontRes[2]}}rpx;" catchtap="onDeriDetail" id='deri2'>
               {{dictionary[index].deris[2].word}}
             </text>
-            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[3]}}' style="font-size: {{font23}}rpx;" catchtap="onDeriDetail" id='deri3'>
+            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[3]}}' style="font-size: {{fontRes[3]}}rpx;" catchtap="onDeriDetail" id='deri3'>
               {{dictionary[index].deris[3].word}}
             </text>
             <text wx:else decode="true">
