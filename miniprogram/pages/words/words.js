@@ -16,6 +16,7 @@ Page({
   },
 
   mCount: function (word) {
+    // 计算单词中"m"的个数，用于字号修正
     try {
       var lenRes = word.match(/m/g).length
     } catch {
@@ -27,6 +28,7 @@ Page({
   calFont: function (deris) {
     let fontRes = []
     try {
+      // 计算衍生词字号，保证大小一路递减且不会超出 border
       fontRes[0] = Math.min(40, 500/(deris[0].word.length+1+this.mCount(deris[0].word)))
       fontRes[1] = Math.min(fontRes[0]-1, 500/(deris[1].word.length+1+this.mCount(deris[1].word)))
       fontRes[2] = Math.min(fontRes[1]-1, 500/(deris[2].word.length+1+this.mCount(deris[2].word)))
@@ -82,7 +84,8 @@ Page({
         let itemIndex = dataTemp.findIndex((item) => item._id === theOldItem._id)
         dataTemp[itemIndex].learnt = theOldItem.learnt
         dataTemp[itemIndex].tested = theOldItem.tested
-        // 本地学习过程中在 dictionary 内添加任何属性均需在这里存入 Storage
+        // 本地学习过程中在 dictionary 内添加的属性塞进更新过的词典里
+        // 目前因为基本不会改动词库中词的数目，所以是把旧词库各词组属性存入新词库同一个 index 中，但有空可以改成用 word 作为 key 更好
       }
       wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp)
       console.log('更新词库完毕~')
@@ -107,6 +110,7 @@ Page({
       this.onLoad()
     }
 
+    // 选取最靠前的未掌握词组
     var indexArray = Array.from(Array(dictionary.length).keys())
     const revered = indexArray.reverse()
     for (var i in revered) {
@@ -134,6 +138,7 @@ Page({
       fontRes: fontRes
     })
 
+    // “朗读”功能
     this.InnerAudioContext = wx.createInnerAudioContext()
     this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
     //this.InnerAudioContext.play()
@@ -147,7 +152,7 @@ Page({
   },
 
   onDone: function () {
-    this.data.dictionary[this.data.index][this.data.chooseStatus] = true
+    this.data.dictionary[this.data.index][this.data.chooseStatus] = true // 标记掌握
     this.onNext()
   },
 
@@ -219,6 +224,7 @@ Page({
   },
 
   onDeriDetail: function (event) {
+    // 点击衍生词可显示该衍生词释义
     var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
     wx.showModal({
       title: deri_obj.word,
