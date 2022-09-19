@@ -5,11 +5,11 @@
     <text wx:if='{{dictionary[index].total_count}}'>总词频：{{dictionary[index].total_count}}</text>
     <!--<text class="wordLarge" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index].word}}</text>
     <text class="wordSmall" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index].word}}</text>--> 
-    <view class="subcontainer" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
+    <view class="subcontainer">
       <text class="wordLarge" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index]._id}}</text>
       <text class="wordSmall" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index]._id}}</text>
       <!--<text wx:if='{{dictionary[index].phonogram}}'>音标</text>--> 
-      <view class="subcontainerHorizon">
+      <view class="subcontainerHorizon" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
         <text wx:if='{{dictionary[index].phonogram}}'>{{dictionary[index].phonogram}}</text>
         <!--
         <text style="font-size: 35rpx;text-align: center;background-color: #07c160;color: #fff;" bindtap="onPlay" wx:if='{{showPlay}}'>播放</text>
