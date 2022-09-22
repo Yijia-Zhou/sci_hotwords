@@ -13,7 +13,7 @@
 1. 目录选择
 
     - 三列picker, 选择词库与使用模式
-![image](https://user-images.githubusercontent.com/22675861/191643546-4ed67ef1-81b6-4e9d-bcbd-e4fdaf91bb59.png)
+        ![image](https://user-images.githubusercontent.com/22675861/191643546-4ed67ef1-81b6-4e9d-bcbd-e4fdaf91bb59.png)
 
 
         - 识记模式即为普通模式
@@ -23,7 +23,7 @@
     - 之后可能添加一个进入查词页面的按钮，考虑做成脚踏板状放在最底下
 
 2. 词库识记
-![image](https://user-images.githubusercontent.com/22675861/191644756-dd430427-d9c5-45f4-92a2-dc73e7627f19.png)
+    ![image](https://user-images.githubusercontent.com/22675861/191644756-dd430427-d9c5-45f4-92a2-dc73e7627f19.png)
 
 
     - 词频前四高的衍生词会被显示在衍生词框中
