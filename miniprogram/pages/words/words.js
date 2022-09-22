@@ -69,7 +69,7 @@ Page({
       const useDict = app.globalData.dictInfo.useDict
       var dictionary = wx.getStorageSync(useDict)
       //console.log('dictionary: ', dictionary)
-    } 
+    }
     
     else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict)) {
       wx.showLoading({
@@ -131,6 +131,7 @@ Page({
     let fontRes = await this.calFont(dictionary[index].deris)
     console.log("fontRes: ", fontRes)
 
+    // 数据加载进渲染模板
     this.setData({
       dictionary: dictionary,
       indexArray: indexArray,
@@ -184,7 +185,8 @@ Page({
         showChinese: false
       })
     }
-  
+    
+    // 更新“朗读”内容
     this.InnerAudioContext.destroy()
     this.InnerAudioContext = wx.createInnerAudioContext()
     let fontRes = await this.calFont(this.data.dictionary[this.data.index].deris)
@@ -199,6 +201,7 @@ Page({
     })
   },
 
+  // “朗读”与“暂停”
   onPlay: function () {
     this.InnerAudioContext.play()
     this.setData({
