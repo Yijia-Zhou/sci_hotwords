@@ -45,6 +45,7 @@
 ### "贡献流程？"与待开发需求
 
 - 现在各种打算开发的想法都列到了 issue 里并打上了 ToDo 标签
+  - [所有有效的 ToDo issues 清单](https://github.com/Yijia-Zhou/sci_hotwords/issues?q=is%3Aissue+is%3Aopen+label%3AToDo)
 - 有各种相关想法都可以随时新建/回复 issue 讨论，尤其是打了“有待完善的想法”标签的←_←
 - 可以随时认领感兴趣的 issue - 指 assign 给自己
   
