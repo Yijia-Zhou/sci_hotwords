@@ -47,6 +47,7 @@
 - 现在各种打算开发的想法都列到了 issue 里并打上了 ToDo 标签
 - 有各种相关想法都可以随时新建/回复 issue 讨论，尤其是打了“有待完善的想法”标签的←_←
 - 可以随时认领感兴趣的 issue - 指 assign 给自己
+  
   ![image](https://user-images.githubusercontent.com/22675861/191906009-5bfb6d6d-0b60-469a-82fa-36816d816d52.png)
 - 具体开发时从dev进行分支，在开发者工具中测试完成后可向dev分支提Pull Request, dev分支尽量与当前体验版同步，体验版在一些代表性机型上测试无明显问题后准备合并至正式版，正式版发布后将相关内容合并至master
   - ![image](https://user-images.githubusercontent.com/22675861/191907196-cd995282-6080-44fc-a6c5-8b297d1b674c.png)
