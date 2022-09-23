@@ -50,7 +50,9 @@
   
   ![image](https://user-images.githubusercontent.com/22675861/191906009-5bfb6d6d-0b60-469a-82fa-36816d816d52.png)
 - 具体开发时从dev进行分支，在开发者工具中测试完成后可向dev分支提Pull Request, dev分支尽量与当前体验版同步，体验版在一些代表性机型上测试无明显问题后准备合并至正式版，正式版发布后将相关内容合并至master
-  - ![image](https://user-images.githubusercontent.com/22675861/191907196-cd995282-6080-44fc-a6c5-8b297d1b674c.png)
+  - 在微信开发者工具中上传会设为体验版，可通过下面二维码打开体验版测试
+    
+    ![image](https://user-images.githubusercontent.com/22675861/191907196-cd995282-6080-44fc-a6c5-8b297d1b674c.png)
   - 此为初步尝试流程（x
   - PR中最好引用一下对应的目标issue
   - [示例issue](https://github.com/Yijia-Zhou/sci_hotwords/issues/7)
