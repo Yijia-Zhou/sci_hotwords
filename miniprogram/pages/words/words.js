@@ -115,9 +115,8 @@ Page({
     const revered = indexArray.reverse()
     for (var i in revered) {
       var indexTemp = revered[i]
-      if (dictionary[indexTemp][this.data.chooseStatus]) {
-        var index = Number(indexTemp) + 1
-        break
+      if (!dictionary[indexTemp][this.data.chooseStatus]) {
+        var index = Number(indexTemp)
       }
     }
     if (!index) {
@@ -180,10 +179,16 @@ Page({
         }
       })
     } else {
-      this.setData({
-        index: this.data.index + 1,
-        showChinese: false
-      })
+      this.data.index = this.data.index + 1
+      console.log('word: ', this.data.dictionary[this.data.index]._id, 'chooseStatus: ', this.data.dictionary[this.data.index][this.data.chooseStatus])
+      if (this.data.dictionary[this.data.index][this.data.chooseStatus]) {
+        return this.onNext()
+      } else {
+        this.setData({
+          index: this.data.index,
+          showChinese: false
+        })
+      }
     }
     
     // 更新“朗读”内容
