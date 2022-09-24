@@ -32,7 +32,7 @@ page {
   flex-shrink: 1;
   vertical-align: super;
   font-style: italic;
-  /* margin-bottom: 30rpx; */
+  padding-right: 3%;
 }
 
 .wordDeriRight {
@@ -40,6 +40,7 @@ page {
   width: 45%;
   flex-grow: 0;
   font-style:oblique;
+  padding-left: 3%;
 }
 
 .subcontainer_deri {
@@ -57,7 +58,7 @@ page {
   align-items: center;
   justify-content: center;
   width: 100%;
-  gap: 10%;
+  /* column-gap: 10%; */
   line-height: 27rpx;
   margin-top: 20rpx;
   margin-bottom: 20rpx;

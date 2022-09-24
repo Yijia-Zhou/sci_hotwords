@@ -27,8 +27,8 @@ picker-view-column {
   height: 96rpx;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
-  border-image: linear-gradient(to right,#FBFBFB,#FFAC30,#FBFBFB) 1 1;
-  border-image: linear-gradient(to right,#FBFBFB,#969656,#FBFBFB) 1 1;
+  /* border-image: linear-gradient(to right,#FBFBFB,#FFAC30,#FBFBFB) 1 1;
+  border-image: linear-gradient(to right,#FBFBFB,#969656,#FBFBFB) 1 1; */
   margin-left:25%;
 }
 /* 来自https://blog.csdn.net/Hero_rong/article/details/96971853的样式结束 */
