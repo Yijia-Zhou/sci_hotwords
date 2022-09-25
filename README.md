@@ -9,7 +9,6 @@
 
 - [一些介绍和推广什么的](https://github.com/Yijia-Zhou/sci_hotwords/issues/14)
 
-
 ### 页面（已有2个，可能再添加1个）
 
 1. 目录选择
@@ -57,6 +56,7 @@
 - 可以随时认领感兴趣的 issue - 指 assign 给自己
   
   ![image](https://user-images.githubusercontent.com/22675861/191906009-5bfb6d6d-0b60-469a-82fa-36816d816d52.png)
+
 - 具体开发时从dev进行分支，在开发者工具中测试完成后可向dev分支提 Pull Request, dev分支尽量与当前体验版同步，体验版在一些代表性机型上测试无明显问题后发布至正式版，正式版发布后将相关内容合并至master
   - 在微信开发者工具中“上传”会设为体验版，可通过下面二维码打开体验版测试
 
