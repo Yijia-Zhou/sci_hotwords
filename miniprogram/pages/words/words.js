@@ -1,4 +1,5 @@
 const app = getApp()
+console.log('app: ', app)
 
 Page({
  
