@@ -1,8 +1,7 @@
 <!--pages/words/words.wxml--> 
 <view class="container1">
   <view class="card" wx:if="{{!showMoreDeri}}">
-    <view style="margin-top: 9rpx;"></view>
-    <text wx:if='{{dictionary[index].total_count}}'>总词频：{{dictionary[index].total_count}}</text>
+    <text wx:if='{{dictionary[index].total_count}}' style="margin-top: 20rpx; font-weight: 500;">总词频 - {{dictionary[index].total_count}}</text>
     <!--<text class="wordLarge" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index].word}}</text>
     <text class="wordSmall" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index].word}}</text>--> 
     <view class="subcontainer">
@@ -15,8 +14,8 @@
         <text style="font-size: 35rpx;text-align: center;background-color: #07c160;color: #fff;" bindtap="onPlay" wx:if='{{showPlay}}'>播放</text>
         <text style="font-size: 35rpx;text-align: center;background-color: #07c160;color: #fff;" bindtap="onPause" wx:else>暂停</text>
         -->
-        <text style="font-size: 35rpx;text-align: center;background-color: #07c160;color: #fff;" wx:if='{{showPlay}}'>朗读</text>
-        <text style="font-size: 35rpx;text-align: center;background-color: #07c160;color: #fff;" wx:else>暂停</text>
+        <text class="read_button" wx:if='{{showPlay}}'>朗读</text>
+        <text class="read_button" wx:else>暂停</text>
       </view>
     <view class="subcontainer_deri" wx:if='{{dictionary[index].deris[0]}}'>
         <view class="subcontainerHorizonDeri" id="deris01">
@@ -52,9 +51,9 @@
       <text class="subtitle" wx:if="{{useMode==='识记模式' || showChinese}}">{{dictionary[index].chosen}}</text>
       <text class="subtitle" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
     </view>
-    <view class="subcontainer">
-      <button type="primary" size='default' class='btn1' bindtap="onDone">我记住了</button>
-      <button type="default" size='default' class='btn1' bindtap="onNext" style="margin-bottom: 100rpx;">还要努力</button>
+    <view class="subcontainer" style="height: 300rpx; align-self: flex-end; flex-grow: 0;">
+      <button type="primary" size='default' class='btn1' bindtap="onDone" style="width: 61.8%;">我记住了</button>
+      <button type="default" size='default' class='btn1' bindtap="onNext" style="margin-bottom: 60rpx; width: 61.8%;">还要努力</button>
     </view>
     <view style="margin-bottom: 6rpx;"></view>
   </view>
