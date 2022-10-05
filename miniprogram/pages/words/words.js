@@ -26,18 +26,50 @@ Page({
     return lenRes
   },
 
-  calFont: function (deris) {
-    let fontRes = []
-    try {
-      // 计算衍生词字号，保证大小一路递减且不会超出 border
-      fontRes[0] = Math.min(40, 500/(deris[0].word.length+1+this.mCount(deris[0].word)))
-      fontRes[1] = Math.min(fontRes[0]-1, 500/(deris[1].word.length+1+this.mCount(deris[1].word)))
-      fontRes[2] = Math.min(fontRes[1]-1, 500/(deris[2].word.length+1+this.mCount(deris[2].word)))
-      fontRes[3] = Math.min(fontRes[2]-1, 500/(deris[3].word.length+1+this.mCount(deris[3].word)))
-    } catch(err) {
-      console.log(err)
+  display_length_count: function (word) {
+    // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
+    var res = 0
+    for (let char in word) {
+      switch(word[char]) { // 用法参考 https://blog.csdn.net/tel13259437538/article/details/83314965
+        case 'i':
+        case 'j':
+        case 'l':
+          res += 6
+          break
+        case 'f':
+        case 'r':
+        case 't':
+          res += 10
+          break
+        case 'm':
+        case 'w':
+          res += 20
+          break
+        default:
+          res += 14
+      }
     }
-    return fontRes
+    return res/14
+  },
+
+  calFont: function (deris) {
+    // 计算衍生词字号，保证大小一路递减且不会超出 border
+    // let fontRes = 500
+    // try {
+    //   fontRes = Math.min(43, 600/(deris[0].word.length+1+this.mCount(deris[0].word)))
+    //   fontRes = Math.min(fontRes, 600/(deris[1].word.length+1+this.mCount(deris[1].word)))
+    //   fontRes = Math.min(fontRes, 600/(deris[2].word.length+1+this.mCount(deris[2].word)))
+    //   fontRes = Math.min(fontRes, 600/(deris[3].word.length+1+this.mCount(deris[3].word)))
+    // } catch(err) {
+    //   console.log(err)
+    // }
+    // Todo: 整个计算显示长度的工具函数，i,l,t 等少算点长度，m 等多算点
+    for (let i in [0,0,0,0]) {
+      deris.push('')
+    }
+    let dlc = this.display_length_count
+    let fontRes = Math.min(43, 500/(dlc(deris[0].word)+1), 500/(dlc(deris[1].word)+1), 500/(dlc(deris[2].word)+1), 500/(dlc(deris[3].word)+1))
+    return [fontRes, fontRes, fontRes, fontRes]
   },
 
   /**
