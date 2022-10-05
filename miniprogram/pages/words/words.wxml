@@ -1,71 +1,64 @@
 <!--pages/words/words.wxml--> 
-<view class="container1">
+<view class="page_container">
   <view class="card" wx:if="{{!showMoreDeri}}">
-    <text wx:if='{{dictionary[index].total_count}}' style="margin-top: 20rpx; font-weight: 500;">总词频 - {{dictionary[index].total_count}}</text>
-    <!--<text class="wordLarge" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index].word}}</text>
-    <text class="wordSmall" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index].word}}</text>--> 
-    <view class="subcontainer">
-      <text class="wordLarge" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index]._id}}</text>
-      <text class="wordSmall" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index]._id}}</text>
-      <!--<text wx:if='{{dictionary[index].phonogram}}'>音标</text>--> 
-      <view class="subcontainerHorizon" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
-        <text wx:if='{{dictionary[index].phonogram}}'>{{dictionary[index].phonogram}}</text>
-        <!--
-        <text style="font-size: 35rpx;text-align: center;background-color: #07c160;color: #fff;" bindtap="onPlay" wx:if='{{showPlay}}'>播放</text>
-        <text style="font-size: 35rpx;text-align: center;background-color: #07c160;color: #fff;" bindtap="onPause" wx:else>暂停</text>
-        -->
+    <text wx:if='{{dictionary[index].total_count}}' class="total_count_text">总词频 - {{dictionary[index].total_count}}</text>
+    <view class="container_grow1">
+      <text class="main_word" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index]._id}}</text>
+      <text class="main_word_smaller" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index]._id}}</text>
+      <view class="read_button_container" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
         <text class="read_button" wx:if='{{showPlay}}'>朗读</text>
         <text class="read_button" wx:else>暂停</text>
       </view>
-    <view class="subcontainer_deri" wx:if='{{dictionary[index].deris[0]}}'>
-        <view class="subcontainerHorizonDeri" id="deris01">
-            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[0]}}' style="font-size: {{fontRes[0]}}rpx; color: rgba(52, 58, 64, 1);" catchtap="onDeriDetail" id='deri0'>
-              {{dictionary[index].deris[0].word}}
-            </text>
-            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[1]}}' style="font-size: {{fontRes[1]}}rpx; color: rgba(52, 58, 64, 0.92);" catchtap="onDeriDetail" id='deri1'>
-              {{dictionary[index].deris[1].word}}
-            </text>
-            <text wx:else class="wordDeriRight" style="color: rgba(52, 58, 64, 0.76);" decode="true">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </text>
+
+      <view class="deri_container_whole" wx:if='{{dictionary[index].deris[0]}}'>
+        <view class="deri_container_horizon" id="deris01">
+          <text class="word_deri_left" wx:if='{{dictionary[index].deris[0]}}' style="font-size: {{fontRes[0]}}rpx; color: rgba(52, 58, 64, 1);" catchtap="onDeriDetail" id='deri0'>
+            {{dictionary[index].deris[0].word}}
+          </text>
+          <text class="word_deri_right" wx:if='{{dictionary[index].deris[1]}}' style="font-size: {{fontRes[1]}}rpx; color: rgba(52, 58, 64, 0.92);" catchtap="onDeriDetail" id='deri1'>
+            {{dictionary[index].deris[1].word}}
+          </text>
+          <text wx:else class="word_deri_right" style="color: rgba(52, 58, 64, 0.76);" decode="true">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </text>
         </view>
-        <view class="subcontainerHorizonDeri" id="deris23" wx:if='{{dictionary[index].deris[2]}}'>
-            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[2]}}' style="font-size: {{fontRes[2]}}rpx; color: rgba(52, 58, 64, 0.84);" catchtap="onDeriDetail" id='deri2'>
-              {{dictionary[index].deris[2].word}}
-            </text>
-            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[3]}}' style="font-size: {{fontRes[3]}}rpx; color: rgba(52, 58, 64, 0.76);" catchtap="onDeriDetail" id='deri3'>
-              {{dictionary[index].deris[3].word}}
-            </text>
-            <text wx:else class="wordDeriRight" style="color: rgba(52, 58, 64, 0.76);" decode="true">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </text>
+        <view class="deri_container_horizon" id="deris23" wx:if='{{dictionary[index].deris[2]}}'>
+          <text class="word_deri_left" wx:if='{{dictionary[index].deris[2]}}' style="font-size: {{fontRes[2]}}rpx; color: rgba(52, 58, 64, 0.84);" catchtap="onDeriDetail" id='deri2'>
+            {{dictionary[index].deris[2].word}}
+          </text>
+          <text class="word_deri_right" wx:if='{{dictionary[index].deris[3]}}' style="font-size: {{fontRes[3]}}rpx; color: rgba(52, 58, 64, 0.76);" catchtap="onDeriDetail" id='deri3'>
+            {{dictionary[index].deris[3].word}}
+          </text>
+          <text wx:else class="word_deri_right" style="color: rgba(52, 58, 64, 0.76);" decode="true">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </text>
         </view>
         <view class="button_more_deri" catchtap="onMoreDeri" wx:if="{{dictionary[index].deris[4]}}">
             更多衍生词……
         </view>
+      </view>
     </view>
 
+    <view class="container_grow1" style="padding: 0 30rpx; width: auto;" catchtap="onShowChinese">
+      <text class="explain_zhcn" wx:if="{{useMode==='识记模式' || showChinese}}">{{dictionary[index].chosen}}</text>
+      <text class="explain_zhcn" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
     </view>
-    <view class="subcontainer" style="padding: 0 30rpx; width: auto;" catchtap="onShowChinese">
-      <!--<text>解释</text>--> 
-      <text class="subtitle" wx:if="{{useMode==='识记模式' || showChinese}}">{{dictionary[index].chosen}}</text>
-      <text class="subtitle" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
+
+    <view class="container_grow1" style="height: 300rpx; align-self: flex-end; flex-grow: 0;">
+      <button type="primary" size='default' class='btn1' bindtap="onDone" style="width: 61.8vw;">我记住了</button>
+      <button type="default" size='default' class='btn1' bindtap="onNext" style="margin-bottom: 60rpx; width: 61.8vw;">还要努力</button>
     </view>
-    <view class="subcontainer" style="height: 300rpx; align-self: flex-end; flex-grow: 0;">
-      <button type="primary" size='default' class='btn1' bindtap="onDone" style="width: 61.8%;">我记住了</button>
-      <button type="default" size='default' class='btn1' bindtap="onNext" style="margin-bottom: 60rpx; width: 61.8%;">还要努力</button>
-    </view>
-    <view style="margin-bottom: 6rpx;"></view>
+
   </view>
 
-  <view id="more_deri" class="table" wx:if="{{showMoreDeri}}">
+  <view class="table_more_deri" wx:if="{{showMoreDeri}}">
     <view class="tr bg-w">
       <view class="th" style="width: 20%;">词频</view>
       <view class="th">单词</view>
       <view class="th ">释义</view>
     </view>
 
-    <block wx:for="{{dictionary[index].deris}}">
+    <block wx:for="{{dictionary[index].deris}}" wx:key="*this">
       <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
         <view class="td" style="width: 20%;">{{item.count}}</view>
         <view class="td">{{item.word}}</view>
@@ -80,7 +73,7 @@
 
   </view>
 
-  <button type="primary" class='btn2' catchtap="onMoreDeri" style="margin-top: 50rpx;" wx:if="{{showMoreDeri}}">返回</button>
+  <button type="primary" class='btn1 bottom_back_from_more_deri' catchtap="onMoreDeri" style="width: 61.8vw;" wx:if="{{showMoreDeri}}">返回</button>
   <!-- <view class="botton-right-float">
     <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
       <text>选择词典</text>
