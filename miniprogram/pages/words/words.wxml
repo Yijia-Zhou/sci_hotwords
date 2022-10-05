@@ -19,24 +19,24 @@
       </view>
     <view class="subcontainer_deri" wx:if='{{dictionary[index].deris[0]}}'>
         <view class="subcontainerHorizonDeri" id="deris01">
-            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[0]}}' style="font-size: {{fontRes[0]}}rpx;" catchtap="onDeriDetail" id='deri0'>
+            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[0]}}' style="font-size: {{fontRes[0]}}rpx; color: rgba(52, 58, 64, 1);" catchtap="onDeriDetail" id='deri0'>
               {{dictionary[index].deris[0].word}}
             </text>
-            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[1]}}' style="font-size: {{fontRes[1]}}rpx;" catchtap="onDeriDetail" id='deri1'>
+            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[1]}}' style="font-size: {{fontRes[1]}}rpx; color: rgba(52, 58, 64, 0.92);" catchtap="onDeriDetail" id='deri1'>
               {{dictionary[index].deris[1].word}}
             </text>
-            <text wx:else decode="true">
+            <text wx:else class="wordDeriRight" style="color: rgba(52, 58, 64, 0.76);" decode="true">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </text>
         </view>
         <view class="subcontainerHorizonDeri" id="deris23" wx:if='{{dictionary[index].deris[2]}}'>
-            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[2]}}' style="font-size: {{fontRes[2]}}rpx;" catchtap="onDeriDetail" id='deri2'>
+            <text class="wordDeriLeft" wx:if='{{dictionary[index].deris[2]}}' style="font-size: {{fontRes[2]}}rpx; color: rgba(52, 58, 64, 0.84);" catchtap="onDeriDetail" id='deri2'>
               {{dictionary[index].deris[2].word}}
             </text>
-            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[3]}}' style="font-size: {{fontRes[3]}}rpx;" catchtap="onDeriDetail" id='deri3'>
+            <text class="wordDeriRight" wx:if='{{dictionary[index].deris[3]}}' style="font-size: {{fontRes[3]}}rpx; color: rgba(52, 58, 64, 0.76);" catchtap="onDeriDetail" id='deri3'>
               {{dictionary[index].deris[3].word}}
             </text>
-            <text wx:else decode="true">
+            <text wx:else class="wordDeriRight" style="color: rgba(52, 58, 64, 0.76);" decode="true">
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </text>
         </view>
@@ -46,7 +46,7 @@
     </view>
 
     </view>
-    <view class="subcontainer" catchtap="onShowChinese">
+    <view class="subcontainer" style="padding: 0 30rpx; width: auto;" catchtap="onShowChinese">
       <!--<text>解释</text>--> 
       <text class="subtitle" wx:if="{{useMode==='识记模式' || showChinese}}">{{dictionary[index].chosen}}</text>
       <text class="subtitle" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>

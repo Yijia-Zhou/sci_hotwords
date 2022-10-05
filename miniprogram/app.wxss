@@ -8,6 +8,10 @@ page {
   --button-icon-size: 6vw;
 }
 
+text {
+  color: #343a40;
+}
+
 /* page {
   background: #f6f6f6;
   display: flex;
@@ -84,7 +88,7 @@ button::after {
   font-size: 36rpx;
   text-align: center;
   width: 100%;
-  font-weight: 600;
+  font-weight: 550;
 }
 
 .text1{
