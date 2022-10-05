@@ -99,7 +99,7 @@ page {
   flex-grow: 0;
   flex-shrink: 1;
   vertical-align: super;
-  font-style: italic;
+  font-style: oblique;
   padding-right: 3%;
 }
 
@@ -108,7 +108,7 @@ page {
   text-align: start;
   width: 45%;
   flex-grow: 0;
-  font-style: italic;
+  font-style: oblique;
   padding-left: 3%;
 }
 
