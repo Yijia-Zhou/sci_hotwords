@@ -251,6 +251,10 @@ Page({
     this.setData({
       showMoreDeri: !this.data.showMoreDeri
     })
+    wx.pageScrollTo({
+      duration: 0,
+      scrollTop: 0
+    })
   },
 
   onDeriDetail: function (event) {
