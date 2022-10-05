@@ -8,6 +8,8 @@ page {
   padding: 30 rpx;
 } */
 
+@import './font-face.wxss';
+
 page {
   /* background-color: rgba(255, 250, 205, 0.05); */
   background-color: rgba(138, 109, 53, 0.03);
@@ -25,19 +27,23 @@ page {
 }
 
 .wordLarge{
-  font-size: 72rpx;
-  font-weight: 420;
+  font-family: Inter Tight;
+  /* font-style: oblique; */
+  font-size: 81rpx;
+  font-weight: 550;
   text-align: center;
-  letter-spacing: -2.5rpx;
+  /* letter-spacing: -3rpx; */
 }
 
 .wordSmall{
+  font-family: Inter Tight;
   justify-content: space-around;
   flex: 1;
   height: auto;
 }
 
 .wordDeriLeft {
+  font-family: Inter Tight;
   text-align: right;
   width: 45%;
   flex-grow: 0;
@@ -48,10 +54,11 @@ page {
 }
 
 .wordDeriRight {
+  font-family: Inter Tight;
   text-align: start;
   width: 45%;
   flex-grow: 0;
-  font-style:oblique;
+  font-style: italic;
   padding-left: 3%;
 }
 
@@ -142,7 +149,7 @@ page {
   margin: 8px;
   margin-top: 5rpx;
   margin-left: 35rpx;
-  
+  margin: 5rpx 16rpx 0 35rpx;
   /* font: 400 2em/180px 'Oswald', sans-serif;
   color: #fbfbfb;
   text-indent: 20px; */
