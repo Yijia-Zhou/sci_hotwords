@@ -52,23 +52,13 @@ Page({
     return res/14
   },
 
-  calFont: function (deris) {
-    // 计算衍生词字号，保证大小一路递减且不会超出 border
-    // let fontRes = 500
-    // try {
-    //   fontRes = Math.min(43, 600/(deris[0].word.length+1+this.mCount(deris[0].word)))
-    //   fontRes = Math.min(fontRes, 600/(deris[1].word.length+1+this.mCount(deris[1].word)))
-    //   fontRes = Math.min(fontRes, 600/(deris[2].word.length+1+this.mCount(deris[2].word)))
-    //   fontRes = Math.min(fontRes, 600/(deris[3].word.length+1+this.mCount(deris[3].word)))
-    // } catch(err) {
-    //   console.log(err)
-    // }
-    // Todo: 整个计算显示长度的工具函数，i,l,t 等少算点长度，m 等多算点
+  calFontSize: function (deris) {
+    let deris_copy = [...deris]
     for (let i in [0,0,0,0]) {
-      deris.push('')
+      deris_copy.push('')
     }
     let dlc = this.display_length_count
-    let fontRes = Math.min(43, 500/(dlc(deris[0].word)+1), 500/(dlc(deris[1].word)+1), 500/(dlc(deris[2].word)+1), 500/(dlc(deris[3].word)+1))
+    let fontRes = Math.min(43, 500/(dlc(deris_copy[0].word)+1), 500/(dlc(deris_copy[1].word)+1), 500/(dlc(deris_copy[2].word)+1), 500/(dlc(deris_copy[3].word)+1))
     return [fontRes, fontRes, fontRes, fontRes]
   },
 
@@ -160,7 +150,7 @@ Page({
       dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
     }
 
-    let fontRes = await this.calFont(dictionary[index].deris)
+    let fontRes = await this.calFontSize(dictionary[index].deris)
     console.log("fontRes: ", fontRes)
 
     // 数据加载进渲染模板
@@ -171,10 +161,9 @@ Page({
       fontRes: fontRes
     })
 
-    // “朗读”功能
+    // 预备“朗读”功能
     this.InnerAudioContext = wx.createInnerAudioContext()
     this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
-    //this.InnerAudioContext.play()
     this.InnerAudioContext.onEnded(() => {
       app.globalData.timeout = setTimeout(this.onPlay, 1000)
     })
@@ -227,7 +216,7 @@ Page({
     // 更新“朗读”内容
     this.InnerAudioContext.destroy()
     this.InnerAudioContext = wx.createInnerAudioContext()
-    let fontRes = await this.calFont(this.data.dictionary[this.data.index].deris)
+    let fontRes = await this.calFontSize(this.data.dictionary[this.data.index].deris)
     console.log("fontRes: ", fontRes)
     this.setData({
       showPlay: true,
