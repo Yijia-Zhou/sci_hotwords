@@ -81,7 +81,7 @@ Page({
 
     if (!dictionary || dictionary.length==0) {
       wx.showLoading({
-        title: '获取词库中',
+        title: '获取/更新词库中',
       })
       const db = wx.cloud.database()
       var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
@@ -96,12 +96,12 @@ Page({
     
     else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict)) {
       wx.showLoading({
-        title: '更新词库中',
+        title: '获取/更新词库中',
       })
       const db = wx.cloud.database()
       var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
       var dataTemp = getRes.data.dictionary
-      console.log('更新词库中', dataTemp)
+      console.log('获取/更新词库中', dataTemp)
       for (var i in dictionary) {
         let theOldItem = dictionary[i]
         let itemIndex = dataTemp.findIndex((item) => item._id === theOldItem._id)
@@ -160,6 +160,8 @@ Page({
       index: index,
       fontRes: fontRes
     })
+
+    wx.hideLoading()
 
     // 预备“朗读”功能
     this.InnerAudioContext = wx.createInnerAudioContext()
@@ -271,7 +273,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    wx.hideLoading()
   },
 
   /**
