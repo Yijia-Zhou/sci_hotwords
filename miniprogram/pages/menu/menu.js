@@ -23,38 +23,36 @@ Page({
     if (actualLoad) {
       // onShow 中调用进行页面重载时 actualLoad 为 false, 此时不需要再次访问云端数据库
       console.log("actualLoad")
-      try {
-        const db = wx.cloud.database()
-        const dictInfoRes = await db.collection('dictInfo').doc('content').get()
-        var dataTemp = dictInfoRes.data
-      } catch {
+      const db = wx.cloud.database()
+      db.collection('dictInfo').doc('content').get().then(res => {
+        app.globalData.dataTemp = res.data.data
+        console.log('app.globalData.dataTemp: ', app.globalData.dataTemp) 
+
+        if (actualLoad && app.globalData.dataTemp && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=app.globalData.dataTemp.marker)) {
+          /**
+           * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
+           * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新
+           * 词库使用时会检查自己是否在 ‘dict_need_refresh’ 中，是的话就会从数据库拉去新版进行更新
+           */
+          wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
+
+          // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
+          app.globalData.dictInfo.clusters_and_domains = app.globalData.dataTemp.clusters_and_domains
+          app.globalData.dictInfo.modes = app.globalData.dataTemp.modes
+          app.globalData.dictInfo.marker = app.globalData.dataTemp.marker
+          wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+        }
+      }).catch(err => {
         console.log('Offline')
+        console.log(err)
         app.globalData.offline = true
-      }
+      })
     }
 
-    console.log('dataTemp: ', dataTemp)
     app.globalData.dictInfo = wx.getStorageSync('dictInfo')
     console.log(app.globalData.dictInfo)
     if (typeof(app.globalData.dictInfo) == "string") { // 此时即为没有 app.globalData.dictInfo
       app.globalData.dictInfo = new Object()
-    }
-    if (actualLoad && dataTemp && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=dataTemp.marker)) {
-      // console.log('app.globalData.dictInfo.marker: ', app.globalData.dictInfo.marker)
-      // console.log('dataTemp.marker: ', dataTemp.marker)
-
-      /**
-       * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
-       * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新
-       * 词库使用时会检查自己是否在 ‘dict_need_refresh’ 中，是的话就会从数据库拉去新版进行更新
-       */
-      wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
-
-      // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
-      app.globalData.dictInfo.clusters_and_domains = dataTemp.clusters_and_domains
-      app.globalData.dictInfo.modes = dataTemp.modes
-      app.globalData.dictInfo.marker = dataTemp.marker
-      wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     }
     console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     if (app.globalData.dictInfo.useDict && actualLoad) { // 直接跳转到之前使用的词库
