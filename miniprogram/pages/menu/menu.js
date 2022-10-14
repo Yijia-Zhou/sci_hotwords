@@ -25,7 +25,7 @@ Page({
       console.log("actualLoad")
       const db = wx.cloud.database()
       db.collection('dictInfo').doc('content').get().then(res => {
-        app.globalData.dataTemp = res.data.data
+        app.globalData.dataTemp = res.data
         console.log('app.globalData.dataTemp: ', app.globalData.dataTemp) 
 
         if (actualLoad && app.globalData.dataTemp && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=app.globalData.dataTemp.marker)) {
