@@ -23,9 +23,14 @@ Page({
     if (actualLoad) {
       // onShow 中调用进行页面重载时 actualLoad 为 false, 此时不需要再次访问云端数据库
       console.log("actualLoad")
-      const db = wx.cloud.database()
-      const dictInfoRes = await db.collection('dictInfo').doc('content').get()
-      var dataTemp = dictInfoRes.data
+      try {
+        const db = wx.cloud.database()
+        const dictInfoRes = await db.collection('dictInfo').doc('content').get()
+        var dataTemp = dictInfoRes.data
+      } catch {
+        console.log('Offline')
+        app.globalData.offline = true
+      }
     }
 
     console.log('dataTemp: ', dataTemp)
@@ -34,7 +39,7 @@ Page({
     if (typeof(app.globalData.dictInfo) == "string") { // 此时即为没有 app.globalData.dictInfo
       app.globalData.dictInfo = new Object()
     }
-    if (actualLoad && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=dataTemp.marker)) {
+    if (actualLoad && dataTemp && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=dataTemp.marker)) {
       // console.log('app.globalData.dictInfo.marker: ', app.globalData.dictInfo.marker)
       // console.log('dataTemp.marker: ', dataTemp.marker)
 
