@@ -1,6 +1,11 @@
 App({
   async onLaunch() {
-    this.initcloud()
+    try {
+      this.initcloud()
+    } catch {
+      console.log("Cloud can't be init")
+    }
+    
     this.globalData = {
     }
     console.log("onLaunch end")

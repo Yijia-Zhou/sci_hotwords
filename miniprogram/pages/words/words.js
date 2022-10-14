@@ -1,5 +1,4 @@
 const app = getApp()
-console.log('app: ', app)
 
 Page({
  
@@ -13,7 +12,8 @@ Page({
     showPlay: true,
     showMoreDeri: false,
     useMode: app.globalData.dictInfo.useMode,
-    showChinese: false
+    showChinese: false,
+    noAudio: false
   },
 
   mCount: function (word) {
@@ -164,11 +164,23 @@ Page({
     wx.hideLoading()
 
     // 预备“朗读”功能
-    this.InnerAudioContext = wx.createInnerAudioContext()
-    this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
-    this.InnerAudioContext.onEnded(() => {
-      app.globalData.timeout = setTimeout(this.onPlay, 1000)
-    })
+    try {
+      this.InnerAudioContext = wx.createInnerAudioContext()
+      this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
+      this.InnerAudioContext.onEnded(() => {
+        app.globalData.timeout = setTimeout(this.onPlay, 1000)
+      })
+    } catch(e) {
+      console.log(175, e)
+      this.setData({
+        noAudio: true
+      })
+    }
+    if (app.globalData.offline) {
+      this.setData({
+        noAudio: true
+      })
+    }
   },
 
   onShowChinese: function () {
