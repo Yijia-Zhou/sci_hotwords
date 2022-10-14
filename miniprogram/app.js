@@ -26,7 +26,7 @@ App({
       // 装载云函数操作对象返回方法
       this.cloud = async function () {
         if (this.flag != true) { // 如果第一次使用返回方法，还没初始化
-          await this.c1.init() // 初始化一下
+          await this.c1.init().then(console.log).catch(err => {console.log(err)}) // 初始化一下
           this.flag = true // 设置为已经初始化
         }
         return this.c1 // 返回 cloud 对象
@@ -36,7 +36,7 @@ App({
         wx.cloud.init({ // 初始化云开发环境
           traceUser: true,
           env: normalinfo[0].envId
-        })
+        }).then(console.log).catch(err => {console.log(err)})
         // 装载云函数操作对象返回方法
         this.cloud = () => {
           return wx.cloud // 直接返回 wx.cloud

@@ -12,6 +12,10 @@
     "navigationBarTextStyle": "black"
   },
   "lazyCodeLoading": "requiredComponents",
+  "networkTimeout": {
+    "request": 5000,
+    "connectSocket": 5000
+  },
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }
