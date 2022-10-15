@@ -1,5 +1,4 @@
 const app = getApp()
-console.log('app: ', app)
 
 Page({
  
@@ -13,7 +12,8 @@ Page({
     showPlay: true,
     showMoreDeri: false,
     useMode: app.globalData.dictInfo.useMode,
-    showChinese: false
+    showChinese: false,
+    noAudio: false
   },
 
   mCount: function (word) {
@@ -164,11 +164,24 @@ Page({
     wx.hideLoading()
 
     // 预备“朗读”功能
-    this.InnerAudioContext = wx.createInnerAudioContext()
-    this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
-    this.InnerAudioContext.onEnded(() => {
-      app.globalData.timeout = setTimeout(this.onPlay, 1000)
-    })
+    if (app.globalData.offline) {
+      this.setData({
+        noAudio: true
+      })
+    } else {
+      try {
+        this.InnerAudioContext = wx.createInnerAudioContext()
+        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
+        this.InnerAudioContext.onEnded(() => {
+          app.globalData.timeout = setTimeout(this.onPlay, 1000)
+        })
+      } catch(e) {
+        console.log(175, e)
+        this.setData({
+          noAudio: true
+        })
+      }
+    }
   },
 
   onShowChinese: function () {
@@ -216,18 +229,20 @@ Page({
     }
     
     // 更新“朗读”内容
-    this.InnerAudioContext.destroy()
-    this.InnerAudioContext = wx.createInnerAudioContext()
-    let fontRes = await this.calFontSize(this.data.dictionary[this.data.index].deris)
-    console.log("fontRes: ", fontRes)
-    this.setData({
-      showPlay: true,
-      fontRes: fontRes
-    })
-    this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
-    this.InnerAudioContext.onEnded(() => {
-      app.globalData.timeout = setTimeout(this.onPlay, 1000)
-    })
+    if (!this.data.noAudio) {
+      this.InnerAudioContext.destroy()
+      this.InnerAudioContext = wx.createInnerAudioContext()
+      let fontRes = await this.calFontSize(this.data.dictionary[this.data.index].deris)
+      console.log("fontRes: ", fontRes)
+      this.setData({
+        showPlay: true,
+        fontRes: fontRes
+      })
+      this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
+      this.InnerAudioContext.onEnded(() => {
+        app.globalData.timeout = setTimeout(this.onPlay, 1000)
+      })
+    }
   },
 
   // “朗读”与“暂停”

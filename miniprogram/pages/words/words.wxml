@@ -5,7 +5,7 @@
     <view class="container_grow1">
       <text class="main_word" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index]._id}}</text>
       <text class="main_word_smaller" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index]._id}}</text>
-      <view class="read_button_container" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
+      <view class="read_button_container" wx:if="{{!noAudio}}" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
         <text class="read_button" wx:if='{{showPlay}}'>朗读</text>
         <text class="read_button" wx:else>暂停</text>
       </view>
