@@ -58,8 +58,11 @@ Page({
     for (let i in [0,0,0,0]) {
       deris_copy.push('')
     }
-    let dlc = this.display_length_count
-    let fontRes = Math.min(43, 500/(dlc(deris_copy[0].word)+1), 500/(dlc(deris_copy[1].word)+1), 500/(dlc(deris_copy[2].word)+1), 500/(dlc(deris_copy[3].word)+1))
+    let max_display_length = 0
+    for (let i in [0,1,2,3]) {
+      max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
+    }
+    let fontRes = Math.min(43, 500/(max_display_length+1))
     return [fontRes, fontRes, fontRes, fontRes]
   },
 
@@ -101,7 +104,6 @@ Page({
       
       const useDict = app.globalData.dictInfo.useDict
       var dictionary = wx.getStorageSync(useDict)
-      //console.log('dictionary: ', dictionary)
     }
     
     else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict)) {
@@ -163,18 +165,15 @@ Page({
       dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
     }
 
-    let fontRes = await this.calFontSize(dictionary[index].deris)
-    console.log("fontRes: ", fontRes)
-
     // 数据加载进渲染模板
     this.setData({
       dictionary: dictionary,
       index: index,
-      fontRes: fontRes
+      fontRes: await this.calFontSize(dictionary[index].deris)
     })
 
     var _this = this
-    setTimeout(function(){_this.data.with3s = false}, 3000)
+    this.data.timer_timeout = setTimeout(function(){_this.data.with3s = false}, 3000)
 
     wx.hideLoading()
 
@@ -188,10 +187,10 @@ Page({
         this.InnerAudioContext = wx.createInnerAudioContext()
         this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
         this.InnerAudioContext.onEnded(() => {
-          app.globalData.timeout = setTimeout(this.onPlay, 1000)
+          this.data.audio_timeout = setTimeout(this.onPlay, 1000)
         })
       } catch(e) {
-        console.log(175, e)
+        console.log(e)
         this.setData({
           noAudio: true
         })
@@ -237,6 +236,8 @@ Page({
   },
 
   onNext: async function () {
+    clearTimeout(this.data.timer_timeout)
+    clearTimeout(this.data.audio_timeout)
     if (this.data.index+1 >= this.data.indexArray.length) {
     //   var dictionary = this.data.dictionary
     //   dictionary.sort((a, b) => {
@@ -268,13 +269,15 @@ Page({
       //   })
       // }
       if (this.checkIfDisplay(this.data.index + 1, this.data.dictionary)) {
+        let new_index = this.data.index + 1
         this.setData({
-          index: this.data.index + 1,
-          showChinese: false
+          index: new_index,
+          showChinese: false,
+          fontRes: await this.calFontSize(this.data.dictionary[new_index].deris)
         })
         this.data.with3s = true
         var _this = this
-        setTimeout(function(){_this.data.with3s = false}, 3000)
+        this.data.timer_timeout = setTimeout(function(){_this.data.with3s = false}, 3000)
       } else {
         this.data.index += 1
         return this.onNext() // 这里  return 仅表示不再向下执行
@@ -285,15 +288,12 @@ Page({
     if (!this.data.noAudio) {
       this.InnerAudioContext.destroy()
       this.InnerAudioContext = wx.createInnerAudioContext()
-      let fontRes = await this.calFontSize(this.data.dictionary[this.data.index].deris)
-      console.log("fontRes: ", fontRes)
       this.setData({
-        showPlay: true,
-        fontRes: fontRes
+        showPlay: true
       })
       this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
       this.InnerAudioContext.onEnded(() => {
-        app.globalData.timeout = setTimeout(this.onPlay, 1000)
+        this.data.audio_timeout = setTimeout(this.onPlay, 1000)
       })
     }
   },
@@ -307,7 +307,7 @@ Page({
   },
   onPause: function () {
     try {
-      clearTimeout(app.globalData.timeout)
+      clearTimeout(this.data.audio_timeout)
     } catch {
       console.log('')
     }
@@ -358,9 +358,14 @@ Page({
   onHide: async function () {
     wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
     try {
-      clearTimeout(app.globalData.timeout)
-    } catch {
-      console.log('')
+      clearTimeout(this.data.timer_timeout)
+    } catch(e) {
+      console.log('e')
+    }
+    try {
+      clearTimeout(this.data.audio_timeout)
+    } catch(e) {
+      console.log('e')
     }
   },
 
