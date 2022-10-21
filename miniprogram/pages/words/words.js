@@ -13,7 +13,8 @@ Page({
     showMoreDeri: false,
     useMode: app.globalData.dictInfo.useMode,
     showChinese: false,
-    noAudio: false
+    noAudio: false,
+    with3s: true
   },
 
   mCount: function (word) {
@@ -57,9 +58,22 @@ Page({
     for (let i in [0,0,0,0]) {
       deris_copy.push('')
     }
-    let dlc = this.display_length_count
-    let fontRes = Math.min(43, 500/(dlc(deris_copy[0].word)+1), 500/(dlc(deris_copy[1].word)+1), 500/(dlc(deris_copy[2].word)+1), 500/(dlc(deris_copy[3].word)+1))
+    let max_display_length = 0
+    for (let i in [0,1,2,3]) {
+      max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
+    }
+    let fontRes = Math.min(43, 500/(max_display_length+1))
     return [fontRes, fontRes, fontRes, fontRes]
+  },
+
+  checkIfDisplay: function (index, dictionary) {
+    let item = dictionary[index]
+    let res = true
+    res = res && (!item[this.data.chooseStatus])
+    if (app.globalData.dictInfo.no_high_school) {
+      res = res && (!dictionary[index].high_school)
+    }
+    return res
   },
 
   /**
@@ -77,7 +91,6 @@ Page({
         break
     }
     var dictionary = wx.getStorageSync(useDict)
-    //console.log('dictionary: ', dictionary)
 
     if (!dictionary || dictionary.length==0) {
       wx.showLoading({
@@ -91,7 +104,6 @@ Page({
       
       const useDict = app.globalData.dictInfo.useDict
       var dictionary = wx.getStorageSync(useDict)
-      //console.log('dictionary: ', dictionary)
     }
     
     else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict)) {
@@ -134,14 +146,17 @@ Page({
     }
 
     // 选取最靠前的未掌握词组
-    var indexArray = Array.from(Array(dictionary.length).keys())
-    const revered = indexArray.reverse()
+    this.data.indexArray = Array.from(Array(dictionary.length).keys())
+    const revered = this.data.indexArray.reverse()
     for (var i in revered) {
       var indexTemp = revered[i]
-      if (!dictionary[indexTemp][this.data.chooseStatus]) {
+      // if (!dictionary[indexTemp][this.data.chooseStatus]) {
+      if (this.checkIfDisplay(indexTemp, dictionary)) {
         var index = Number(indexTemp)
       }
     }
+
+    // Todo: 厘清可能产生这个的各种情况
     if (!index) {
       var index = 0
     }
@@ -150,16 +165,15 @@ Page({
       dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
     }
 
-    let fontRes = await this.calFontSize(dictionary[index].deris)
-    console.log("fontRes: ", fontRes)
-
     // 数据加载进渲染模板
     this.setData({
       dictionary: dictionary,
-      indexArray: indexArray,
       index: index,
-      fontRes: fontRes
+      fontRes: await this.calFontSize(dictionary[index].deris)
     })
+
+    var _this = this
+    this.data.timer_timeout = setTimeout(function(){_this.data.with3s = false}, 3000)
 
     wx.hideLoading()
 
@@ -173,10 +187,10 @@ Page({
         this.InnerAudioContext = wx.createInnerAudioContext()
         this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
         this.InnerAudioContext.onEnded(() => {
-          app.globalData.timeout = setTimeout(this.onPlay, 1000)
+          this.data.audio_timeout = setTimeout(this.onPlay, 1000)
         })
       } catch(e) {
-        console.log(175, e)
+        console.log(e)
         this.setData({
           noAudio: true
         })
@@ -188,21 +202,49 @@ Page({
     this.setData({showChinese: true})
   },
 
+  configFilter: function (filtername, filtering) {
+    app.globalData.dictInfo[filtername] = filtering
+    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+    if (filtering) {
+      this.onLoad()
+    }
+  },
+  mayIFiltering: function (filtername) {
+    let _this = this
+    wx.showModal({
+      title: '简单词汇太多？',
+      content: '在构建词库的过程中，由于一些原因，部分存在高中课纲词汇的词汇组被保留了下来，是否将它们彻底屏蔽？',
+      success (res) {
+        if (res.confirm) {
+          _this.configFilter(filtername, true)
+        } else if (res.cancel) {
+          _this.configFilter(filtername, false)
+        }
+      }
+    })
+  },
+
   onDone: function () {
     this.data.dictionary[this.data.index][this.data.chooseStatus] = true // 标记掌握
+
+    // 如果3s内选择掌握、当前单词在高中范围 且 storage中值为undefined而非false则弹窗询问是否屏蔽
+    if (this.data.with3s && this.data.dictionary[this.data.index].high_school && (!app.globalData.dictInfo.hasOwnProperty('no_high_school'))) {
+      this.mayIFiltering('no_high_school')
+    }
+
     this.onNext()
   },
 
   onNext: async function () {
-    //console.log('index: ', this.data.index)
-    //console.log('indexArray[-1]: ', this.data.indexArray.length)
+    clearTimeout(this.data.timer_timeout)
+    clearTimeout(this.data.audio_timeout)
     if (this.data.index+1 >= this.data.indexArray.length) {
-      var dictionary = this.data.dictionary
-      dictionary.sort((a, b) => {
-        return Number(Boolean(b[this.data.chooseStatus])) - Number(Boolean(a[this.data.chooseStatus]))
-      })
-      //console.log('sortedDict: ', dictionary)
-      wx.setStorageSync(app.globalData.dictInfo.useDict, dictionary)
+    //   var dictionary = this.data.dictionary
+    //   dictionary.sort((a, b) => {
+    //     return Number(Boolean(b[this.data.chooseStatus])) - Number(Boolean(a[this.data.chooseStatus]))
+    //   })
+    //   //console.log('sortedDict: ', dictionary)
+    //   wx.setStorageSync(app.globalData.dictInfo.useDict, dictionary)
       var _this = this
       wx.showToast({
         title: '本词典到底啦\r\n重新翻出尚未掌握的',
@@ -216,15 +258,29 @@ Page({
         }
       })
     } else {
-      this.data.index = this.data.index + 1
-      console.log('word: ', this.data.dictionary[this.data.index]._id, 'chooseStatus: ', this.data.dictionary[this.data.index][this.data.chooseStatus])
-      if (this.data.dictionary[this.data.index][this.data.chooseStatus]) {
-        return this.onNext()
-      } else {
+      // this.data.index = this.data.index + 1
+      // //console.log('word: ', this.data.dictionary[this.data.index]._id, 'chooseStatus: ', this.data.dictionary[this.data.index][this.data.chooseStatus])
+      // if (this.data.dictionary[this.data.index][this.data.chooseStatus]) {
+      //   return this.onNext()
+      // } else {
+      //   this.setData({
+      //     index: this.data.index,
+      //     showChinese: false
+      //   })
+      // }
+      if (this.checkIfDisplay(this.data.index + 1, this.data.dictionary)) {
+        let new_index = this.data.index + 1
         this.setData({
-          index: this.data.index,
-          showChinese: false
+          index: new_index,
+          showChinese: false,
+          fontRes: await this.calFontSize(this.data.dictionary[new_index].deris)
         })
+        this.data.with3s = true
+        var _this = this
+        this.data.timer_timeout = setTimeout(function(){_this.data.with3s = false}, 3000)
+      } else {
+        this.data.index += 1
+        return this.onNext() // 这里  return 仅表示不再向下执行
       }
     }
     
@@ -232,15 +288,12 @@ Page({
     if (!this.data.noAudio) {
       this.InnerAudioContext.destroy()
       this.InnerAudioContext = wx.createInnerAudioContext()
-      let fontRes = await this.calFontSize(this.data.dictionary[this.data.index].deris)
-      console.log("fontRes: ", fontRes)
       this.setData({
-        showPlay: true,
-        fontRes: fontRes
+        showPlay: true
       })
       this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
       this.InnerAudioContext.onEnded(() => {
-        app.globalData.timeout = setTimeout(this.onPlay, 1000)
+        this.data.audio_timeout = setTimeout(this.onPlay, 1000)
       })
     }
   },
@@ -254,7 +307,7 @@ Page({
   },
   onPause: function () {
     try {
-      clearTimeout(app.globalData.timeout)
+      clearTimeout(this.data.audio_timeout)
     } catch {
       console.log('')
     }
@@ -271,7 +324,7 @@ Page({
     wx.pageScrollTo({
       duration: 0,
       scrollTop: 0
-    })
+    }) // 将“更多衍生词”界面滚动条回位
   },
 
   onDeriDetail: function (event) {
@@ -305,9 +358,14 @@ Page({
   onHide: async function () {
     wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
     try {
-      clearTimeout(app.globalData.timeout)
-    } catch {
-      console.log('')
+      clearTimeout(this.data.timer_timeout)
+    } catch(e) {
+      console.log('e')
+    }
+    try {
+      clearTimeout(this.data.audio_timeout)
+    } catch(e) {
+      console.log('e')
     }
   },
 

@@ -21,40 +21,41 @@ Page({
   async onLoad(actualLoad=true) {
     console.log("menu onLoad start")
     if (actualLoad) {
-      // onShow 中调用进行页面重载时 actualLoad 为 false, 此时不需要再次访问云端数据库
-      console.log("actualLoad")
+      // onShow 中调用进行页面重载时 actualLoad 为 false, 此时不需要再次访问云端数据库获取/更新词库信息
+      // console.log("actualLoad")
       const db = wx.cloud.database()
-      db.collection('dictInfo').doc('content').get().then(res => {
-        app.globalData.dataTemp = res.data
-        console.log('app.globalData.dataTemp: ', app.globalData.dataTemp) 
+      app.globalData.dictInfo = wx.getStorageSync('dictInfo') // 若storage中无此key则返回""
+      if (!app.globalData.hasOwnProperty('dictInfo') || typeof(app.globalData.dictInfo) == "string") { 
+        // 此时即为没有 app.globalData.dictInfo，立即从云数据库拉去一份初始的
+        const dictInfoRes = await db.collection('dictInfo').doc('content').get() 
+        app.globalData.dictInfo = dictInfoRes.data
+      } else {
+        // 慢慢进行一个是否需要更新词库的判断
+        db.collection('dictInfo').doc('content').get().then(res => { 
+          app.globalData.dataTemp = res.data
+          if (actualLoad && app.globalData.dataTemp && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=app.globalData.dataTemp.marker)) {
+            /**
+             * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
+             * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新
+             * 词库使用时会检查自己是否在 ‘dict_need_refresh’ 中，是的话就会从数据库拉去新版进行更新
+             */
+            wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
 
-        if (actualLoad && app.globalData.dataTemp && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=app.globalData.dataTemp.marker)) {
-          /**
-           * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
-           * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新
-           * 词库使用时会检查自己是否在 ‘dict_need_refresh’ 中，是的话就会从数据库拉去新版进行更新
-           */
-          wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
-
-          // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
-          app.globalData.dictInfo.clusters_and_domains = app.globalData.dataTemp.clusters_and_domains
-          app.globalData.dictInfo.modes = app.globalData.dataTemp.modes
-          app.globalData.dictInfo.marker = app.globalData.dataTemp.marker
-          wx.setStorageSync('dictInfo', app.globalData.dictInfo)
-        }
-      }).catch(err => {
-        console.log('Offline')
-        console.log(err)
-        app.globalData.offline = true
-      })
+            // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
+            app.globalData.dictInfo.clusters_and_domains = app.globalData.dataTemp.clusters_and_domains
+            app.globalData.dictInfo.modes = app.globalData.dataTemp.modes
+            app.globalData.dictInfo.marker = app.globalData.dataTemp.marker
+            wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+          }
+        }).catch(err => {
+          console.log('Offline')
+          console.log(err)
+          app.globalData.offline = true
+        })
+      }
+      console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     }
 
-    app.globalData.dictInfo = wx.getStorageSync('dictInfo')
-    console.log(app.globalData.dictInfo)
-    if (typeof(app.globalData.dictInfo) == "string") { // 此时即为没有 app.globalData.dictInfo
-      app.globalData.dictInfo = new Object()
-    }
-    console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     if (app.globalData.dictInfo.useDict && actualLoad) { // 直接跳转到之前使用的词库
       wx.navigateTo({
         url: '../words/words',
@@ -82,7 +83,7 @@ Page({
   },
 
   /**
-   * 滚动过程中屏蔽确认按钮避免数据未完成更新就提交了
+   * 滚动过程中屏蔽确认按钮，避免数据更新还没完成就提交了
    */
   bindpickstart: function () {
     this.setData({showBtn: false})
@@ -91,8 +92,8 @@ Page({
     this.setData({showBtn: true})
   },
 
+  // picker 选择更新时刷新相关变量值
   bindChange: function (e) { 
-    // picker 选择更新时刷新相关变量值
     const val = e.detail.value
     if (val[0]!=this.data.value[0]) {
       // todo: 当有不止一个大类后，根据第一列（大类）的改变决定第二列（domain）选项显示什么
@@ -128,6 +129,7 @@ Page({
 
   /**
    * 生命周期函数--监听页面显示
+   * 主要触发场景：从words页面返回
    */
   onShow() {
     if (app.globalData.loaded) {
