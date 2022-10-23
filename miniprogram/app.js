@@ -1,3 +1,6 @@
+var dblog = require('./dblog/dblog.js')
+
+
 App({
   async onLaunch() {
     try {
@@ -109,4 +112,8 @@ App({
       imageUrl: '/images/shareImage.png',
     }
   },
+
+  dbLogAction : function(action){
+    dblog.logAction(action)
+  }
 })

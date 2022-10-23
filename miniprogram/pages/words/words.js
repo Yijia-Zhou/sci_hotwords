@@ -393,6 +393,7 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
+    app.dbLogAction('shareApp')
     return app.onShareAppMessage(res)
   },
 })
