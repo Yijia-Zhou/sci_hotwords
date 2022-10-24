@@ -17,16 +17,6 @@ Page({
     with3s: true
   },
 
-  mCount: function (word) {
-    // 计算单词中"m"的个数，用于字号修正
-    try {
-      var lenRes = word.match(/m/g).length
-    } catch {
-      return 0
-    }
-    return lenRes
-  },
-
   display_length_count: function (word) {
     // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
     var res = 0
@@ -212,8 +202,10 @@ Page({
   mayIFiltering: function (filtername) {
     let _this = this
     wx.showModal({
-      title: '简单词汇太多？',
-      content: '在构建词库的过程中，由于一些原因，部分存在高中课纲词汇的词汇组被保留了下来，是否将它们彻底屏蔽？',
+      title: '彻底屏蔽高中单词？',
+      content: '部分高中课纲单词在论文中有一些特定用法/释义，您可以选择是否保留它们',
+      confirmText: "屏蔽",
+      cancelText: "保留",
       success (res) {
         if (res.confirm) {
           _this.configFilter(filtername, true)
