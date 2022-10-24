@@ -44,12 +44,13 @@
       <text class="explain_zhcn" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
     </view>
 
-    <view class="container_grow1" style="height: 300rpx; align-self: flex-end; flex-grow: 0;">
-      <button type="primary" size='default' class='btn1' bindtap="onDone" style="width: 61.8vw;">我记住了</button>
-      <button type="default" size='default' class='btn1' bindtap="onNext" style="margin-bottom: 60rpx; width: 61.8vw;">还要努力</button>
-    </view>
-
   </view>
+
+  <view class="main_button_container" style="height: 33vh; align-self: flex-end; flex-grow: 0;" wx:if="{{!showMoreDeri}}">
+      <button type="primary" class='primary_button' bindtap="onDone" style="width: 61.8vw;">我记住了</button>
+      <button type="default" class='following_button' bindtap="onNext" style="width: 61.8vw;">还要努力</button>
+      <button type="default" class='following_button' bindtap="onConfig" style="width: 61.8vw;" wx:if="{{showSetting}}">调整设置</button>
+    </view>
 
   <view class="table_more_deri" wx:if="{{showMoreDeri}}">
     <view class="tr bg-w">
@@ -74,7 +75,7 @@
   </view>
 
   <button type="primary" class='btn1 bottom_back_from_more_deri' catchtap="onMoreDeri" style="width: 61.8vw;" wx:if="{{showMoreDeri}}">返回</button>
-  <!-- <view class="botton-right-float">
+  <!-- <view class="button-right-float">
     <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
       <text>选择词典</text>
       <text>/模式</text>

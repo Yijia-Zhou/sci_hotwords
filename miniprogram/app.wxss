@@ -1,13 +1,13 @@
 /* 引入 weui 组件
 @import './miniprogram_npm/weui-miniprogram/weui-wxss/dist/style/weui.wxss'; */
-
+/* 
 page {
   --footer-height: 10vh;
   --button-size: 16vw;
   --button-color: #353535;
   --button-icon-size: 6vw;
-}
-
+} 
+*/
 text {
   color: #343a40;
 }
@@ -17,14 +17,43 @@ text {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 95vh;
-  width: 98%;
+  height: 100vh;
+  width: 100vw;
+}
+
+.main_button_container {
+  height: 33vh;
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* flex-grow: 0; */
+  flex: 0 0 auto;
+  /* justify-content: space-between; */
+  width: 100%;
+}
+
+.primary_button {
+  /* width: 61.8vw; */
+  border-radius: 0;
+  font-size: 36rpx;
+  font-weight: 500;
+  align-self: flex-start;
+  margin-top: 6vh;
+}
+
+.following_button {
+  border-radius: 0;
+  font-size: 36rpx;
+  font-weight: 500;
+  align-self: flex-start;
+  margin-top: 36rpx;
 }
 
 .btn1{
-  width: 61.8vw;
+  /* width: 61.8vw; */
   border-radius: 0;
-  font-size: 35rpx;
+  font-size: 36rpx;
   font-weight: 500;
 }
 

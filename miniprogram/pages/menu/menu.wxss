@@ -25,10 +25,11 @@ picker-view {
   background-color: #FFF;
   text-align: center;
   box-sizing: border-box;
-  width: 95%;
+  width: 93vw;
   height: 50%;
   /* border-radius: 30rpx; */
   box-shadow: 0px 7px 6px -9px black;
+  margin-bottom: 12rpx;
 }
 
 picker-view-column {
