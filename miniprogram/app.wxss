@@ -22,7 +22,7 @@ text {
 }
 
 .main_button_container {
-  height: 33vh;
+  height: 38.2vh; /* 100 - 61.8 */
   align-self: flex-end;
   display: flex;
   flex-direction: column;

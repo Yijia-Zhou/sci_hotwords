@@ -11,8 +11,9 @@ page {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 61vh;
-  width: 93vw;
+  margin-top: 4vh;
+  height: 57.8vh; /* 61.8 - 4 */
+  width: 92vw;
   border: 1px solid #ddd;
   background-size: cover;
 	background-clip: content-box;
@@ -20,15 +21,12 @@ page {
   background-color: rgba(232, 232, 216, 0.1);
   box-sizing: border-box;
   position: relative;
-  /* margin: 8px; */
-  margin-top: 5vh;
-  /* margin-left: 12rpx; */
-  /* margin: 5vh 16rpx 0 35rpx; */
 }
 
 .total_count_text {
   margin-top: 20rpx; 
   font-weight: 500;
+  color: rgba(52, 58, 64, 0.618);
 }
 
 .container_grow1{
@@ -74,10 +72,10 @@ page {
 }
 
 .deri_container_whole {
-  width: 96%;
+  width: 92%;
   box-sizing: border-box;
   padding-bottom: 35rpx;
-  border: steelblue dashed 1rpx;
+  border: 1rpx dashed steelblue;
   position: relative;
   padding-bottom: 55rpx;
 }
@@ -120,7 +118,7 @@ page {
   font-size: 25rpx;
   font: lighter;
   background-color:rgba(236, 255, 147, 0.2);
-  border: steelblue dotted 1rpx;
+  border: 1rpx dotted steelblue;
   border-bottom: unset;
 }
 
