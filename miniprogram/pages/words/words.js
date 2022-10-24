@@ -15,7 +15,9 @@ Page({
     showChinese: false,
     noAudio: false,
     with3s: true,
-    showSetting: false
+    showSetting: false,
+    since_touch_setting: 0,
+    setting_opacity: 1
   },
 
   display_length_count: function (word) {
@@ -195,10 +197,10 @@ Page({
   },
 
   configFilter: function (filtername, filtering) {
-    let filtering_temp = app.globalData.dictInfo[filtername]
+    let filtering_past = app.globalData.dictInfo[filtername]
     app.globalData.dictInfo[filtername] = filtering
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
-    if (filtering != filtering_temp) {
+    if (filtering != filtering_past) {
       this.onLoad()
     }
   },
@@ -217,6 +219,10 @@ Page({
         }
       }
     })
+    this.setData({
+      'since_touch_setting': 0,
+      'setting_opacity': 1
+    })
   },
 
   onConfig: function () {
@@ -234,7 +240,7 @@ Page({
     this.onNext()
   },
 
-  onNext: async function () {
+  onNext: async function (real_touch=true) {
     clearTimeout(this.data.timer_timeout)
     clearTimeout(this.data.audio_timeout)
     if (this.data.index+1 >= this.data.indexArray.length) {
@@ -279,7 +285,7 @@ Page({
         this.data.timer_timeout = setTimeout(function(){_this.data.with3s = false}, 3000)
       } else {
         this.data.index += 1
-        return this.onNext() // 这里  return 仅表示不再向下执行
+        return this.onNext(real_touch=false) // 这里  return 仅表示不再向下执行
       }
     }
     
@@ -295,6 +301,8 @@ Page({
         this.data.audio_timeout = setTimeout(this.onPlay, 1000)
       })
     }
+    this.data.since_touch_setting += 1
+    this.setData({'setting_opacity': Math.max(0.25, 0.8 ** this.data.since_touch_setting)})
   },
 
   // “朗读”与“暂停”

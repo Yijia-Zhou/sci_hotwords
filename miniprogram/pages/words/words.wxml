@@ -46,10 +46,10 @@
 
   </view>
 
-  <view class="main_button_container" style="height: 33vh; align-self: flex-end; flex-grow: 0;" wx:if="{{!showMoreDeri}}">
+  <view class="main_button_container" wx:if="{{!showMoreDeri}}">
       <button type="primary" class='primary_button' bindtap="onDone" style="width: 61.8vw;">我记住了</button>
       <button type="default" class='following_button' bindtap="onNext" style="width: 61.8vw;">还要努力</button>
-      <button type="default" class='following_button' bindtap="onConfig" style="width: 61.8vw;" wx:if="{{showSetting}}">调整设置</button>
+      <button type="default" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{setting_opacity}}" wx:if="{{showSetting}}">调整设置</button>
     </view>
 
   <view class="table_more_deri" wx:if="{{showMoreDeri}}">
