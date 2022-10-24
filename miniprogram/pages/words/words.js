@@ -55,7 +55,7 @@ Page({
     for (let i in [0,1,2,3]) {
       max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
     }
-    let fontRes = Math.min(43, 500/(max_display_length+1))
+    let fontRes = Math.min(44, 555/(max_display_length+1))
     return [fontRes, fontRes, fontRes, fontRes]
   },
 
@@ -75,6 +75,7 @@ Page({
   onLoad: async function () {
     console.log("words onLoad start")
     const useDict = app.globalData.dictInfo.useDict
+    wx.setNavigationBarTitle({title: '生命科学 - ' + useDict})
     switch (app.globalData.dictInfo.useMode) {
       case '识记模式':
         this.data.chooseStatus = 'learnt'
@@ -302,7 +303,7 @@ Page({
       })
     }
     this.data.since_touch_setting += 1
-    this.setData({'setting_opacity': Math.max(0.25, 0.8 ** this.data.since_touch_setting)})
+    this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
   },
 
   // “朗读”与“暂停”
