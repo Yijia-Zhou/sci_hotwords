@@ -11,19 +11,19 @@ page {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  height: 85%;
-  width: 80%;
+  height: 61vh;
+  width: 93vw;
   border: 1px solid #ddd;
   background-size: cover;
 	background-clip: content-box;
-  background-color: rgba(255, 250, 205, 0.1);
+  /* background-color: rgba(255, 250, 205, 0.1); */
   background-color: rgba(232, 232, 216, 0.1);
   box-sizing: border-box;
   position: relative;
-  margin: 8px;
-  margin-top: 5rpx;
-  margin-left: 35rpx;
-  margin: 5rpx 16rpx 0 35rpx;
+  /* margin: 8px; */
+  margin-top: 5vh;
+  /* margin-left: 12rpx; */
+  /* margin: 5vh 16rpx 0 35rpx; */
 }
 
 .total_count_text {
@@ -65,7 +65,7 @@ page {
 }
 
 .read_button {
-  font-size: 35rpx;
+  font-size: 36rpx;
   text-align: center;
   background-color: #07c160;
   color: #fff;
@@ -138,8 +138,8 @@ page {
   position: absolute;
   border: 50px solid transparent;
   border-top: 50px solid #fefefe;
-  top: -60px;
-  left: -65px;
+  top: -63px;
+  left: -60px;
   box-shadow: 0px -7px 6px -9px black;
   transform: rotate(135deg);
 }
@@ -149,8 +149,8 @@ page {
   position: absolute;
   border: 50px solid transparent;
   border-bottom: 50px solid #fefefe;
-  bottom: -60px;
-  right: -65px;
+  bottom: -63px;
+  right: -60px;
   box-shadow: 0px 7px 6px -9px black;
   transform: rotate(135deg);
 }
@@ -159,7 +159,7 @@ page {
   border: 0px solid darkgray;
   width: 100%;
   position: absolute;
-  top: 50rpx;
+  top: 5vh;
   padding-bottom: 260rpx;
 }
 .tr {
@@ -191,7 +191,7 @@ page {
   align-items: center;
 }
 
-/* .botton-right-float{
+/* .button-right-float{
   color: #ffffff;
   position: fixed;
   display: flex;
