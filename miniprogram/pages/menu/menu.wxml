@@ -1,7 +1,7 @@
 <!--pages/menu/menu.wxml--> 
 
 
-<view class="page_container" style="width: 100%;">
+<view class="page_container">
   <view class="title_container" style="height: 365rpx;"><text class="title">请选择您要使用的词库和模式</text></view>
   
   <picker-view 
@@ -22,7 +22,8 @@
     </picker-view-column>
   </picker-view>
 
-  <view class="page_container" style="height: 33%;">
-    <button type="primary" size='default' class='btn1' catchtap="onConfirm" style="width: 61.8vw; margin-bottom: 50rpx;" wx:if="{{showBtn}}">确定</button>
+  <view class="main_button_container">
+    <button type="primary" class='primary_button' catchtap="onConfirm" style="width: 61.8vw" wx:if="{{showBtn}}">就是这样</button>
+    <button type="default" class='following_button' catchtap="onConfirm" style="width: 61.8vw;" wx:if="{{showBtn}}">随便看看</button>
   </view>
 </view>

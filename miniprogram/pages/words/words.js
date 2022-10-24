@@ -14,7 +14,8 @@ Page({
     useMode: app.globalData.dictInfo.useMode,
     showChinese: false,
     noAudio: false,
-    with3s: true
+    with3s: true,
+    showSetting: false
   },
 
   display_length_count: function (word) {
@@ -159,7 +160,8 @@ Page({
     this.setData({
       dictionary: dictionary,
       index: index,
-      fontRes: await this.calFontSize(dictionary[index].deris)
+      fontRes: await this.calFontSize(dictionary[index].deris),
+      showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
     })
 
     var _this = this
@@ -193,9 +195,10 @@ Page({
   },
 
   configFilter: function (filtername, filtering) {
+    let filtering_temp = app.globalData.dictInfo[filtername]
     app.globalData.dictInfo[filtername] = filtering
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
-    if (filtering) {
+    if (filtering != filtering_temp) {
       this.onLoad()
     }
   },
@@ -203,7 +206,7 @@ Page({
     let _this = this
     wx.showModal({
       title: '彻底屏蔽高中单词？',
-      content: '部分高中课纲单词在论文中有一些特定用法/释义，您可以选择是否保留它们',
+      content: '部分高中课纲单词在论文中有一些特定用法/释义，您可以选择是否保留它们\r\n您也可以随时通过“调整设置”修改此设定',
       confirmText: "屏蔽",
       cancelText: "保留",
       success (res) {
@@ -214,6 +217,10 @@ Page({
         }
       }
     })
+  },
+
+  onConfig: function () {
+    this.mayIFiltering('no_high_school')
   },
 
   onDone: function () {
