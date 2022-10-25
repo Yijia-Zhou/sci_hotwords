@@ -220,8 +220,8 @@ Page({
         }
       }
     })
+    this.data.since_touch_setting = 0
     this.setData({
-      'since_touch_setting': 0,
       'setting_opacity': 1
     })
   },
@@ -302,8 +302,11 @@ Page({
         this.data.audio_timeout = setTimeout(this.onPlay, 1000)
       })
     }
-    this.data.since_touch_setting += 1
-    this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
+
+    if (real_touch) {
+      this.data.since_touch_setting += 1
+      this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
+    }
   },
 
   // “朗读”与“暂停”

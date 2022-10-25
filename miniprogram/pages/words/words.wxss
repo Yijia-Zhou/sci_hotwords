@@ -75,7 +75,7 @@ page {
 .deri_container_whole {
   width: 92%;
   box-sizing: border-box;
-  border: 1rpx dashed steelblue;
+  border: 1px dashed steelblue;
   position: relative;
   padding-bottom: 55rpx;
   flex: 0 0 auto;
@@ -120,7 +120,7 @@ page {
   font-size: 25rpx;
   font: lighter;
   background-color:rgba(236, 255, 147, 0.2);
-  border: 1rpx dotted steelblue;
+  border: 1px dotted steelblue;
   border-bottom: unset;
 }
 
