@@ -1,8 +1,8 @@
 /* pages/menu/menu.wxss */
 
 page {
-  background-color: #F0F0E8;
-  /* background-color: rgba(138, 109, 53, 0.03); */
+  /* background-color: #F0F0E8; */
+  background-color: rgba(138, 109, 53, 0.03);
 }
 
 .title_container{
@@ -12,7 +12,6 @@ page {
   flex-grow: 1;
   justify-content: space-around;
   width: 100%;
-  gap: 10rpx;
 }
 
 .title{
@@ -22,13 +21,15 @@ page {
 
 /* 以下3个样式来自 https://blog.csdn.net/Hero_rong/article/details/96971853 */
 picker-view {
-  background-color: #FFF;
+  background-color: rgba(232, 232, 216, 0.1);
   text-align: center;
+  flex-grow: 1;
   box-sizing: border-box;
   width: 92vw;
   height: 50%;
-  /* border-radius: 30rpx; */
-  box-shadow: 0px 7px 6px -9px black;
+  /* box-shadow: 0px 7px 6px -9px black; */
+  box-shadow: 0 20rpx 30rpx 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
   margin-bottom: 12rpx;
 }
 

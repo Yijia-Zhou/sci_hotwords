@@ -20,6 +20,7 @@ page {
   /* background-color: rgba(255, 250, 205, 0.1); */
   background-color: rgba(232, 232, 216, 0.1);
   box-sizing: border-box;
+  box-shadow: 0 20rpx 30rpx 0 rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -29,7 +30,7 @@ page {
   color: rgba(52, 58, 64, 0.618);
 }
 
-.container_grow1{
+.main_word_container{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,10 +75,11 @@ page {
 .deri_container_whole {
   width: 92%;
   box-sizing: border-box;
-  padding-bottom: 35rpx;
-  border: 1rpx dashed steelblue;
+  border: 1px dashed steelblue;
   position: relative;
   padding-bottom: 55rpx;
+  flex: 0 0 auto;
+  height: 240rpx;
 }
 
 .deri_container_horizon{
@@ -118,11 +120,24 @@ page {
   font-size: 25rpx;
   font: lighter;
   background-color:rgba(236, 255, 147, 0.2);
-  border: 1rpx dotted steelblue;
+  border: 1px dotted steelblue;
   border-bottom: unset;
 }
 
+.explain_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48rpx 30rpx 0 30rpx; 
+  box-sizing: border-box;
+  width: 88%; 
+  flex: 0 0 auto; 
+  height: 215rpx;
+}
+
 .explain_zhcn {
+  align-self: flex-start;
   font-size: 36rpx;
   text-align: center;
   width: 100%;
@@ -134,10 +149,10 @@ page {
   content: "";
   display: block;
   position: absolute;
-  border: 50px solid transparent;
-  border-top: 50px solid #fefefe;
-  top: -63px;
-  left: -60px;
+  border: 40px solid transparent;
+  border-top: 40px solid #fefefe;
+  top: -50px;
+  left: -48px;
   box-shadow: 0px -7px 6px -9px black;
   transform: rotate(135deg);
 }
@@ -145,10 +160,10 @@ page {
   content: "";
   display: block;
   position: absolute;
-  border: 50px solid transparent;
-  border-bottom: 50px solid #fefefe;
-  bottom: -63px;
-  right: -60px;
+  border: 40px solid transparent;
+  border-bottom: 40px solid #fefefe;
+  bottom: -50px;
+  right: -48px;
   box-shadow: 0px 7px 6px -9px black;
   transform: rotate(135deg);
 }
