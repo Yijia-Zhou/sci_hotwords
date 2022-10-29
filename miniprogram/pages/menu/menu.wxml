@@ -11,13 +11,18 @@
     bindpickstart="bindpickstart"
     bindpickend="bindpickend"
   >
-    <picker-view-column style="background-color: #D0C8B8;">
+    <!-- <picker-view-column style="background-color: rgba(232, 232, 216, 0.5);"> -->
+      <!-- <picker-view-column style="background-color: #D0C8B8;"> -->
+    <picker-view-column style="background-color: rgba(175, 144, 115, 0.3);">
       <view wx:for="{{clusters}}" style="line-height: 50px" wx:key="*this">{{item}}</view>
     </picker-view-column>
-    <picker-view-column style="background-color: rgba(175, 144, 115, 0.65);">
+    <!-- <picker-view-column style="background-color: rgba(232, 232, 216, 0.8);"> -->
+    <picker-view-column style="background-color: rgba(175, 144, 115, 0.4);">
       <view wx:for="{{domains}}" style="line-height: 50px" wx:key="*this">{{item}}</view>
     </picker-view-column>
-    <picker-view-column style="background-color: #D0C8B8;">
+    <!-- <picker-view-column style="background-color: rgba(232, 232, 216, 0.5);"> -->
+      <!-- <picker-view-column style="background-color: #D0C8B8;"> -->
+    <picker-view-column style="background-color: rgba(175, 144, 115, 0.3);">
       <view wx:for="{{modes}}" style="line-height: 50px" wx:key="*this">{{item}}</view>
     </picker-view-column>
   </picker-view>
