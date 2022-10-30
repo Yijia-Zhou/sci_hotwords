@@ -359,7 +359,7 @@ Page({
     var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
     wx.showModal({
       title: deri_obj.word,
-      content: deri_obj.bing + '\r\n 词频：' + String(deri_obj.count), 
+      content: Boolean(deri_obj.bing) ? deri_obj.bing : "暂无释义" + '\r\n 词频：' + String(deri_obj.count), 
       showCancel: false
     })
   },
