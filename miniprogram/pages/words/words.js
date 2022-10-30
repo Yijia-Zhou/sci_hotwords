@@ -7,9 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    count: function (s) {
-      return s.length
-    },
+    // count: function (s) {
+    //   return s.length
+    // },
     showPlay: true,
     showMoreDeri: false,
     useMode: app.globalData.dictInfo.useMode,
@@ -197,7 +197,7 @@ Page({
   },
 
   onShowChinese: function () {
-    dblog.logAction("ShowChinese")
+    dblog.logAction("onShowChinese")
     this.setData({showChinese: true})
   },
 
@@ -219,8 +219,10 @@ Page({
       success (res) {
         if (res.confirm) {
           _this.configFilter(filtername, true)
+          dblog.logAction("enable_highschool_filter")
         } else if (res.cancel) {
           _this.configFilter(filtername, false)
+          dblog.logAction("disable_highschool_filter")
         }
       }
     })
@@ -232,6 +234,7 @@ Page({
 
   onConfig: function () {
     this.mayIFiltering('no_high_school')
+    dblog.logAction("onConfig")
   },
 
   onDone: function () {
@@ -380,6 +383,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: async function () {
+    dblog.reportUserLog()
     wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
     try {
       clearTimeout(this.data.timer_timeout)
@@ -397,7 +401,6 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: async function () {
-    dblog.reportUserLog()
     this.InnerAudioContext.destroy()
     await this.onHide()
   },
