@@ -2,7 +2,8 @@
   "entryPagePath": "pages/menu/menu",
   "pages": [
     "pages/menu/menu",
-    "pages/words/words"
+    "pages/words/words",
+    "pages/query/query"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

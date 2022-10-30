@@ -122,6 +122,12 @@ Page({
     })
   },
 
+  onQuery(){
+    wx.navigateTo({
+      url: '../query/query',
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
