@@ -7,7 +7,13 @@ function reportUserLog() {
     return 1
   }
   const db = wx.cloud.database()
-  let deviceInfo = wx.getDeviceInfo()
+  try {
+    var deviceInfo = wx.getDeviceInfo()
+  } catch {
+    var deviceInfo = {
+      model: "开发者工具"
+    }
+  }
   db.collection('log').add({
     data : {
       userLog,
