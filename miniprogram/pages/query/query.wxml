@@ -1,2 +1,12 @@
 <!--pages/query/query.wxml-->
-<text>pages/query/query.wxml</text>
+<view class="page_container">
+  <view class="query_bar_container">
+    <view class="query_bar">
+      <view class="query_bar_box">
+        <icon class="query_icon_in_query_bar_box" type="query" size="14"></icon>
+        <input type="text" class="query_input_in_query_bar_box" placeholder="请输入查询词汇"/>
+      </view>
+    </view>
+    <view class="query_bar_btn" bindtap='onQuery'>查询</view>
+  </view>
+</view>

@@ -29,6 +29,6 @@
 
   <view class="main_button_container">
     <button type="primary" class='primary_button' catchtap="onConfirm" style="width: 61.8vw" wx:if="{{showBtn}}">就是这样</button>
-    <button type="default" class='following_button' catchtap="onQuery" style="width: 61.8vw;" wx:if="{{showBtn}}">单词查询</button>
+    <button type="default" class='following_button' catchtap="onQuery" style="width: 61.8vw;" wx:if="{{showBtn}}">词汇查询</button>
   </view>
 </view>
