@@ -1,4 +1,5 @@
 const app = getApp()
+var dblog = require('../../utils/dblog.js')
 
 Page({
  
@@ -6,9 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    count: function (s) {
-      return s.length
-    },
+    // count: function (s) {
+    //   return s.length
+    // },
     showPlay: true,
     showMoreDeri: false,
     useMode: app.globalData.dictInfo.useMode,
@@ -172,6 +173,8 @@ Page({
 
     wx.hideLoading()
 
+    dblog.logWord(dictionary[index]._id)
+
     // 预备“朗读”功能
     if (app.globalData.offline) {
       this.setData({
@@ -194,6 +197,7 @@ Page({
   },
 
   onShowChinese: function () {
+    dblog.logAction("onShowChinese")
     this.setData({showChinese: true})
   },
 
@@ -215,8 +219,10 @@ Page({
       success (res) {
         if (res.confirm) {
           _this.configFilter(filtername, true)
+          dblog.logAction("enable_highschool_filter")
         } else if (res.cancel) {
           _this.configFilter(filtername, false)
+          dblog.logAction("disable_highschool_filter")
         }
       }
     })
@@ -228,9 +234,11 @@ Page({
 
   onConfig: function () {
     this.mayIFiltering('no_high_school')
+    dblog.logAction("onConfig")
   },
 
   onDone: function () {
+    dblog.logAction("onDone")
     this.data.dictionary[this.data.index][this.data.chooseStatus] = true // 标记掌握
 
     // 如果3s内选择掌握、当前单词在高中范围 且 storage中值为undefined而非false则弹窗询问是否屏蔽
@@ -238,6 +246,11 @@ Page({
       this.mayIFiltering('no_high_school')
     }
 
+    this.onNext()
+  },
+
+  onToBeDone: function () {
+    dblog.logAction("onToBeDone")
     this.onNext()
   },
 
@@ -276,6 +289,7 @@ Page({
       // }
       if (this.checkIfDisplay(this.data.index + 1, this.data.dictionary)) {
         let new_index = this.data.index + 1
+        dblog.logWord(this.data.dictionary[new_index]._id)
         this.setData({
           index: new_index,
           showChinese: false,
@@ -311,6 +325,7 @@ Page({
 
   // “朗读”与“暂停”
   onPlay: function () {
+    dblog.logAction("onPlay")
     this.InnerAudioContext.play()
     this.setData({
       showPlay: false,
@@ -340,6 +355,7 @@ Page({
 
   onDeriDetail: function (event) {
     // 点击衍生词可显示该衍生词释义
+    dblog.logAction("onDeriDetail")
     var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
     wx.showModal({
       title: deri_obj.word,
@@ -367,6 +383,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: async function () {
+    dblog.reportUserLog()
     wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
     try {
       clearTimeout(this.data.timer_timeout)
