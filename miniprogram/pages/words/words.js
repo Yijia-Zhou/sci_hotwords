@@ -131,10 +131,31 @@ Page({
     }
     console.log('allDone: ', allDone)
     if (allDone) {
-      wx.showToast({
-        title: '全部掌握啦\r\n正在重置词典',
-        icon: 'none'
-      })
+      switch (app.globalData.dictInfo.useMode) {
+        case '识记模式':
+          wx.showModal({
+            title: '全部记过一遍啦(^_^)正在重置词典 \r\n 要不要试着到检验模式印证一下记忆？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                app.globalData.dictInfo.useMode = '检验模式'
+                dblog.logAction("allDone_begin_test")
+              } else if (res.cancel) {
+                _this.configFilter(filtername, false)
+                dblog.logAction("allDone_and_reset")
+              }
+            }
+          })
+          break
+        case '检验模式':
+          wx.showToast({
+            title: '全部掌握啦\r\n正在重置词典',
+            duration: 3200,
+            icon: 'none'
+          })
+          break
+      }
       for (var w in dictionary) {
         dictionary[w][this.data.chooseStatus] = false
       }
