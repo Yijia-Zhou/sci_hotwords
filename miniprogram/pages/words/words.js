@@ -127,8 +127,9 @@ Page({
 
     var allDone = true
     for (var w in dictionary) {
-      allDone = allDone && dictionary[w][this.data.chooseStatus]
+      allDone = allDone && (!this.checkIfDisplay(w, dictionary))
     }
+    console.log('allDone: ', allDone)
     if (allDone) {
       wx.showToast({
         title: '全部掌握啦\r\n正在重置词典',
@@ -151,8 +152,6 @@ Page({
         var index = Number(indexTemp)
       }
     }
-
-    // Todo: 厘清可能产生这个的各种情况
     if (!index) {
       var index = 0
     }
@@ -247,10 +246,6 @@ Page({
       this.mayIFiltering('no_high_school')
     }
 
-    app.globalData.tracer.doneCount ++
-    this.setData({doneCount: app.globalData.tracer.doneCount})
-    wx.setStorage('tracer', app.globalData.tracer)
-
     this.onNext()
   },
 
@@ -274,10 +269,7 @@ Page({
         title: '本词典到底啦\r\n重新翻出尚未掌握的',
         icon: 'none',
         success: function () {
-          // _this.setData({
-          //   index: 0,
-          //   showChinese: false
-          // })
+          wx.setStorageSync(app.globalData.dictInfo.useDict, _this.data.dictionary)
           _this.onLoad()
         }
       })
