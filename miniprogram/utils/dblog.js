@@ -1,6 +1,7 @@
 var userLog = new Array()
 var currentLogNum = 0
 var logNumLimit = 30
+var app = getApp()
 
 function reportUserLog() {
   if (userLog.length == 0) {

@@ -131,6 +131,7 @@ Page({
     }
     console.log('allDone: ', allDone)
     if (allDone) {
+      var _this = this
       switch (app.globalData.dictInfo.useMode) {
         case '识记模式':
           var _this = this
