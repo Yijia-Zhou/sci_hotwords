@@ -18,7 +18,8 @@ Page({
     with3s: true,
     showSetting: false,
     since_touch_setting: 0,
-    setting_opacity: 1
+    setting_opacity: 1,
+    target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'
   },
 
   display_length_count: function (word) {
@@ -126,13 +127,35 @@ Page({
 
     var allDone = true
     for (var w in dictionary) {
-      allDone = allDone && dictionary[w][this.data.chooseStatus]
+      allDone = allDone && (!this.checkIfDisplay(w, dictionary))
     }
+    console.log('allDone: ', allDone)
     if (allDone) {
-      wx.showToast({
-        title: '全部掌握啦\r\n正在重置词典',
-        icon: 'none'
-      })
+      switch (app.globalData.dictInfo.useMode) {
+        case '识记模式':
+          wx.showModal({
+            title: '全部记过一遍啦(^_^)正在重置词典 \r\n 要不要试着到检验模式印证一下记忆？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                app.globalData.dictInfo.useMode = '检验模式'
+                dblog.logAction("allDone_begin_test")
+              } else if (res.cancel) {
+                _this.configFilter(filtername, false)
+                dblog.logAction("allDone_and_reset")
+              }
+            }
+          })
+          break
+        case '检验模式':
+          wx.showToast({
+            title: '全部掌握啦\r\n正在重置词典',
+            duration: 3200,
+            icon: 'none'
+          })
+          break
+      }
       for (var w in dictionary) {
         dictionary[w][this.data.chooseStatus] = false
       }
@@ -150,8 +173,6 @@ Page({
         var index = Number(indexTemp)
       }
     }
-
-    // Todo: 厘清可能产生这个的各种情况
     if (!index) {
       var index = 0
     }
@@ -246,6 +267,40 @@ Page({
       this.mayIFiltering('no_high_school')
     }
 
+    // 每日任务进度更新
+    app.globalData.tracer.doneCount ++
+    // this.setData({doneCount: app.globalData.tracer.doneCount})
+    this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
+    wx.setStorage({key: 'tracer', data: app.globalData.tracer})
+    console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
+    if (app.globalData.tracer.doneCount == app.globalData.dictInfo.daily_target) {
+      console.log('temp true')
+      wx.showModal({
+        title: "已学习30个词汇组",
+        content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
+        confirmText: "明天继续",
+        showCancel: false,
+        success () {
+          wx.requestSubscribeMessage({
+            tmplIds: ['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I'],
+            success (res) {
+              console.log(res)
+              if (res['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I']=='accept') {
+                const db = wx.cloud.database()
+                db.collection('reminder').add({
+                  data: {
+                    remind_date: new Date(new Date().getTime()/*+86400000*/).getDate()
+                  }
+                })
+              }
+            },
+            complete () {
+
+            }
+          })
+        }
+      })
+    }
     this.onNext()
   },
 
@@ -269,10 +324,7 @@ Page({
         title: '本词典到底啦\r\n重新翻出尚未掌握的',
         icon: 'none',
         success: function () {
-          // _this.setData({
-          //   index: 0,
-          //   showChinese: false
-          // })
+          wx.setStorageSync(app.globalData.dictInfo.useDict, _this.data.dictionary)
           _this.onLoad()
         }
       })
@@ -359,7 +411,7 @@ Page({
     var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
     wx.showModal({
       title: deri_obj.word,
-      content: deri_obj.bing + '\r\n 词频：' + String(deri_obj.count), 
+      content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 词频：' + String(deri_obj.count), 
       showCancel: false
     })
   },
@@ -377,6 +429,13 @@ Page({
     this.setData({
       useMode: app.globalData.dictInfo.useMode
     })
+    try{
+      if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+        this.onNext(real_touch=false)
+      }
+    } catch(e) {
+      console.log(e)
+    }
   },
 
   /**
@@ -388,12 +447,12 @@ Page({
     try {
       clearTimeout(this.data.timer_timeout)
     } catch(e) {
-      console.log('e')
+      console.log(e)
     }
     try {
       clearTimeout(this.data.audio_timeout)
     } catch(e) {
-      console.log('e')
+      console.log(e)
     }
   },
 

@@ -5,8 +5,17 @@ App({
     } catch {
       console.log("Cloud can't be init")
     }
+    let tracer = wx.getStorageSync('tracer')
+    const date = new Date()
+    if (typeof(tracer) == "string" || tracer.date != date.toLocaleDateString()) {
+      tracer = {
+        doneCount: 0,
+        date: date.toLocaleDateString()
+      }
+    }
     
     this.globalData = {
+      tracer
     }
     console.log("onLaunch end")
   },
