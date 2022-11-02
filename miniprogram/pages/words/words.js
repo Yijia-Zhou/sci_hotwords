@@ -133,6 +133,7 @@ Page({
     if (allDone) {
       switch (app.globalData.dictInfo.useMode) {
         case '识记模式':
+          var _this = this
           wx.showModal({
             title: '全部记过一遍啦(^_^)正在重置词典 \r\n 要不要试着到检验模式印证一下记忆？',
             confirmText: '这就去',
@@ -140,7 +141,9 @@ Page({
             success (res) {
               if (res.confirm) {
                 app.globalData.dictInfo.useMode = '检验模式'
+                _this.setData({useMode: '检验模式'})
                 dblog.logAction("allDone_begin_test")
+                _this.onLoad()
               } else if (res.cancel) {
                 _this.configFilter(filtername, false)
                 dblog.logAction("allDone_and_reset")
