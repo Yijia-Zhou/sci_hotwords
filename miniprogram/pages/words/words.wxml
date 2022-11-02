@@ -1,10 +1,17 @@
 <!--pages/words/words.wxml--> 
 <view class="page_container">
+  <view>
+    <view class="progress-bar-container">
+      <view class="progress-bar stripes">
+        <text class="progress-bar-inner" style="width: {{target_percent}};"></text>
+      </view>
+    </view>
+  </view>
   <view class="card" wx:if="{{!showMoreDeri}}">
     <text wx:if='{{dictionary[index].total_count}}' class="total_count_text">总词频 - {{dictionary[index].total_count}}</text>
     <view class="main_word_container">
-      <text class="main_word" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index]._id}}</text>
-      <text class="main_word_smaller" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index]._id}}</text>
+      <text class="main_word" wx:if='{{dictionary[index].len<15}}'>{{dictionary[index]._id}}</text>
+      <text class="main_word_smaller" style="font-size: {{1200/dictionary[index].len}}rpx;" wx:else>{{dictionary[index]._id}}</text>
       <view class="read_button_container" wx:if="{{!noAudio}}" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
         <text class="read_button" wx:if='{{showPlay}}'>朗读</text>
         <text class="read_button" wx:else>暂停</text>

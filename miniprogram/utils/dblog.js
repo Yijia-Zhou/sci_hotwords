@@ -21,10 +21,12 @@ function reportUserLog() {
         model: deviceInfo.model,
         system: deviceInfo.system,
         benchmarkLevel: deviceInfo.benchmarkLevel
-      }
+      },
+      useMode: app.globalData.dictInfo.useMode,
     },
     success: function() {
       userLog = new Array()
+      currentLogNum = 0
     }
   })
   return 0
