@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "openapi": [
+      "templateMessage.send"
+    ]
+  },
+    "// triggers": "字段是触发器数组，目前仅支持一个触发器，即数组只能填写一个，不可添加多个",
+  "triggers": [
+    {
+      "name": "12:25",
+      "type": "timer",
+      "config": "0 25 12 * * * *"
+    }
+  ]
+}

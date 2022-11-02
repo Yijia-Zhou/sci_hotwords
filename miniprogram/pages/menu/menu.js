@@ -54,6 +54,9 @@ Page({
           app.globalData.offline = true
         })
       }
+      if (!app.globalData.dictInfo.hasOwnProperty('daily_target')) {
+        app.globalData.dictInfo.daily_target = 30
+      }
       console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     }
 

@@ -19,7 +19,7 @@ Page({
     showSetting: false,
     since_touch_setting: 0,
     setting_opacity: 1,
-    doneCount: app.globalData.tracer.doneCount
+    target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'
   },
 
   display_length_count: function (word) {
@@ -270,6 +270,40 @@ Page({
       this.mayIFiltering('no_high_school')
     }
 
+    // 每日任务进度更新
+    app.globalData.tracer.doneCount ++
+    // this.setData({doneCount: app.globalData.tracer.doneCount})
+    this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
+    wx.setStorage({key: 'tracer', data: app.globalData.tracer})
+    console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
+    if (app.globalData.tracer.doneCount == app.globalData.dictInfo.daily_target) {
+      console.log('temp true')
+      wx.showModal({
+        title: "已学习30个词汇组",
+        content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
+        confirmText: "明天继续",
+        showCancel: false,
+        success () {
+          wx.requestSubscribeMessage({
+            tmplIds: ['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I'],
+            success (res) {
+              console.log(res)
+              if (res['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I']=='accept') {
+                const db = wx.cloud.database()
+                db.collection('reminder').add({
+                  data: {
+                    remind_date: new Date(new Date().getTime()/*+86400000*/).getDate()
+                  }
+                })
+              }
+            },
+            complete () {
+
+            }
+          })
+        }
+      })
+    }
     this.onNext()
   },
 
@@ -398,6 +432,13 @@ Page({
     this.setData({
       useMode: app.globalData.dictInfo.useMode
     })
+    try{
+      if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+        this.onNext(real_touch=false)
+      }
+    } catch(e) {
+      console.log(e)
+    }
   },
 
   /**

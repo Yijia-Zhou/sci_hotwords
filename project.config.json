@@ -49,7 +49,7 @@
   "projectname": "lifeSciHighFreWord",
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
-  "cloudfunctionTemplateRoot": "",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "condition": {
     "plugin": {
       "list": []
