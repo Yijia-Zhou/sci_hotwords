@@ -43,9 +43,37 @@
 }
 
 .query_bar_btn{
-  margin-left: 250px;
+  margin-left: 230px;
   line-height: 28px;
   color: #09BB07;
   white-space: nowrap;
   z-index: 1;
+}
+
+.cancel_bar_btn{
+  margin-left: 20px;
+  line-height: 28px;
+  color: #09BB07;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.resultBgView {
+  background: white;
+}
+
+.resultBgView-hidden {
+  display: none;
+}
+
+.resultCell {
+  padding-left: 30rpx;
+  height: 100rpx;
+  border-bottom: 1px solid rgb(230, 230, 230);
+  display: flex;
+  align-items: center;
+}
+
+.resultText {
+  padding-left: 30rpx;
 }
