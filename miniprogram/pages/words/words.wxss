@@ -24,12 +24,6 @@ page {
   position: relative;
 }
 
-.total_count_text {
-  margin-top: 20rpx; 
-  font-weight: 500;
-  color: rgba(52, 58, 64, 0.618);
-}
-
 .main_word_container{
   display: flex;
   flex-direction: column;
@@ -37,39 +31,6 @@ page {
   flex-grow: 1;
   justify-content: space-around;
   width: 100%;
-}
-
-.main_word{
-  font-family: Inter Tight;
-  /* font-style: oblique; */
-  font-size: 81rpx;
-  font-weight: 550;
-  text-align: center;
-  /* letter-spacing: -3rpx; */
-}
-
-.main_word_smaller{
-  font-family: Inter Tight;
-  justify-content: space-around;
-  flex: 1;
-  height: auto;
-}
-
-.read_button_container{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  padding: 15rpx 0;
-}
-
-.read_button {
-  font-size: 36rpx;
-  text-align: center;
-  background-color: #07c160;
-  color: #fff;
-  padding: 10rpx 18rpx;
-  font-weight: 500;
 }
 
 .deri_container_whole {
@@ -122,26 +83,6 @@ page {
   background-color:rgba(236, 255, 147, 0.2);
   border: 1px dotted steelblue;
   border-bottom: unset;
-}
-
-.explain_container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 48rpx 30rpx 0 30rpx; 
-  box-sizing: border-box;
-  width: 88%; 
-  flex: 0 0 auto; 
-  height: 215rpx;
-}
-
-.explain_zhcn {
-  align-self: flex-start;
-  font-size: 36rpx;
-  text-align: center;
-  width: 100%;
-  font-weight: 550;
 }
 
 /* 画 card 左上、右下俩三角 */

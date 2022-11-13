@@ -1,4 +1,7 @@
 // pages/query/query.js
+const app = getApp()
+var dblog = require('../../utils/dblog.js')
+
 Page({
 
   /**
@@ -38,7 +41,7 @@ Page({
     var resultArr = []
     for(var i = 0; i < 5; i++)
     {
-      resultArr.push(this.data.allDictionary[i]._id)
+      resultArr.push(this.data.allDictionary[i])
     }
     console.log(resultArr)
 
@@ -46,9 +49,6 @@ Page({
       isShowResultView : true,
       searchResultArr : resultArr
     })
-
-    console.log(this.data.isShowResultView)
-
   },
 
   onCancel(){
@@ -56,6 +56,14 @@ Page({
       isShowResultView : false,
       searchResultArr : []
     })
+  },
+
+  toResult(e){
+    var resultIndex = e.currentTarget.dataset["resultindex"]
+    wx.setStorageSync('resultWord', this.data.searchResultArr[resultIndex])
+    wx.navigateTo({
+        url: '../result/result'
+      })
   },
   
   /**

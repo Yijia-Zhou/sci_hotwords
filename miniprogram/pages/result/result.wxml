@@ -1,0 +1,6 @@
+<!--pages/result/result.wxml-->
+<view class="page_container">
+  <view class="card">
+    <wordcard word='{{word}}' showChinese='true'></wordcard>
+  </view>
+</view>

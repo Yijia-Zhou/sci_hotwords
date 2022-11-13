@@ -1,14 +1,9 @@
 <!--pages/words/words.wxml--> 
 <view class="page_container">
   <view class="card" wx:if="{{!showMoreDeri}}">
-    <text wx:if='{{dictionary[index].total_count}}' class="total_count_text">总词频 - {{dictionary[index].total_count}}</text>
+    <wordcard word='{{dictionary[index]}}' showChinese="{{useMode==='识记模式' || showChinese}}"></wordcard>
+
     <view class="main_word_container">
-      <text class="main_word" wx:if='{{dictionary[index].len<13}}'>{{dictionary[index]._id}}</text>
-      <text class="main_word_smaller" style="font-size: {{1000/dictionary[index].len}}rpx;" wx:else>{{dictionary[index]._id}}</text>
-      <view class="read_button_container" wx:if="{{!noAudio}}" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
-        <text class="read_button" wx:if='{{showPlay}}'>朗读</text>
-        <text class="read_button" wx:else>暂停</text>
-      </view>
 
       <view class="deri_container_whole" wx:if='{{dictionary[index].deris[0]}}'>
         <view class="deri_container_horizon" id="deris01">
@@ -44,10 +39,6 @@
 
     </view>
 
-    <view class="explain_container" catchtap="onShowChinese">
-      <text class="explain_zhcn" wx:if="{{useMode==='识记模式' || showChinese}}">{{dictionary[index].chosen}}</text>
-      <text class="explain_zhcn" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
-    </view>
   </view>
 
   <view class="main_button_container" wx:if="{{!showMoreDeri}}">
