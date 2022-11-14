@@ -1,15 +1,16 @@
 <!--components/wordcard/wordcard.wxml-->
 
-<view class="wordcard_container">
+<view class="card">
+  <text wx:if='{{word.total_count}}' class="total_count_text">总词频 - {{word.total_count}}</text>
     <view class="main_word_container">
-        <text wx:if='{{word.total_count}}' class="total_count_text">总词频 - {{word.total_count}}</text>
-        <text class="main_word" wx:if='{{word.len<13}}'>{{word._id}}</text>
-        <text class="main_word_smaller" style="font-size: {{1000/word.len}}rpx;" wx:else>{{word._id}}</text>
-        <view class="read_button_container" wx:if="{{!noAudio}}" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
-            <text class="read_button" wx:if='{{showPlay}}'>朗读</text>
-            <text class="read_button" wx:else>暂停</text>
-        </view>
-        <view class="deri_container_whole" wx:if='{{word.deris[0]}}'>
+      <text class="main_word" wx:if='{{word.len<15}}'>{{word._id}}</text>
+      <text class="main_word_smaller" style="font-size: {{1200/word.len}}rpx;" wx:else>{{word._id}}</text>
+      <view class="read_button_container" wx:if="{{!noAudio}}" style="height: 100rpx; width: 50%; padding: 0;" bindtap="{{showPlay ? 'onPlay' : 'onPause'}}">
+        <text class="read_button" wx:if='{{showPlay}}'>朗读</text>
+        <text class="read_button" wx:else>暂停</text>
+      </view>
+
+      <view class="deri_container_whole" wx:if='{{word.deris[0]}}'>
         <view class="deri_container_horizon" id="deris01">
           <text class="word_deri_left" wx:if='{{word.deris[0]}}' style="font-size: {{fontRes[0]}}rpx; color: rgba(52, 58, 64, 1);" catchtap="onDeriDetail" id='deri0'>
             {{word.deris[0].word}}
@@ -36,13 +37,15 @@
             更多衍生词……
         </view>
       </view>
-      
+
       <view class="deri_container_whole" style="display: flex; align-items: center; justify-content: space-around;" wx:else>
         <text class="total_count_text">没有衍生词呢~</text>
       </view>
-        <view class="explain_container" catchtap="onShowChinese">
-            <text class="explain_zhcn" wx:if="{{showChinese}}">{{word.chosen}}</text>
-            <text class="explain_zhcn" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
-        </view>
+
+    </view>
+
+    <view class="explain_container" catchtap="onShowChinese">
+      <text class="explain_zhcn" wx:if="{{useMode==='识记模式' || showChinese}}">{{word.chosen}}</text>
+      <text class="explain_zhcn" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
     </view>
 </view>
