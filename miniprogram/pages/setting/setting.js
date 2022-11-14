@@ -27,6 +27,10 @@ Page({
     this.setData({remind_time: e.detail.value})
   },
 
+  on_set_reminder: function () {
+    app.requestReminder()
+  },
+
   onConfirm: function () {
     app.globalData.dictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
     app.globalData.dictInfo.remind_time = this.data.remind_time
