@@ -1,0 +1,37 @@
+<view class="page_container">
+  <view class="title_container title">设置项调整</view>
+
+  <view class="setting_container">
+    <view class="section">
+      <text class="sub_title">是否彻底屏蔽高中单词？</text>
+      <view class="paragraph">
+        <text>部分高中课纲单词在论文中有一些特定用法/释义，当前将为您在词库中</text>
+        <picker class="picked_text">保留它们</picker>
+        <text>，您可以点击进行修改</text>
+      </view>
+    </view>
+    <view class="section">
+      <text class="sub_title">每天的目标是记住多少？</text>
+      <view class="paragraph">
+        <text>当前每日目标识记量为</text>
+        <picker class="picked_text">30 组词汇</picker>
+        <text>，您可以点击进行修改</text>
+      </view>
+    </view>
+    <view class="section">
+      <text class="sub_title">偏好何时进行单词识记？</text>
+      <view class="paragraph">
+        <text>如果您</text>
+        <text class="picked_text">让我们提醒您每日进行单词学习，</text>
+        <text>当前设定的提醒时间为</text>
+        <picker class="picked_text">12:25</picker>
+        <text>，您可以点击进行修改</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="main_button_container">
+    <button type="primary" class='primary_button' catchtap="onConfirm" style="width: 61.8vw">确定</button>
+    <button type="default" class='following_button' catchtap="onCancel" style="width: 61.8vw;">取消</button>
+  </view>
+</view>

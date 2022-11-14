@@ -8,13 +8,7 @@ function reportUserLog() {
     return 1
   }
   const db = wx.cloud.database()
-  try {
-    var deviceInfo = wx.getDeviceInfo()
-  } catch {
-    var deviceInfo = {
-      model: "开发者工具"
-    }
-  }
+  const deviceInfo = wx.getDeviceInfo()
   db.collection('log').add({
     data : {
       userLog,
@@ -24,6 +18,7 @@ function reportUserLog() {
         benchmarkLevel: deviceInfo.benchmarkLevel
       },
       useMode: app.globalData.dictInfo.useMode,
+      useDict: app.globalData.dictInfo.useDict,
     },
     success: function() {
       userLog = new Array()

@@ -258,8 +258,11 @@ Page({
   },
 
   onConfig: function () {
-    this.mayIFiltering('no_high_school')
+    // this.mayIFiltering('no_high_school')
     dblog.logAction("onConfig")
+    wx.navigateTo({
+      url: 'pages/setting/setting',
+    })
   },
 
   onDone: function () {
@@ -278,7 +281,6 @@ Page({
     wx.setStorage({key: 'tracer', data: app.globalData.tracer})
     console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
     if (app.globalData.tracer.doneCount == app.globalData.dictInfo.daily_target) {
-      console.log('temp true')
       wx.showModal({
         title: "已学习30个词汇组",
         content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
@@ -293,7 +295,7 @@ Page({
                 const db = wx.cloud.database()
                 db.collection('reminder').add({
                   data: {
-                    remind_date: new Date(new Date().getTime()/*+86400000*/).getDate()
+                    remind_date: new Date(new Date().getTime()+72000000).getDate()
                   }
                 })
               }
@@ -433,12 +435,16 @@ Page({
     this.setData({
       useMode: app.globalData.dictInfo.useMode
     })
-    try{
-      if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
-        this.onNext(real_touch=false)
-      }
-    } catch(e) {
-      console.log(e)
+    // try{
+    //   if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+    //     this.onNext(real_touch=false)
+    //   }
+    // } catch(e) {
+    //   console.log(e)
+    // }
+    if (this.data.hasOwnProperty('dictionary') && this.data.hasOwnProperty('index')
+     && this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+      this.onNext(real_touch=false)
     }
   },
 
