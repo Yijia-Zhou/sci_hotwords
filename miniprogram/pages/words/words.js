@@ -242,44 +242,11 @@ Page({
         return this.onNext(real_touch=false) // 这里  return 仅表示不再向下执行
       }
     }
-    
-    // 更新“朗读”内容
-    if (!this.data.noAudio) {
-      this.InnerAudioContext.destroy()
-      this.InnerAudioContext = wx.createInnerAudioContext()
-      this.setData({
-        showPlay: true
-      })
-      this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
-      this.InnerAudioContext.onEnded(() => {
-        this.data.audio_timeout = setTimeout(this.onPlay, 1000)
-      })
-    }
 
     if (real_touch) {
       this.data.since_touch_setting += 1
       this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
     }
-  },
-
-  // “朗读”与“暂停”
-  onPlay: function () {
-    dblog.logAction("onPlay")
-    this.InnerAudioContext.play()
-    this.setData({
-      showPlay: false,
-    })
-  },
-  onPause: function () {
-    try {
-      clearTimeout(this.data.audio_timeout)
-    } catch {
-      console.log('')
-    }
-    this.InnerAudioContext.pause()
-    this.setData({
-      showPlay: true,
-    })
   },
 
   onMoreDeri: function () {
@@ -340,7 +307,6 @@ Page({
    */
   onUnload: async function () {
     dblog.reportUserLog()
-    this.InnerAudioContext.destroy()
     await this.onHide()
   },
 
