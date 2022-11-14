@@ -23,6 +23,13 @@
             "enabled": true,
             "pages": []
           }
+        },
+        {
+          "name": "查词结果卡片",
+          "pathName": "pages/result/result",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

@@ -21,45 +21,6 @@ Page({
     setting_opacity: 1
   },
 
-  display_length_count: function (word) {
-    // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
-    var res = 0
-    for (let char in word) {
-      switch(word[char]) { // 用法参考 https://blog.csdn.net/tel13259437538/article/details/83314965
-        case 'i':
-        case 'j':
-        case 'l':
-          res += 6
-          break
-        case 'f':
-        case 'r':
-        case 't':
-          res += 10
-          break
-        case 'm':
-        case 'w':
-          res += 20
-          break
-        default:
-          res += 14
-      }
-    }
-    return res/14
-  },
-
-  calFontSize: function (deris) {
-    let deris_copy = [...deris]
-    for (let i in [0,0,0,0]) {
-      deris_copy.push('')
-    }
-    let max_display_length = 0
-    for (let i in [0,1,2,3]) {
-      max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
-    }
-    let fontRes = Math.min(44, 555/(max_display_length+1))
-    return [fontRes, fontRes, fontRes, fontRes]
-  },
-
   checkIfDisplay: function (index, dictionary) {
     let item = dictionary[index]
     let res = true
@@ -164,7 +125,7 @@ Page({
     this.setData({
       dictionary: dictionary,
       index: index,
-      fontRes: await this.calFontSize(dictionary[index].deris),
+      // fontRes: await this.calFontSize(dictionary[index].deris),
       showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
     })
 
@@ -175,25 +136,6 @@ Page({
 
     dblog.logWord(dictionary[index]._id)
 
-    // 预备“朗读”功能
-    if (app.globalData.offline) {
-      this.setData({
-        noAudio: true
-      })
-    } else {
-      try {
-        this.InnerAudioContext = wx.createInnerAudioContext()
-        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
-        this.InnerAudioContext.onEnded(() => {
-          this.data.audio_timeout = setTimeout(this.onPlay, 1000)
-        })
-      } catch(e) {
-        console.log(e)
-        this.setData({
-          noAudio: true
-        })
-      }
-    }
   },
 
   onShowChinese: function () {

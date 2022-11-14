@@ -1,4 +1,4 @@
-/* components/wordcard/wordcard.wxss */
+@import '../../pages/words/font-face.wxss';
 
 .total_count_text {
     margin-top: 20rpx; 
@@ -25,10 +25,10 @@
 }
   
 .main_word_smaller{
-font-family: Inter Tight;
-justify-content: space-around;
-flex: 1;
-height: auto;
+  font-family: Inter Tight;
+  justify-content: space-around;
+  flex: 1;
+  height: auto;
 }
 
 .read_button_container{
@@ -46,6 +46,68 @@ height: auto;
     color: #fff;
     padding: 10rpx 18rpx;
     font-weight: 500;
+}
+
+
+.main_word_container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.deri_container_whole {
+  width: 92%;
+  box-sizing: border-box;
+  border: 1px dashed steelblue;
+  position: relative;
+  padding-bottom: 55rpx;
+  flex: 0 0 auto;
+  height: 240rpx;
+}
+
+.deri_container_horizon{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  line-height: 27rpx;
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.word_deri_left {
+  font-family: Inter Tight;
+  text-align: right;
+  width: 45%;
+  flex-grow: 0;
+  flex-shrink: 1;
+  vertical-align: super;
+  font-style: oblique;
+  padding-right: 3%;
+}
+
+.word_deri_right {
+  font-family: Inter Tight;
+  text-align: start;
+  width: 45%;
+  flex-grow: 0;
+  font-style: oblique;
+  padding-left: 3%;
+}
+
+.button_more_deri {
+  position: absolute;
+  right: 0;
+  bottom: 0rpx;
+  height: 38rpx;
+  font-size: 25rpx;
+  font: lighter;
+  background-color:rgba(236, 255, 147, 0.2);
+  border: 1px dotted steelblue;
+  border-bottom: unset;
 }
 
 .explain_container {

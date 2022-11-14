@@ -5,7 +5,7 @@
 
     <view class="main_word_container">
 
-      <view class="deri_container_whole" wx:if='{{dictionary[index].deris[0]}}'>
+      <!-- <view class="deri_container_whole" wx:if='{{dictionary[index].deris[0]}}'>
         <view class="deri_container_horizon" id="deris01">
           <text class="word_deri_left" wx:if='{{dictionary[index].deris[0]}}' style="font-size: {{fontRes[0]}}rpx; color: rgba(52, 58, 64, 1);" catchtap="onDeriDetail" id='deri0'>
             {{dictionary[index].deris[0].word}}
@@ -35,7 +35,7 @@
 
       <view class="deri_container_whole" style="display: flex; align-items: center; justify-content: space-around;" wx:else>
         <text class="total_count_text">没有衍生词呢~</text>
-      </view>
+      </view> -->
 
     </view>
 
