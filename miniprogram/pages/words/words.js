@@ -261,7 +261,7 @@ Page({
     // this.mayIFiltering('no_high_school')
     dblog.logAction("onConfig")
     wx.navigateTo({
-      url: 'pages/setting/setting',
+      url: '/pages/setting/setting',
     })
   },
 
@@ -287,23 +287,7 @@ Page({
         confirmText: "明天继续",
         showCancel: false,
         success () {
-          wx.requestSubscribeMessage({
-            tmplIds: ['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I'],
-            success (res) {
-              console.log(res)
-              if (res['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I']=='accept') {
-                const db = wx.cloud.database()
-                db.collection('reminder').add({
-                  data: {
-                    remind_date: new Date(new Date().getTime()+72000000).getDate()
-                  }
-                })
-              }
-            },
-            complete () {
-
-            }
-          })
+          app.requestReminder()
         }
       })
     }
@@ -443,8 +427,9 @@ Page({
     //   console.log(e)
     // }
     if (this.data.hasOwnProperty('dictionary') && this.data.hasOwnProperty('index')
-     && this.checkIfDisplay(this.data.index, this.data.dictionary)) {
-      this.onNext(real_touch=false)
+     && !this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+      let real_touch=false
+      this.onNext(real_touch)
     }
   },
 

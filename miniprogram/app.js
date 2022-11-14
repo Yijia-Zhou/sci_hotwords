@@ -62,6 +62,33 @@ App({
     }
   },
 
+  requestReminder() {
+    let tmplId = '8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I'
+    var _this = this
+    wx.requestSubscribeMessage({
+      tmplIds: [tmplId],
+      success (res) {
+        console.log(res)
+        if (res[tmplId]=='accept') {
+          let db = wx.cloud.database()
+          let remind_time = _this.globalData.dictInfo.remind_time
+          if (!remind_time) {
+            remind_time = '12:25'
+          }
+          let remind_time_obj = new Date(new Date().getTime()+72000000)
+          remind_time_obj.setHours(remind_time.split(':')[0])
+          remind_time_obj.setMinutes(remind_time.split(':')[1])
+          remind_time_obj.setSeconds(0)
+          db.collection('reminder').add({
+            data: {
+              remind_time_ms: remind_time_obj.getTime()
+            }
+          })
+        }
+      }
+    })
+  },
+
   // 获取云数据库实例
   async database() {
     return (await this.cloud()).database()
