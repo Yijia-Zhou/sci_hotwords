@@ -1,5 +1,3 @@
-/* pages/result/result.wxss */
-
 .card {
     display: flex;
     flex-direction: column;

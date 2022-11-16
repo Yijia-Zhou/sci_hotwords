@@ -1,5 +1,3 @@
-<!--pages/query/query.wxml-->
-
 <view class="query_bar_container">
   <view class="query_bar">
     <view class="query_bar_box">

@@ -1,4 +1,3 @@
-/* pages/query/query.wxss */
 .query_bar_container{
   position: relative;
   padding: 8px 10px;
