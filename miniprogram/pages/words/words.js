@@ -7,9 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    count: function (s) {
-      return s.length
-    },
+    // count: function (s) {
+    //   return s.length
+    // },
     showPlay: true,
     showMoreDeri: false,
     useMode: app.globalData.dictInfo.useMode,
@@ -18,7 +18,47 @@ Page({
     with3s: true,
     showSetting: false,
     since_touch_setting: 0,
-    setting_opacity: 1
+    setting_opacity: 1,
+    target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'
+  },
+
+  display_length_count: function (word) {
+    // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
+    var res = 0
+    for (let char in word) {
+      switch(word[char]) { // 用法参考 https://blog.csdn.net/tel13259437538/article/details/83314965
+        case 'i':
+        case 'j':
+        case 'l':
+          res += 6
+          break
+        case 'f':
+        case 'r':
+        case 't':
+          res += 10
+          break
+        case 'm':
+        case 'w':
+          res += 20
+          break
+        default:
+          res += 14
+      }
+    }
+    return res/14
+  },
+
+  calFontSize: function (deris) {
+    let deris_copy = [...deris]
+    for (let i in [0,0,0,0]) {
+      deris_copy.push('')
+    }
+    let max_display_length = 0
+    for (let i in [0,1,2,3]) {
+      max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
+    }
+    let fontRes = Math.min(44, 555/(max_display_length+1))
+    return [fontRes, fontRes, fontRes, fontRes]
   },
 
   checkIfDisplay: function (index, dictionary) {
@@ -87,13 +127,39 @@ Page({
 
     var allDone = true
     for (var w in dictionary) {
-      allDone = allDone && dictionary[w][this.data.chooseStatus]
+      allDone = allDone && (!this.checkIfDisplay(w, dictionary))
     }
+    console.log('allDone: ', allDone)
     if (allDone) {
-      wx.showToast({
-        title: '全部掌握啦\r\n正在重置词典',
-        icon: 'none'
-      })
+      var _this = this
+      switch (app.globalData.dictInfo.useMode) {
+        case '识记模式':
+          var _this = this
+          wx.showModal({
+            title: '全部记过一遍啦(^_^)正在重置词典 \r\n 要不要试着到检验模式印证一下记忆？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                app.globalData.dictInfo.useMode = '检验模式'
+                _this.setData({useMode: '检验模式'})
+                dblog.logAction("allDone_begin_test")
+                _this.onLoad()
+              } else if (res.cancel) {
+                _this.configFilter(filtername, false)
+                dblog.logAction("allDone_and_reset")
+              }
+            }
+          })
+          break
+        case '检验模式':
+          wx.showToast({
+            title: '全部掌握啦\r\n正在重置词典',
+            duration: 3200,
+            icon: 'none'
+          })
+          break
+      }
       for (var w in dictionary) {
         dictionary[w][this.data.chooseStatus] = false
       }
@@ -111,8 +177,6 @@ Page({
         var index = Number(indexTemp)
       }
     }
-
-    // Todo: 厘清可能产生这个的各种情况
     if (!index) {
       var index = 0
     }
@@ -125,7 +189,7 @@ Page({
     this.setData({
       dictionary: dictionary,
       index: index,
-      // fontRes: await this.calFontSize(dictionary[index].deris),
+      fontRes: await this.calFontSize(dictionary[index].deris),
       showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
     })
 
@@ -136,10 +200,29 @@ Page({
 
     dblog.logWord(dictionary[index]._id)
 
+    // 预备“朗读”功能
+    if (app.globalData.offline) {
+      this.setData({
+        noAudio: true
+      })
+    } else {
+      try {
+        this.InnerAudioContext = wx.createInnerAudioContext()
+        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
+        this.InnerAudioContext.onEnded(() => {
+          this.data.audio_timeout = setTimeout(this.onPlay, 1000)
+        })
+      } catch(e) {
+        console.log(e)
+        this.setData({
+          noAudio: true
+        })
+      }
+    }
   },
 
   onShowChinese: function () {
-    dblog.logAction("ShowChinese")
+    dblog.logAction("onShowChinese")
     this.setData({showChinese: true})
   },
 
@@ -161,8 +244,10 @@ Page({
       success (res) {
         if (res.confirm) {
           _this.configFilter(filtername, true)
+          dblog.logAction("enable_highschool_filter")
         } else if (res.cancel) {
           _this.configFilter(filtername, false)
+          dblog.logAction("disable_highschool_filter")
         }
       }
     })
@@ -173,7 +258,11 @@ Page({
   },
 
   onConfig: function () {
-    this.mayIFiltering('no_high_school')
+    // this.mayIFiltering('no_high_school')
+    dblog.logAction("onConfig")
+    wx.navigateTo({
+      url: '/pages/setting/setting',
+    })
   },
 
   onDone: function () {
@@ -185,6 +274,23 @@ Page({
       this.mayIFiltering('no_high_school')
     }
 
+    // 每日任务进度更新
+    app.globalData.tracer.doneCount ++
+    // this.setData({doneCount: app.globalData.tracer.doneCount})
+    this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
+    wx.setStorage({key: 'tracer', data: app.globalData.tracer})
+    console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
+    if (app.globalData.tracer.doneCount == app.globalData.dictInfo.daily_target) {
+      wx.showModal({
+        title: "已学习30个词汇组",
+        content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
+        confirmText: "明天继续",
+        showCancel: false,
+        success () {
+          app.requestReminder()
+        }
+      })
+    }
     this.onNext()
   },
 
@@ -208,10 +314,7 @@ Page({
         title: '本词典到底啦\r\n重新翻出尚未掌握的',
         icon: 'none',
         success: function () {
-          // _this.setData({
-          //   index: 0,
-          //   showChinese: false
-          // })
+          wx.setStorageSync(app.globalData.dictInfo.useDict, _this.data.dictionary)
           _this.onLoad()
         }
       })
@@ -242,11 +345,44 @@ Page({
         return this.onNext(real_touch=false) // 这里  return 仅表示不再向下执行
       }
     }
+    
+    // 更新“朗读”内容
+    if (!this.data.noAudio) {
+      this.InnerAudioContext.destroy()
+      this.InnerAudioContext = wx.createInnerAudioContext()
+      this.setData({
+        showPlay: true
+      })
+      this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
+      this.InnerAudioContext.onEnded(() => {
+        this.data.audio_timeout = setTimeout(this.onPlay, 1000)
+      })
+    }
 
     if (real_touch) {
       this.data.since_touch_setting += 1
       this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
     }
+  },
+
+  // “朗读”与“暂停”
+  onPlay: function () {
+    dblog.logAction("onPlay")
+    this.InnerAudioContext.play()
+    this.setData({
+      showPlay: false,
+    })
+  },
+  onPause: function () {
+    try {
+      clearTimeout(this.data.audio_timeout)
+    } catch {
+      console.log('')
+    }
+    this.InnerAudioContext.pause()
+    this.setData({
+      showPlay: true,
+    })
   },
 
   onMoreDeri: function () {
@@ -265,7 +401,7 @@ Page({
     var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
     wx.showModal({
       title: deri_obj.word,
-      content: deri_obj.bing + '\r\n 词频：' + String(deri_obj.count), 
+      content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 词频：' + String(deri_obj.count), 
       showCancel: false
     })
   },
@@ -283,22 +419,35 @@ Page({
     this.setData({
       useMode: app.globalData.dictInfo.useMode
     })
+    // try{
+    //   if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+    //     this.onNext(real_touch=false)
+    //   }
+    // } catch(e) {
+    //   console.log(e)
+    // }
+    if (this.data.hasOwnProperty('dictionary') && this.data.hasOwnProperty('index')
+     && !this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+      let real_touch=false
+      this.onNext(real_touch)
+    }
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: async function () {
+    dblog.reportUserLog()
     wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
     try {
       clearTimeout(this.data.timer_timeout)
     } catch(e) {
-      console.log('e')
+      console.log(e)
     }
     try {
       clearTimeout(this.data.audio_timeout)
     } catch(e) {
-      console.log('e')
+      console.log(e)
     }
   },
 
@@ -306,7 +455,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: async function () {
-    dblog.reportUserLog()
+    this.InnerAudioContext.destroy()
     await this.onHide()
   },
 
