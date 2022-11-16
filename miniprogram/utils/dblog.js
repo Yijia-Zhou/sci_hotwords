@@ -1,12 +1,28 @@
 var userLog = new Array()
 var currentLogNum = 0
 var logNumLimit = 30
+var app = getApp()
 
 function reportUserLog() {
+  if (userLog.length == 0) {
+    return 1
+  }
   const db = wx.cloud.database()
+  const deviceInfo = wx.getDeviceInfo()
   db.collection('log').add({
     data : {
-      userLog
+      userLog,
+      deviceInfo: {
+        model: deviceInfo.model,
+        system: deviceInfo.system,
+        benchmarkLevel: deviceInfo.benchmarkLevel
+      },
+      useMode: app.globalData.dictInfo.useMode,
+      useDict: app.globalData.dictInfo.useDict,
+    },
+    success: function() {
+      userLog = new Array()
+      currentLogNum = 0
     }
   })
   return 0
