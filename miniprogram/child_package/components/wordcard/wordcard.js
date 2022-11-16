@@ -1,5 +1,5 @@
 // components/wordcard/wordcard.js
-var dblog = require('../../utils/dblog.js')
+var dblog = require('../../../utils/dblog.js')
 var app = getApp()
 Component({
   /**

@@ -63,7 +63,7 @@ Page({
 
     if (app.globalData.dictInfo.useDict && actualLoad) { // 直接跳转到之前使用的词库
       wx.navigateTo({
-        url: '../words/words',
+        url: '/child_package/pages/words/words',
       })
     }
 
@@ -122,7 +122,7 @@ Page({
 
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     wx.navigateTo({
-      url: '../words/words',
+      url: '/child_package/pages/words/words',
     })
   },
 
@@ -139,7 +139,7 @@ Page({
     console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     wx.navigateTo({
-      url: '../query/query',
+      url: '/child_package/pages/query/query',
     })
   },
 
