@@ -131,8 +131,10 @@ Page({
     }
     console.log('allDone: ', allDone)
     if (allDone) {
+      var _this = this
       switch (app.globalData.dictInfo.useMode) {
         case '识记模式':
+          var _this = this
           wx.showModal({
             title: '全部记过一遍啦(^_^)正在重置词典 \r\n 要不要试着到检验模式印证一下记忆？',
             confirmText: '这就去',
@@ -140,7 +142,9 @@ Page({
             success (res) {
               if (res.confirm) {
                 app.globalData.dictInfo.useMode = '检验模式'
+                _this.setData({useMode: '检验模式'})
                 dblog.logAction("allDone_begin_test")
+                _this.onLoad()
               } else if (res.cancel) {
                 _this.configFilter(filtername, false)
                 dblog.logAction("allDone_and_reset")
@@ -254,8 +258,11 @@ Page({
   },
 
   onConfig: function () {
-    this.mayIFiltering('no_high_school')
+    // this.mayIFiltering('no_high_school')
     dblog.logAction("onConfig")
+    wx.navigateTo({
+      url: '/pages/setting/setting',
+    })
   },
 
   onDone: function () {
@@ -274,30 +281,13 @@ Page({
     wx.setStorage({key: 'tracer', data: app.globalData.tracer})
     console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
     if (app.globalData.tracer.doneCount == app.globalData.dictInfo.daily_target) {
-      console.log('temp true')
       wx.showModal({
         title: "已学习30个词汇组",
         content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
         confirmText: "明天继续",
         showCancel: false,
         success () {
-          wx.requestSubscribeMessage({
-            tmplIds: ['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I'],
-            success (res) {
-              console.log(res)
-              if (res['8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I']=='accept') {
-                const db = wx.cloud.database()
-                db.collection('reminder').add({
-                  data: {
-                    remind_date: new Date(new Date().getTime()/*+86400000*/).getDate()
-                  }
-                })
-              }
-            },
-            complete () {
-
-            }
-          })
+          app.requestReminder()
         }
       })
     }
@@ -429,12 +419,17 @@ Page({
     this.setData({
       useMode: app.globalData.dictInfo.useMode
     })
-    try{
-      if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
-        this.onNext(real_touch=false)
-      }
-    } catch(e) {
-      console.log(e)
+    // try{
+    //   if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+    //     this.onNext(real_touch=false)
+    //   }
+    // } catch(e) {
+    //   console.log(e)
+    // }
+    if (this.data.hasOwnProperty('dictionary') && this.data.hasOwnProperty('index')
+     && !this.checkIfDisplay(this.data.index, this.data.dictionary)) {
+      let real_touch=false
+      this.onNext(real_touch)
     }
   },
 
