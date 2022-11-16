@@ -1,10 +1,6 @@
 App({
   async onLaunch() {
-    try {
-      this.initcloud()
-    } catch {
-      console.log("Cloud can't be init")
-    }
+    setTimeout(this.initcloud, 0)
     let tracer = wx.getStorageSync('tracer')
     const date = new Date()
     if (typeof(tracer) == "string" || tracer.date != date.toLocaleDateString()) {

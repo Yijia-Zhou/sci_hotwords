@@ -154,10 +154,10 @@ Page({
    * 主要触发场景：从words页面返回
    */
   onShow() {
-    if (app.globalData.loaded) {
-      console.log("onShow - call onLoad")
-      this.onLoad(actualLoad=false)
-    }
+    // if (app.globalData.loaded) {
+    //   console.log("onShow - call onLoad")
+    //   this.onLoad(actualLoad=false)
+    // }
   },
 
   /**
