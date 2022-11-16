@@ -25,6 +25,13 @@
           }
         },
         {
+          "name": "查词结果卡片",
+          "pathName": "pages/result/result",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "setting 页",
           "pathName": "pages/setting/setting",
           "query": "",

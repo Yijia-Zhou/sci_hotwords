@@ -12,7 +12,8 @@ Page({
     domains: undefined,
     modes: undefined,
     value: undefined,
-    showBtn: true
+    showBtn: true,
+    useDictList : []
   },
 
   /**
@@ -122,6 +123,23 @@ Page({
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     wx.navigateTo({
       url: '../words/words',
+    })
+  },
+
+  onQuery(){
+    app.globalData.dictInfo.useDictList = []
+    var dict = ""
+    for(dict in this.data.domains)
+    {
+      if(this.data.domains[dict] != "敬请期待")
+      {
+        app.globalData.dictInfo.useDictList.push(this.data.domains[dict])
+      }
+    }
+    console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
+    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+    wx.navigateTo({
+      url: '../query/query',
     })
   },
 

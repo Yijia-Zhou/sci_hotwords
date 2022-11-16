@@ -3,6 +3,8 @@
   "pages": [
     "pages/menu/menu",
     "pages/words/words",
+    "pages/query/query",
+    "pages/result/result",
     "pages/setting/setting"
   ],
   "window": {
