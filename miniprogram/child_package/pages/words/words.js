@@ -89,7 +89,7 @@ Page({
         var index = Number(indexTemp)
       }
     }
-    if (!index) {  // alldone
+    if (typeof(index)!='number') {  // alldone
       var _this = this
       switch (app.globalData.dictInfo.useMode) {
         case '识记模式':

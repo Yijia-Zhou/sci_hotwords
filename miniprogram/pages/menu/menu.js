@@ -29,7 +29,7 @@ Page({
         })
       }
     } catch(e) {
-      setTimeout(this.onLoad, 100)
+      setTimeout(this.onLoad, 50)
     }
   },
 
@@ -39,7 +39,7 @@ Page({
    */
   onShow() {
     if (!app.globalData.hasOwnProperty('dictInfo')) {
-      return setTimeout(this.onShow, 50)
+      return setTimeout(this.onShow, 20)
     }
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.clusters_and_domains),
