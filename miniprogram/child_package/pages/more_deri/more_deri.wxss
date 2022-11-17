@@ -1,0 +1,48 @@
+@import '../../font-face.wxss';
+
+page {
+  position: relative;
+}
+
+.table_more_deri {
+  border: 0px solid darkgray;
+  width: 100%;
+  position: absolute;
+  top: 5vh;
+  padding-bottom: 260rpx;
+}
+.tr {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  min-height: 3rem;
+  /* height: 3rem; */
+  align-items: center;
+}
+.td {
+  width:40%;
+  justify-content: center;
+  text-align: center;
+  font-family: Inter Tight;
+}
+.bg-w{
+  background: snow;
+}
+.bg-g{
+  background: #E6F3F9;
+}
+.th {
+  width: 40%;
+  justify-content: center;
+  background: #3366FF;
+  color: #fff;
+  display: flex;
+  height: 3rem;
+  align-items: center;
+}
+
+.bottom_back_from_more_deri {
+  position: fixed;
+  bottom: 143rpx; 
+  left: 19.1vw;
+}

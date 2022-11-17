@@ -1,18 +1,88 @@
 App({
   async onLaunch() {
+    console.log('app.onLaunch')
     this.initcloud()
-    let tracer = wx.getStorageSync('tracer')
-    const date = new Date()
-    if (typeof(tracer) == "string" || tracer.date != date.toLocaleDateString()) {
-      tracer = {
-        doneCount: 0,
-        date: date.toLocaleDateString()
+    this.globalData = new Object()
+    let _this = this
+    let date = new Date()
+
+    // 载入/初始化tracer
+    wx.getStorage({
+      key: 'tracer',
+      success (res) {
+        if (res.data.date != date.toLocaleDateString()) {
+          _this.globalData.tracer = {
+            doneCount: 0,
+            date: date.toLocaleDateString()
+          }
+        } else {
+          _this.globalData.tracer = res.data
+        }
+      },
+      fail () {
+        _this.globalData.tracer = {
+          doneCount: 0,
+          date: date.toLocaleDateString()
+        }
+      },
+      complete () {
+        console.log('getStorage - tracer - complete')
       }
-    }
-    
-    this.globalData = {
-      tracer
-    }
+    })
+
+    // 载入/初始化dictInfo
+    wx.getStorage({
+      key: 'dictInfo',
+      success (res) {
+        _this.globalData.dictInfo = res.data
+        if (!_this.globalData.dictInfo.hasOwnProperty('daily_target')) {
+          _this.globalData.dictInfo.daily_target = 30
+        }
+      },
+      fail () {
+        _this.globalData.dictInfo =   {
+          "clusters_and_domains": {
+            "生命科学": [
+              "基础词库",
+              "敬请期待"
+            ]
+          },
+          "marker": 3,
+          "modes": [
+            "识记模式",
+            "检验模式"
+          ],
+          daily_target: 30
+        }
+      },
+      complete () {
+        // 慢慢进行一个是否需要更新词库的判断
+        const db = wx.cloud.database()
+        db.collection('dictInfo').doc('content').get().then(res => { 
+          _this.globalData.dataTemp = res.data
+          if (_this.globalData.dataTemp && (!_this.globalData.dictInfo.marker || _this.globalData.dictInfo.marker!=_this.globalData.dataTemp.marker)) {
+            /**
+             * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
+             * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新
+             * 词库使用时会检查自己是否在 ‘dict_need_refresh’ 中，是的话就会从数据库拉去新版进行更新
+             */
+            wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
+
+            // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
+            _this.globalData.dictInfo.clusters_and_domains = _this.globalData.dataTemp.clusters_and_domains
+            _this.globalData.dictInfo.modes = _this.globalData.dataTemp.modes
+            _this.globalData.dictInfo.marker = _this.globalData.dataTemp.marker
+            wx.setStorageSync('dictInfo', _this.globalData.dictInfo)
+          }
+        }).catch(err => {
+          console.log('Offline')
+          console.log(err)
+          _this.globalData.offline = true
+        })
+        console.log('getStorage - dictInfo - complete')
+      }
+    })
+
     console.log("onLaunch end")
   },
 

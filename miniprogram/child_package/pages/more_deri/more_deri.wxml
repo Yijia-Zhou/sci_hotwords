@@ -1,0 +1,24 @@
+
+<view class="table_more_deri">
+  <view class="tr bg-w">
+    <view class="th" style="width: 20%;">词频</view>
+    <view class="th">单词</view>
+    <view class="th ">释义</view>
+  </view>
+
+  <block wx:for="{{deris}}" wx:key="*this">
+    <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
+      <view class="td" style="width: 20%;">{{item.count}}</view>
+      <view class="td">{{item.word}}</view>
+      <view class="td">{{item.bing}}</view>
+    </view>
+    <view class="tr" wx:else>
+      <view class="td" style="width: 20%;">{{item.count}}</view>
+      <view class="td">{{item.word}}</view>
+      <view class="td">{{item.bing}}</view>
+    </view>
+  </block>
+
+</view>
+
+<button type="primary" class='btn1 bottom_back_from_more_deri' catchtap="onReturn" style="width: 61.8vw;">返回</button>
