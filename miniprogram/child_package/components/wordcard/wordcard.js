@@ -47,6 +47,8 @@ Component({
           })
         }
       }
+
+      dblog.logWord(word._id)
     }
   },
 

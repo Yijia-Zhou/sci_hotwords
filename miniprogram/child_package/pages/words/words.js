@@ -79,11 +79,17 @@ Page({
       wx.setStorageSync('dict_need_refresh', dict_need_refresh)
     }
 
-    var allDone = true
-    for (var w in dictionary) {
-      allDone = allDone && (!this.checkIfDisplay(w, dictionary))
+    // 选取最靠前的未掌握词组
+    this.data.indexArray = Array.from(Array(dictionary.length).keys())
+    const revered = this.data.indexArray.reverse()
+    for (var i in revered) {
+      var indexTemp = revered[i]
+      // if (!dictionary[indexTemp][this.data.chooseStatus]) {
+      if (this.checkIfDisplay(indexTemp, dictionary)) {
+        var index = Number(indexTemp)
+      }
     }
-    if (allDone) {
+    if (!index) {  // alldone
       var _this = this
       switch (app.globalData.dictInfo.useMode) {
         case '识记模式':
@@ -120,20 +126,6 @@ Page({
       this.onLoad()
     }
 
-    // 选取最靠前的未掌握词组
-    this.data.indexArray = Array.from(Array(dictionary.length).keys())
-    const revered = this.data.indexArray.reverse()
-    for (var i in revered) {
-      var indexTemp = revered[i]
-      // if (!dictionary[indexTemp][this.data.chooseStatus]) {
-      if (this.checkIfDisplay(indexTemp, dictionary)) {
-        var index = Number(indexTemp)
-      }
-    }
-    if (!index) {
-      var index = 0
-    }
-
     for (i in dictionary) {
       dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
     }
@@ -148,7 +140,7 @@ Page({
     this.data.timer_timeout = setTimeout(function(){_this.data.within3s = false}, 3000)
 
     wx.hideLoading()
-    dblog.logWord(dictionary[index]._id)
+    
     if (!app.globalData.dictInfo.remind_time) {
       app.globalData.dictInfo.remind_time = '12:25'
     }
@@ -262,7 +254,6 @@ Page({
       // }
       if (this.checkIfDisplay(this.data.index + 1, this.data.dictionary)) {
         let new_index = this.data.index + 1
-        dblog.logWord(this.data.dictionary[new_index]._id)
         this.setData({
           word: this.data.dictionary[new_index]
         })
