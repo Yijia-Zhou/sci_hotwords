@@ -20,8 +20,7 @@ Page({
    * 生命周期函数--监听页面加载
    * 如果之前有使用的词库则直接跳转
    */
-  async onLoad() {
-    console.log("menu onLoad start")
+  auto_navigate() {
     try {
       if (app.globalData.dictInfo.useDict) {
         wx.navigateTo({
@@ -29,17 +28,21 @@ Page({
         })
       }
     } catch(e) {
-      setTimeout(this.onLoad, 50)
+      setTimeout(this.auto_navigate, 50)
     }
+  },
+
+  onLoad() {
+    setTimeout(this.auto_navigate, 0)
   },
 
   /**
    * 生命周期函数--监听页面显示
    * 主要触发场景：onLoad结束；从words页面返回
    */
-  onShow() {
+  picker_render() {
     if (!app.globalData.hasOwnProperty('dictInfo')) {
-      return setTimeout(this.onShow, 20)
+      return setTimeout(this.picker_render, 20)
     }
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.clusters_and_domains),
@@ -57,8 +60,10 @@ Page({
     this.setData({
       value: [0, useDictIndex, useModeIndex]
     })
-    console.log('menu onShow end')
-    app.globalData.loaded = true
+  },
+
+  onShow() {
+    setTimeout(this.picker_render, 0)
   },
 
   /**

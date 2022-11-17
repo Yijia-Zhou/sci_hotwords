@@ -44,26 +44,26 @@ Page({
 
     if (!dictionary || dictionary.length==0) {
       wx.showLoading({
-        title: '获取/更新词库中',
+        title: '获取/更新词库中，请稍候',
       })
       const db = wx.cloud.database()
       let getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
       const dataTemp = getRes.data.dictionary
 
-      wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp)
-      
-      const useDict = app.globalData.dictInfo.useDict
+      wx.setStorage({
+        key: app.globalData.dictInfo.useDict,
+        data: dataTemp
+      })
       var dictionary = dataTemp
     }
-    
     else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict)) {
       wx.showLoading({
-        title: '获取/更新词库中',
+        title: '更新词库中，请稍候',
       })
       const db = wx.cloud.database()
       let getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
       var dataTemp = getRes.data.dictionary
-      console.log('获取/更新词库中', dataTemp)
+      console.log('更新词库中', dataTemp)
       for (var i in dictionary) {
         let theOldItem = dictionary[i]
         let itemIndex = dataTemp.findIndex((item) => item._id === theOldItem._id)
@@ -126,10 +126,6 @@ Page({
       this.onLoad()
     }
 
-    // for (i in dictionary) {
-    //   dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
-    // }
-
     // 渲染单词卡片
     this.setData({word: dictionary[index]})
 
@@ -177,7 +173,8 @@ Page({
   on_modify_setting() {
     this.data.since_touch_setting = 0
     this.setData({
-      'setting_opacity': 1
+      showSetting: true,
+      setting_opacity: 1
     })
   },
 

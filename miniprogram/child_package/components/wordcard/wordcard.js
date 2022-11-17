@@ -164,6 +164,15 @@ Component({
       let fontRes = Math.min(44, 555/(max_display_length+1))
       return fontRes
     },
+
+    destroy_audio() {
+      try {
+        this.InnerAudioContext.destroy()
+        clearTimeout(this.data.audio_timeout)
+      } catch(e) {
+        console.log(e)
+      }
+    }
   },
 
   /**
@@ -172,18 +181,13 @@ Component({
   lifetimes: {
     detached: function() {
       // 在组件实例被从页面节点树移除时执行
-      try {
-        this.InnerAudioContext.destroy()
-        clearTimeout(this.data.audio_timeout)
-      } catch(e) {
-        console.log(e)
-      }
+      this.destroy_audio()
     },
   },
 
   pageLifetimes: { // 组件所在页面的生命周期
     hide: function() {
-      this.detached()
+      this.destroy_audio()
     }
   }
 })
