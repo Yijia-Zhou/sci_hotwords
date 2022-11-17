@@ -126,9 +126,9 @@ Page({
       this.onLoad()
     }
 
-    for (i in dictionary) {
-      dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
-    }
+    // for (i in dictionary) {
+    //   dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
+    // }
 
     // 渲染单词卡片
     this.setData({word: dictionary[index]})

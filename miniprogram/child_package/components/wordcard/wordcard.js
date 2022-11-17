@@ -21,7 +21,8 @@ Component({
         useMode: app.globalData.dictInfo.useMode,
         showChinese: false, //记录检验模式中点击显示释义动作
         showPlay: true,
-        fontRes: this.calFontSize(word.deris)
+        fontRes: this.calFontSize(word.deris),
+        baseword_len: this.display_length_count(word._id)
       })
       
       // 更新“朗读”内容
