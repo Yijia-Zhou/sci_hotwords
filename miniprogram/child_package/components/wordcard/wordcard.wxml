@@ -12,10 +12,10 @@
 
       <view class="deri_container_whole" wx:if='{{word.deris[0]}}'>
         <view class="deri_container_horizon" id="deris01">
-          <text class="word_deri_left" wx:if='{{word.deris[0]}}' style="font-size: {{fontRes[0]}}rpx; color: rgba(52, 58, 64, 1);" catchtap="onDeriDetail" id='deri0'>
+          <text class="word_deri_left" wx:if='{{word.deris[0]}}' style="font-size: {{fontRes}}rpx; color: rgba(52, 58, 64, 1);" catchtap="onDeriDetail" id='deri0'>
             {{word.deris[0].word}}
           </text>
-          <text class="word_deri_right" wx:if='{{word.deris[1]}}' style="font-size: {{fontRes[1]}}rpx; color: rgba(52, 58, 64, 0.92);" catchtap="onDeriDetail" id='deri1'>
+          <text class="word_deri_right" wx:if='{{word.deris[1]}}' style="font-size: {{fontRes}}rpx; color: rgba(52, 58, 64, 0.92);" catchtap="onDeriDetail" id='deri1'>
             {{word.deris[1].word}}
           </text>
           <text wx:else class="word_deri_right" style="color: rgba(52, 58, 64, 0.76);" decode="true">
@@ -23,10 +23,10 @@
           </text>
         </view>
         <view class="deri_container_horizon" id="deris23" wx:if='{{word.deris[2]}}'>
-          <text class="word_deri_left" wx:if='{{word.deris[2]}}' style="font-size: {{fontRes[2]}}rpx; color: rgba(52, 58, 64, 0.84);" catchtap="onDeriDetail" id='deri2'>
+          <text class="word_deri_left" wx:if='{{word.deris[2]}}' style="font-size: {{fontRes}}rpx; color: rgba(52, 58, 64, 0.84);" catchtap="onDeriDetail" id='deri2'>
             {{word.deris[2].word}}
           </text>
-          <text class="word_deri_right" wx:if='{{word.deris[3]}}' style="font-size: {{fontRes[3]}}rpx; color: rgba(52, 58, 64, 0.76);" catchtap="onDeriDetail" id='deri3'>
+          <text class="word_deri_right" wx:if='{{word.deris[3]}}' style="font-size: {{fontRes}}rpx; color: rgba(52, 58, 64, 0.76);" catchtap="onDeriDetail" id='deri3'>
             {{word.deris[3].word}}
           </text>
           <text wx:else class="word_deri_right" style="color: rgba(52, 58, 64, 0.76);" decode="true">

@@ -162,7 +162,7 @@ Component({
         max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
       }
       let fontRes = Math.min(44, 555/(max_display_length+1))
-      return [fontRes, fontRes, fontRes, fontRes]
+      return fontRes
     },
   },
 
