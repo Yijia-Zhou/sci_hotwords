@@ -13,7 +13,8 @@ Page({
     modes: undefined,
     value: undefined,
     showBtn: true,
-    useDictList : []
+    useDictList : [],
+    showQuery: wx.getDeviceInfo().platform == "devtools"
   },
 
   /**
@@ -140,6 +141,14 @@ Page({
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     wx.navigateTo({
       url: '/child_package/pages/query/query',
+    })
+  },
+  
+  onConfig: function () {
+    // this.mayIFiltering('no_high_school')
+    dblog.logAction("onConfig")
+    wx.navigateTo({
+      url: '/child_package/pages/setting/setting',
     })
   },
 
