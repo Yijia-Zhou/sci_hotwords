@@ -3,37 +3,22 @@
     "miniprogram": {
       "list": [
         {
-          "name": "单词卡片",
-          "pathName": "pages/words/words",
-          "query": "",
-          "launchMode": "default",
-          "scene": null,
-          "partialCompile": {
-            "enabled": true,
-            "pages": []
-          }
-        },
-        {
-          "name": "词典菜单",
-          "pathName": "pages/menu/menu",
-          "query": "",
-          "launchMode": "default",
-          "scene": 1001,
-          "partialCompile": {
-            "enabled": true,
-            "pages": []
-          }
-        },
-        {
           "name": "查词结果卡片",
-          "pathName": "pages/result/result",
+          "pathName": "/child_package/pages/result/result",
           "query": "",
           "launchMode": "default",
           "scene": null
         },
         {
           "name": "setting 页",
-          "pathName": "pages/setting/setting",
+          "pathName": "/child_package/pages/setting/setting",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "进入查词页面",
+          "pathName": "child_package/pages/query/query",
           "query": "",
           "launchMode": "default",
           "scene": null

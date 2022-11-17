@@ -1,8 +1,0 @@
-<!--pages/result/result.wxml-->
-<view class="page_container">
-  <wordcard word='{{word}}' showChinese='true'></wordcard>
-  <view class="main_button_container">
-    <button class="primary_button">占位按钮1</button>
-    <button class="following_button">占位按钮2</button>
-  </view>
-</view>

@@ -1,5 +1,5 @@
 const app = getApp()
-var dblog = require('../../utils/dblog.js')
+var dblog = require('../../../utils/dblog.js')
 
 Page({
  
@@ -261,7 +261,7 @@ Page({
     // this.mayIFiltering('no_high_school')
     dblog.logAction("onConfig")
     wx.navigateTo({
-      url: '/pages/setting/setting',
+      url: '../setting/setting',
     })
   },
 

@@ -1,6 +1,5 @@
-// pages/query/query.js
 const app = getApp()
-var dblog = require('../../utils/dblog.js')
+var dblog = require('../../../utils/dblog.js')
 
 Page({
 

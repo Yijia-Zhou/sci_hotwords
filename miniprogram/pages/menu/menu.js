@@ -13,7 +13,8 @@ Page({
     modes: undefined,
     value: undefined,
     showBtn: true,
-    useDictList : []
+    useDictList : [],
+    showQuery: wx.getDeviceInfo().platform == "devtools"
   },
 
   /**
@@ -63,7 +64,7 @@ Page({
 
     if (app.globalData.dictInfo.useDict && actualLoad) { // 直接跳转到之前使用的词库
       wx.navigateTo({
-        url: '../words/words',
+        url: '/child_package/pages/words/words',
       })
     }
 
@@ -122,7 +123,7 @@ Page({
 
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     wx.navigateTo({
-      url: '../words/words',
+      url: '/child_package/pages/words/words',
     })
   },
 
@@ -139,7 +140,15 @@ Page({
     console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     wx.navigateTo({
-      url: '../query/query',
+      url: '/child_package/pages/query/query',
+    })
+  },
+  
+  onConfig: function () {
+    // this.mayIFiltering('no_high_school')
+    dblog.logAction("onConfig")
+    wx.navigateTo({
+      url: '/child_package/pages/setting/setting',
     })
   },
 
@@ -154,10 +163,10 @@ Page({
    * 主要触发场景：从words页面返回
    */
   onShow() {
-    if (app.globalData.loaded) {
-      console.log("onShow - call onLoad")
-      this.onLoad(actualLoad=false)
-    }
+    // if (app.globalData.loaded) {
+    //   console.log("onShow - call onLoad")
+    //   this.onLoad(actualLoad=false)
+    // }
   },
 
   /**

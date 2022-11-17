@@ -10,7 +10,7 @@ Page({
     highschool_filter_index: app.globalData.dictInfo.no_high_school ? 1 : 0,
 
     daily_target_array: [...Array(100).keys()].slice(5),
-    daily_target_index: 25,
+    daily_target_index: app.globalData.dictInfo.hasOwnProperty('daily_target') ? app.globalData.dictInfo.daily_target-5 : 25,
 
     remind_time: app.globalData.dictInfo.hasOwnProperty('remind_time') ? app.globalData.dictInfo.remind_time : '12:25'
   },
