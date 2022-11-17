@@ -1,5 +1,4 @@
 const app = getApp()
-var actualLoad
 var dblog = require('../../utils/dblog.js')
 
 Page({
@@ -19,55 +18,29 @@ Page({
 
   /**
    * 生命周期函数--监听页面加载
-   * 将 Storage 中的 dictInfo 加载入 app.globalData.dictInfo
+   * 如果之前有使用的词库则直接跳转
    */
-  async onLoad(actualLoad=true) {
+  async onLoad() {
     console.log("menu onLoad start")
-    if (actualLoad) {
-      // onShow 中调用进行页面重载时 actualLoad 为 false, 此时不需要再次访问云端数据库获取/更新词库信息
-      // console.log("actualLoad")
-      const db = wx.cloud.database()
-      app.globalData.dictInfo = wx.getStorageSync('dictInfo') // 若storage中无此key则返回""
-      if (!app.globalData.hasOwnProperty('dictInfo') || typeof(app.globalData.dictInfo) == "string") { 
-        // 此时即为没有 app.globalData.dictInfo，立即从云数据库拉去一份初始的
-        const dictInfoRes = await db.collection('dictInfo').doc('content').get() 
-        app.globalData.dictInfo = dictInfoRes.data
-      } else {
-        // 慢慢进行一个是否需要更新词库的判断
-        db.collection('dictInfo').doc('content').get().then(res => { 
-          app.globalData.dataTemp = res.data
-          if (actualLoad && app.globalData.dataTemp && (!app.globalData.dictInfo.marker || app.globalData.dictInfo.marker!=app.globalData.dataTemp.marker)) {
-            /**
-             * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
-             * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新
-             * 词库使用时会检查自己是否在 ‘dict_need_refresh’ 中，是的话就会从数据库拉去新版进行更新
-             */
-            wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
-
-            // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
-            app.globalData.dictInfo.clusters_and_domains = app.globalData.dataTemp.clusters_and_domains
-            app.globalData.dictInfo.modes = app.globalData.dataTemp.modes
-            app.globalData.dictInfo.marker = app.globalData.dataTemp.marker
-            wx.setStorageSync('dictInfo', app.globalData.dictInfo)
-          }
-        }).catch(err => {
-          console.log('Offline')
-          console.log(err)
-          app.globalData.offline = true
+    try {
+      if (app.globalData.dictInfo.useDict) {
+        wx.navigateTo({
+          url: '/child_package/pages/words/words',
         })
       }
-      if (!app.globalData.dictInfo.hasOwnProperty('daily_target')) {
-        app.globalData.dictInfo.daily_target = 30
-      }
-      console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
+    } catch(e) {
+      setTimeout(this.onLoad, 100)
     }
+  },
 
-    if (app.globalData.dictInfo.useDict && actualLoad) { // 直接跳转到之前使用的词库
-      wx.navigateTo({
-        url: '/child_package/pages/words/words',
-      })
+  /**
+   * 生命周期函数--监听页面显示
+   * 主要触发场景：onLoad结束；从words页面返回
+   */
+  onShow() {
+    if (!app.globalData.hasOwnProperty('dictInfo')) {
+      return setTimeout(this.onShow, 50)
     }
-
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.clusters_and_domains),
       domains: app.globalData.dictInfo.clusters_and_domains.生命科学,
@@ -84,7 +57,7 @@ Page({
     this.setData({
       value: [0, useDictIndex, useModeIndex]
     })
-
+    console.log('menu onShow end')
     app.globalData.loaded = true
   },
 
@@ -156,17 +129,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady() {
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   * 主要触发场景：从words页面返回
-   */
-  onShow() {
-    // if (app.globalData.loaded) {
-    //   console.log("onShow - call onLoad")
-    //   this.onLoad(actualLoad=false)
-    // }
   },
 
   /**

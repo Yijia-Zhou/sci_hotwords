@@ -15,8 +15,10 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-
+  onLoad() {
+    if (!app.globalData.hasOwnProperty('dictInfo')) {
+      return setTimeout(this.onLoad, 50)
+    }
     console.log("query on load")
     wx.setNavigationBarTitle({title: '词汇查询'})
 

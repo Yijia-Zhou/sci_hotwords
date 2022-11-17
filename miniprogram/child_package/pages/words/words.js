@@ -7,58 +7,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    // count: function (s) {
-    //   return s.length
-    // },
-    showPlay: true,
-    showMoreDeri: false,
-    useMode: app.globalData.dictInfo.useMode,
-    showChinese: false,
-    noAudio: false,
-    with3s: true,
-    showSetting: false,
+    word: new Object(),
+    within3s: true,
+    showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
     since_touch_setting: 0,
     setting_opacity: 1,
     target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'
-  },
-
-  display_length_count: function (word) {
-    // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
-    var res = 0
-    for (let char in word) {
-      switch(word[char]) { // 用法参考 https://blog.csdn.net/tel13259437538/article/details/83314965
-        case 'i':
-        case 'j':
-        case 'l':
-          res += 6
-          break
-        case 'f':
-        case 'r':
-        case 't':
-          res += 10
-          break
-        case 'm':
-        case 'w':
-          res += 20
-          break
-        default:
-          res += 14
-      }
-    }
-    return res/14
-  },
-
-  calFontSize: function (deris) {
-    let deris_copy = [...deris]
-    for (let i in [0,0,0,0]) {
-      deris_copy.push('')
-    }
-    let max_display_length = 0
-    for (let i in [0,1,2,3]) {
-      max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
-    }
-    let fontRes = Math.min(44, 555/(max_display_length+1))
-    return [fontRes, fontRes, fontRes, fontRes]
   },
 
   checkIfDisplay: function (index, dictionary) {
@@ -93,13 +47,13 @@ Page({
         title: '获取/更新词库中',
       })
       const db = wx.cloud.database()
-      var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
+      let getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
       const dataTemp = getRes.data.dictionary
 
       wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp)
       
       const useDict = app.globalData.dictInfo.useDict
-      var dictionary = wx.getStorageSync(useDict)
+      var dictionary = dataTemp
     }
     
     else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict)) {
@@ -107,7 +61,7 @@ Page({
         title: '获取/更新词库中',
       })
       const db = wx.cloud.database()
-      var getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
+      let getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
       var dataTemp = getRes.data.dictionary
       console.log('获取/更新词库中', dataTemp)
       for (var i in dictionary) {
@@ -129,7 +83,6 @@ Page({
     for (var w in dictionary) {
       allDone = allDone && (!this.checkIfDisplay(w, dictionary))
     }
-    console.log('allDone: ', allDone)
     if (allDone) {
       var _this = this
       switch (app.globalData.dictInfo.useMode) {
@@ -142,9 +95,9 @@ Page({
             success (res) {
               if (res.confirm) {
                 app.globalData.dictInfo.useMode = '检验模式'
-                _this.setData({useMode: '检验模式'})
                 dblog.logAction("allDone_begin_test")
                 _this.onLoad()
+                _this.onShow()
               } else if (res.cancel) {
                 _this.configFilter(filtername, false)
                 dblog.logAction("allDone_and_reset")
@@ -185,45 +138,20 @@ Page({
       dictionary[i].len = Math.max.apply(null, dictionary[i]._id.split(' ').map(s => { return s.length }))
     }
 
-    // 数据加载进渲染模板
-    this.setData({
-      dictionary: dictionary,
-      index: index,
-      fontRes: await this.calFontSize(dictionary[index].deris),
-      showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
-    })
+    // 渲染单词卡片
+    this.setData({word: dictionary[index]})
+
+    this.data.dictionary = dictionary
+    this.data.index = index
 
     var _this = this
-    this.data.timer_timeout = setTimeout(function(){_this.data.with3s = false}, 3000)
+    this.data.timer_timeout = setTimeout(function(){_this.data.within3s = false}, 3000)
 
     wx.hideLoading()
-
     dblog.logWord(dictionary[index]._id)
-
-    // 预备“朗读”功能
-    if (app.globalData.offline) {
-      this.setData({
-        noAudio: true
-      })
-    } else {
-      try {
-        this.InnerAudioContext = wx.createInnerAudioContext()
-        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + dictionary[index]._id
-        this.InnerAudioContext.onEnded(() => {
-          this.data.audio_timeout = setTimeout(this.onPlay, 1000)
-        })
-      } catch(e) {
-        console.log(e)
-        this.setData({
-          noAudio: true
-        })
-      }
+    if (!app.globalData.dictInfo.remind_time) {
+      app.globalData.dictInfo.remind_time = '12:25'
     }
-  },
-
-  onShowChinese: function () {
-    dblog.logAction("onShowChinese")
-    this.setData({showChinese: true})
   },
 
   configFilter: function (filtername, filtering) {
@@ -251,6 +179,10 @@ Page({
         }
       }
     })
+    this.on_modify_setting()
+  },
+
+  on_modify_setting() {
     this.data.since_touch_setting = 0
     this.setData({
       'setting_opacity': 1
@@ -260,6 +192,7 @@ Page({
   onConfig: function () {
     // this.mayIFiltering('no_high_school')
     dblog.logAction("onConfig")
+    this.on_modify_setting()
     wx.navigateTo({
       url: '../setting/setting',
     })
@@ -270,13 +203,12 @@ Page({
     this.data.dictionary[this.data.index][this.data.chooseStatus] = true // 标记掌握
 
     // 如果3s内选择掌握、当前单词在高中范围 且 storage中值为undefined而非false则弹窗询问是否屏蔽
-    if (this.data.with3s && this.data.dictionary[this.data.index].high_school && (!app.globalData.dictInfo.hasOwnProperty('no_high_school'))) {
+    if (this.data.within3s && this.data.dictionary[this.data.index].high_school && (!app.globalData.dictInfo.hasOwnProperty('no_high_school'))) {
       this.mayIFiltering('no_high_school')
     }
 
     // 每日任务进度更新
     app.globalData.tracer.doneCount ++
-    // this.setData({doneCount: app.globalData.tracer.doneCount})
     this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
     wx.setStorage({key: 'tracer', data: app.globalData.tracer})
     console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
@@ -301,7 +233,6 @@ Page({
 
   onNext: async function (real_touch=true) {
     clearTimeout(this.data.timer_timeout)
-    clearTimeout(this.data.audio_timeout)
     if (this.data.index+1 >= this.data.indexArray.length) {
     //   var dictionary = this.data.dictionary
     //   dictionary.sort((a, b) => {
@@ -333,30 +264,16 @@ Page({
         let new_index = this.data.index + 1
         dblog.logWord(this.data.dictionary[new_index]._id)
         this.setData({
-          index: new_index,
-          showChinese: false,
-          fontRes: await this.calFontSize(this.data.dictionary[new_index].deris)
+          word: this.data.dictionary[new_index]
         })
-        this.data.with3s = true
+        this.data.index = new_index
+        this.data.within3s = true
         var _this = this
-        this.data.timer_timeout = setTimeout(function(){_this.data.with3s = false}, 3000)
+        this.data.timer_timeout = setTimeout(function(){_this.data.within3s = false}, 3000)
       } else {
         this.data.index += 1
         return this.onNext(real_touch=false) // 这里  return 仅表示不再向下执行
       }
-    }
-    
-    // 更新“朗读”内容
-    if (!this.data.noAudio) {
-      this.InnerAudioContext.destroy()
-      this.InnerAudioContext = wx.createInnerAudioContext()
-      this.setData({
-        showPlay: true
-      })
-      this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.data.dictionary[this.data.index]._id
-      this.InnerAudioContext.onEnded(() => {
-        this.data.audio_timeout = setTimeout(this.onPlay, 1000)
-      })
     }
 
     if (real_touch) {
@@ -365,60 +282,13 @@ Page({
     }
   },
 
-  // “朗读”与“暂停”
-  onPlay: function () {
-    dblog.logAction("onPlay")
-    this.InnerAudioContext.play()
-    this.setData({
-      showPlay: false,
-    })
-  },
-  onPause: function () {
-    try {
-      clearTimeout(this.data.audio_timeout)
-    } catch {
-      console.log('')
-    }
-    this.InnerAudioContext.pause()
-    this.setData({
-      showPlay: true,
-    })
-  },
-
-  onMoreDeri: function () {
-    this.setData({
-      showMoreDeri: !this.data.showMoreDeri
-    })
-    wx.pageScrollTo({
-      duration: 0,
-      scrollTop: 0
-    }) // 将“更多衍生词”界面滚动条回位
-  },
-
-  onDeriDetail: function (event) {
-    // 点击衍生词可显示该衍生词释义
-    dblog.logAction("onDeriDetail")
-    var deri_obj = this.data.dictionary[this.data.index].deris[event.target.id.substr(4,1)]
-    wx.showModal({
-      title: deri_obj.word,
-      content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 词频：' + String(deri_obj.count), 
-      showCancel: false
-    })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  },
-
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    this.setData({
-      useMode: app.globalData.dictInfo.useMode
-    })
+    // this.setData({
+    //   useMode: app.globalData.dictInfo.useMode
+    // })
     // try{
     //   if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
     //     this.onNext(real_touch=false)
@@ -444,31 +314,13 @@ Page({
     } catch(e) {
       console.log(e)
     }
-    try {
-      clearTimeout(this.data.audio_timeout)
-    } catch(e) {
-      console.log(e)
-    }
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: async function () {
-    this.InnerAudioContext.destroy()
     await this.onHide()
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
   },
 
   /**

@@ -1,5 +1,5 @@
 <view class="page_container">
-  <wordcard word='{{word}}' showChinese='true'></wordcard>
+  <wordcard word='{{word}}'></wordcard>
   <view class="main_button_container">
     <button type="primary" class="primary_button" style="width: 61.8vw;">占位按钮1</button>
     <button type="default" class="following_button" style="width: 61.8vw;">占位按钮2</button>

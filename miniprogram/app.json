@@ -10,14 +10,17 @@
         "pages/words/words",
         "pages/setting/setting",
         "pages/query/query",
-        "pages/result/result"
+        "pages/result/result",
+        "pages/more_deri/more_deri"
       ]
     }
   ],
   "preloadRule": {
     "pages/menu/menu": {
       "network": "all",
-      "packages": ["child_package"]
+      "packages": [
+        "child_package"
+      ]
     }
   },
   "window": {

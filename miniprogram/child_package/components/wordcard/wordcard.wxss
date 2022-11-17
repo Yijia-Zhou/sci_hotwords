@@ -1,4 +1,4 @@
-@import '../../pages/words/font-face.wxss';
+@import '../../font-face.wxss';
 
 .card {
   display: flex;
@@ -40,13 +40,16 @@
   font-weight: 550;
   text-align: center;
   /* letter-spacing: -3rpx; */
+  height: 96rpx;
+  margin-top: 12rpx;
 }
 
 .main_word_smaller{
   font-family: Inter Tight;
-  justify-content: space-around;
-  flex: 1;
-  height: auto;
+  font-weight: 550;
+  text-align: center;
+  height: 96rpx;
+  margin-top: 12rpx;
 }
 
 .read_button_container{
@@ -138,6 +141,7 @@
   font-weight: 550;
 }
 
+/* 画 card 左上、右下俩三角 */
 .card:before {
   content: "";
   display: block;
