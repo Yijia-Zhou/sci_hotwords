@@ -12,7 +12,7 @@ Page({
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
     since_touch_setting: 0,
     setting_opacity: 1,
-    target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'
+    target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
   },
 
   checkIfDisplay: function (index, dictionary) {
@@ -198,7 +198,8 @@ Page({
 
     // 每日任务进度更新
     app.globalData.tracer.doneCount ++
-    this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
+    // this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
+    this.setData({target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target})
     wx.setStorage({key: 'tracer', data: app.globalData.tracer})
     console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
     if (app.globalData.tracer.doneCount == app.globalData.dictInfo.daily_target) {

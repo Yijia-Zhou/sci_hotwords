@@ -1,10 +1,6 @@
 <view class="page_container">
-  <view>
-    <view class="progress-bar-container">
-      <view class="progress-bar stripes">
-        <text class="progress-bar-inner" style="width: {{target_percent}};"></text>
-      </view>
-    </view>
+  <view class="progress-box">
+    <progress percent="{{target_percent}}" stroke-width="3"/>
   </view>
 
   <wordcard word='{{word}}'></wordcard>
