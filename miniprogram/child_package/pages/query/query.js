@@ -38,12 +38,50 @@ Page({
     })
   },
 
+  levenshteinDistance:function(str1, str2) {
+    const len1 = str1.length
+    const len2 = str2.length
+
+    var matrix = []
+
+    for (var i = 0; i <= len1; i++) {
+      matrix[i] = new Array()
+      for (let j = 0; j <= len2; j++) {
+        if (i == 0) {
+            matrix[i][j] = j
+        } 
+        else if (j == 0) {
+            matrix[i][j] = i
+        } 
+        else {
+            const temp = matrix[i - 1][j - 1] + (str1[i - 1] != str2[j - 1])
+            matrix[i][j] = Math.min(matrix[i - 1][j] + 1, matrix[i][j - 1] + 1, temp)
+        }
+      }
+    }
+    return matrix[len1][len2]
+  },
+
   onQuery(e){
     var resultArr = []
-    for(var i = 0; i < 5; i++)
+    var diclist = []
+    var target = e.detail.value
+
+    for(var source in this.data.allDictionary)
     {
-      resultArr.push(this.data.allDictionary[i])
+      var distance = this.levenshteinDistance(this.data.allDictionary[source]._id, target)
+      var tmp = {word:this.data.allDictionary[source]._id, dis:distance, idx:source}
+      resultArr.push(tmp)
+
+      resultArr.sort(function(a,b){
+        return a.dis - b.dis;
+      })
+
+      if(resultArr.length > 5){
+        resultArr.pop()
+      }
     }
+
     console.log(resultArr)
 
     this.setData({
@@ -60,8 +98,10 @@ Page({
   },
 
   toResult(e){
+    console.log(e.currentTarget)
     var resultIndex = e.currentTarget.dataset["resultindex"]
-    wx.setStorageSync('resultWord', this.data.searchResultArr[resultIndex])
+    console.log(resultIndex)
+    wx.setStorageSync('resultWord', this.data.allDictionary[resultIndex])
     wx.navigateTo({
         url: '../result/result'
       })
