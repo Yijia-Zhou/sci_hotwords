@@ -6,8 +6,13 @@
   <wordcard word='{{word}}'></wordcard>
 
   <view class="main_button_container">
-      <button type="primary" class='primary_button' bindtap="onDone" style="width: 61.8vw;">我记住了</button>
-      <button type="default" class='following_button' bindtap="onToBeDone" style="width: 61.8vw;">还要努力</button>
+      <button type="primary" class='primary_button' bindtap="onDone" style="width: 61.8vw;">
+        我记住了
+      </button>
+      <!-- <button type="default" class='following_button' bindtap="onToBeDone" style="width: 61.8vw;">还要努力</button> -->
+      <button type="default" class='following_button' bindtap="onFavor" style="width: 61.8vw;">
+        {{word.favored ? '取消收藏' : '收藏本词'}}
+      </button>
       <button type="default" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{setting_opacity}}" wx:if="{{showSetting}}">调整设置</button>
     </view>
 

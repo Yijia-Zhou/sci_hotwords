@@ -221,6 +221,14 @@ Page({
     this.onNext()
   },
 
+  onFavor () {
+    this.data.dictionary[this.data.index].favored = !this.data.dictionary[this.data.index].favored
+    this.setData({
+      'word.favored': this.data.dictionary[this.data.index].favored
+    })
+    wx.setStorage({key: app.globalData.dictInfo.useDict, data: this.data.dictionary})
+  },
+
   onNext: async function (real_touch=true) {
     clearTimeout(this.data.timer_timeout)
     if (this.data.index+1 >= this.data.indexArray.length) {
