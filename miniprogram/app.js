@@ -44,6 +44,7 @@ App({
           "clusters_and_domains": {
             "生命科学": [
               "基础词库",
+              "我的收藏",
               "敬请期待"
             ]
           },
@@ -58,7 +59,7 @@ App({
       complete () {
         // 慢慢进行一个是否需要更新词库的判断
         const db = wx.cloud.database()
-        db.collection('dictInfo').doc('content').get().then(res => { 
+        db.collection('dictInfo').doc('0.9.0').get().then(res => { 
           _this.globalData.dataTemp = res.data
           if (_this.globalData.dataTemp && (!_this.globalData.dictInfo.marker || _this.globalData.dictInfo.marker!=_this.globalData.dataTemp.marker)) {
             /**
