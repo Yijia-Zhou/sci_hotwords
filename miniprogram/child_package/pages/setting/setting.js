@@ -28,7 +28,7 @@ Page({
   },
 
   on_set_reminder: function () {
-    app.requestReminder()
+    app.requestReminder(this.data.remind_time)
   },
 
   onConfirm: function () {
