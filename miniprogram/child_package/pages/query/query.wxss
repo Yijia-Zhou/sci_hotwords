@@ -41,20 +41,12 @@
   font-size: 14px;
 }
 
-.query_bar_btn{
+.cancel_bar_btn{
   margin-left: 230px;
   line-height: 28px;
   color: #09BB07;
   white-space: nowrap;
   z-index: 1;
-}
-
-.cancel_bar_btn{
-  margin-left: 20px;
-  line-height: 28px;
-  color: #09BB07;
-  white-space: nowrap;
-  z-index: 2;
 }
 
 .resultBgView {

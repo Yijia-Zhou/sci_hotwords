@@ -9,6 +9,7 @@ Page({
   data: {
     isShowResultView: false,
     searchResultArr : [],
+    upperBound:100000,
     allDictionary :[]
   },
 
@@ -62,38 +63,58 @@ Page({
     return matrix[len1][len2]
   },
 
-  onQuery(e){
-    var resultArr = []
-    var diclist = []
-    var target = e.detail.value
-
-    for(var source in this.data.allDictionary)
+  onQueryResult:function(src, tgt, resArray, index, isDeris){
+    var distance1 = this.levenshteinDistance(src, tgt)
+    var distance2 = 10000
+    if(tgt.length < src.length)
     {
-      var distance = this.levenshteinDistance(this.data.allDictionary[source]._id, target)
-      var tmp = {word:this.data.allDictionary[source]._id, dis:distance, idx:source}
-      resultArr.push(tmp)
-
-      resultArr.sort(function(a,b){
+      distance2 = this.levenshteinDistance(src.substr(0, tgt.length), tgt)
+    }
+    var distance = Math.min(distance1, distance2)
+    if(distance < this.data.upperBound)
+    {
+      var tmp = {word:src, dis:distance, idx:index, isDeris:isDeris}
+      resArray.push(tmp)
+      resArray.sort(function(a,b){
         return a.dis - b.dis;
       })
-
-      if(resultArr.length > 5){
-        resultArr.pop()
+      if(resArray.length > 5){
+        resArray.pop()
       }
     }
+    this.upperBound = resArray[resArray.length - 1].dis
+  },
 
-    console.log(resultArr)
-
-    this.setData({
-      isShowResultView : true,
-      searchResultArr : resultArr
-    })
+  onQuery(e){
+    var resultArr = []
+    var target = e.detail.value
+    if(target == ""){
+      this.setData({
+        isShowResultView : false,
+        searchResultArr : []
+      })
+    }
+    else{
+      for(var source in this.data.allDictionary)
+      {
+        this.onQueryResult(this.data.allDictionary[source]._id, target, resultArr, source, false)
+        for(var derisIdx in this.data.allDictionary[source].deris)
+        {
+          this.onQueryResult(this.data.allDictionary[source].deris[derisIdx].word, target, resultArr, source, true)
+        }
+      }
+      this.setData({
+        isShowResultView : true,
+        searchResultArr : resultArr
+      })
+    }
   },
 
   onCancel(){
     this.setData({
       isShowResultView : false,
-      searchResultArr : []
+      searchResultArr : [],
+      inputValue :""
     })
   },
 
