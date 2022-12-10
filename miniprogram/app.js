@@ -216,4 +216,9 @@ App({
       imageUrl: '/images/shareImage.png',
     }
   },
+
+  onHide () {
+    let dblog = require('/utils/dblog.js')
+    dblog.reportUserLog()
+  }
 })

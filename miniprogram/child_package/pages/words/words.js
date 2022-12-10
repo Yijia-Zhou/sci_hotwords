@@ -380,8 +380,7 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: async function () {
-    dblog.reportUserLog()
+  onHide: function () {
     if (this.data.dictionary) {
       wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
     }
