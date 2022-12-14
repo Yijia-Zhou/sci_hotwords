@@ -28,6 +28,7 @@ Component({
       // 更新“朗读”内容
       if (!this.data.noAudio) {
         try {
+          clearTimeout(this.data.audio_timeout)
           this.InnerAudioContext.destroy()
         } catch {}
 

@@ -28,17 +28,20 @@ Page({
   },
 
   on_set_reminder: function () {
-    app.requestReminder()
+    app.requestReminder(this.data.remind_time)
   },
 
   onConfirm: function () {
     app.globalData.dictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
     app.globalData.dictInfo.remind_time = this.data.remind_time
-    if (app.globalData.dictInfo.hasOwnProperty('no_high_school')) {
-      app.globalData.dictInfo.no_high_school = Boolean(this.data.highschool_filter_index)
-    }
-    else if (this.data.highschool_filter_array[this.data.highschool_filter_index]=="屏蔽它们") {
+
+    if (this.data.highschool_filter_array[this.data.highschool_filter_index]=="屏蔽它们") {
       app.globalData.dictInfo.no_high_school = true
+    } else if (app.globalData.dictInfo.hasOwnProperty('no_high_school')) {
+      if (app.globalData.dictInfo.no_high_school != false) {
+        app.words_need_reload = true
+        app.globalData.dictInfo.no_high_school = false
+      }
     }
 
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
@@ -67,7 +70,11 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.setData({
+      highschool_filter_index: app.globalData.dictInfo.no_high_school ? 1 : 0,
+      daily_target_index: app.globalData.dictInfo.hasOwnProperty('daily_target') ? app.globalData.dictInfo.daily_target-5 : 25,
+      remind_time: app.globalData.dictInfo.hasOwnProperty('remind_time') ? app.globalData.dictInfo.remind_time : '12:25'
+    })
   },
 
   /**

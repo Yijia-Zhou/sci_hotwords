@@ -32,8 +32,12 @@ Page({
     }
   },
 
-  onLoad() {
-    setTimeout(this.auto_navigate, 0)
+  onLoad(options) {
+    if (!options.no_jump) {
+      setTimeout(this.auto_navigate, 0)
+    } else {
+      this.no_jump = true
+    }
   },
 
   /**
@@ -60,10 +64,14 @@ Page({
     this.setData({
       value: [0, useDictIndex, useModeIndex]
     })
+    if (this.data.domains[useDictIndex] == "我的收藏" && this.no_jump) {
+      this.back2foundermental()
+    }
   },
 
   onShow() {
     setTimeout(this.picker_render, 0)
+    // setTimeout(app.loadFavored, 0)
   },
 
   /**
@@ -74,6 +82,29 @@ Page({
   },
   bindpickend: function () {
     this.setData({showBtn: true})
+    let _this = this
+    if (this.data.domains[this.data.value[1]] == "敬请期待") {
+      wx.showModal({
+        title: "敬请期待",
+        content: "更多学科/子领域词库正在分析/制作中……", 
+        confirmText: "好的吧~",
+        showCancel: false,
+        success: _this.back2foundermental
+      })
+    } else if (this.data.domains[this.data.value[1]] == "我的收藏" && !wx.getStorageInfoSync().keys.includes('我的收藏')) {
+      wx.showModal({
+        title: "暂无收藏",
+        content: "在别的词库中收藏一些词汇组后再来吧", 
+        confirmText: "好的吧~",
+        showCancel: false,
+        success: _this.back2foundermental
+      })
+    }
+  },
+  back2foundermental() {
+    this.setData({
+      'value[1]': this.data.domains.indexOf('基础词库')
+    })
   },
 
   // picker 选择更新时刷新相关变量值
@@ -94,9 +125,6 @@ Page({
     console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     if (app.globalData.dictInfo.useDict=="敬请期待") {
       app.globalData.dictInfo.useDict = "基础词库"
-    }
-    if (app.globalData.dictInfo.useMode=="敬请期待") {
-      app.globalData.dictInfo.useMode = "识记模式"
     }
 
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)

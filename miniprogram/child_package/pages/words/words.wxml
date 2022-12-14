@@ -6,9 +6,17 @@
   <wordcard word='{{word}}'></wordcard>
 
   <view class="main_button_container">
-      <button type="primary" class='primary_button' bindtap="onDone" style="width: 61.8vw;">我记住了</button>
-      <button type="default" class='following_button' bindtap="onToBeDone" style="width: 61.8vw;">还要努力</button>
-      <button type="default" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{setting_opacity}}" wx:if="{{showSetting}}">调整设置</button>
+    <button type="primary" class='primary_button' bindtap="onNext" style="width: 61.8vw;" wx:if="{{word.just_favored}}">
+        Next One!
+      </button>
+      <button type="primary" class='primary_button' bindtap="onDone" style="width: 61.8vw;" wx:else>
+        我记住了
+      </button>
+      <button type="default" class='following_button' bindtap="onToBeDone" style="width: 61.8vw;" wx:if="{{chooseStatus=='tested'}}">还要努力</button>
+      <button type="default" class='following_button' bindtap="onFavor" style="width: 61.8vw;" wx:if="{{chooseStatus=='learnt' || word.favored}}">
+        {{word.favored ? '取消收藏' : '收藏本词'}}
+      </button>
+      <button type="{{setting_opacity===1?'primary':'default'}}" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{setting_opacity}}" wx:if="{{showSetting}}">调整设置</button>
     </view>
 
 </view>
