@@ -130,7 +130,7 @@ App({
   },
 
   requestReminder(changed_time) {
-    let tmplId = '8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I'
+    let tmplId = 'fIbeAXEbSJXGLeVhkuTxth5JrxvXw3sweb0NGd8a83c'
     var remind_time = changed_time ? changed_time : this.globalData.dictInfo.remind_time
     if (!remind_time) {
       remind_time = '12:25'

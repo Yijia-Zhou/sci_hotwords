@@ -21,14 +21,24 @@ exports.main = async (event, context) => {
       "touser": dbRes.data[one]['_openid'],
       "page": 'pages/menu/menu',
       "data": {
-        "thing2": { // “练习程度”
-          "value": '已积跬步'
+        "thing1": { // 昨日情况
+          "value": '昨日的征程已在身后'
         },
-        "thing6": { // “上次背诵时间”
-          "value": '犹在昨日'
+        "thing2": { // 今日目标
+          "value": '今天的路途就从现在开始'
         },
       },
-      "templateId": '8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I',
+      "templateId": 'fIbeAXEbSJXGLeVhkuTxth5JrxvXw3sweb0NGd8a83c',
+
+      // "data": {
+      //   "thing2": { // “练习程度”
+      //     "value": '已积跬步'
+      //   },
+      //   "thing6": { // “上次背诵时间”
+      //     "value": '犹在昨日'
+      //   },
+      // },
+      // "templateId": '8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I',
     })
     doc_ids[one] = dbRes.data[one]._id
     console.log(result[one])

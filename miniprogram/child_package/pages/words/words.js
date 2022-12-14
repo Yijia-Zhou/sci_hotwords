@@ -25,6 +25,59 @@ Page({
     return res
   },
 
+  nothing_favored() {
+    wx.showModal({
+      title: "暂无收藏",
+      content: "在别的词库中收藏一些词汇组后再来吧", 
+      confirmText: "好的吧~",
+      showCancel: false,
+      success () {
+        wx.removeStorageSync('我的收藏')//({key: '我的收藏'})
+        wx.redirectTo({
+          url: '/pages/menu/menu?no_jump=true',
+        })
+      }
+    })
+  },
+
+  on_alldone() {
+    let _this = this
+    let reset = function() {
+      wx.showModal({
+        title: '全部掌握啦\r\n正在重置词典',
+        showCancel: false,
+      })
+    }
+    switch (app.globalData.dictInfo.useMode) {
+      case '识记模式':
+        wx.showModal({
+          title: '全部记过一遍啦(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+          confirmText: '这就去',
+          cancelText: '先不了',
+          success (res) {
+            if (res.confirm) {
+              app.globalData.dictInfo.useMode = '检验模式'
+              dblog.logAction("allDone_begin_test")
+              _this.onLoad()
+              _this.onShow()
+            } else if (res.cancel) {
+              dblog.logAction("allDone_and_reset")
+              reset()
+            }
+          }
+        })
+        break
+      case '检验模式':
+        reset()
+        break
+    }
+    for (var w in this.data.dictionary) {
+      this.data.dictionary[w][this.data.chooseStatus] = false
+    }
+    wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
+    this.onLoad()
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -44,18 +97,7 @@ Page({
     var dictionary = wx.getStorageSync(app.globalData.dictInfo.useDict)
     if (!dictionary || dictionary.length==0) {
       if (app.globalData.dictInfo.useDict == '我的收藏') {
-        wx.showModal({
-          title: "暂无收藏",
-          content: "在别的词库中收藏一些词汇组后再来吧", 
-          confirmText: "好的吧~",
-          showCancel: false,
-          success () {
-            wx.removeStorageSync('我的收藏')//({key: '我的收藏'})
-            wx.redirectTo({
-              url: '/pages/menu/menu?no_jump=true',
-            })
-          }
-        })
+        this.nothing_favored()
         return
       }
       wx.showLoading({
@@ -106,39 +148,7 @@ Page({
       }
     }
     if (typeof(index)!='number' || index >= dictionary.length) {  // alldone
-      var _this = this
-      switch (app.globalData.dictInfo.useMode) {
-        case '识记模式':
-          var _this = this
-          wx.showModal({
-            title: '全部记过一遍啦(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
-            confirmText: '这就去',
-            cancelText: '先不了',
-            success (res) {
-              if (res.confirm) {
-                app.globalData.dictInfo.useMode = '检验模式'
-                dblog.logAction("allDone_begin_test")
-                _this.onLoad()
-                _this.onShow()
-              } else if (res.cancel) {
-                dblog.logAction("allDone_and_reset")
-              }
-            }
-          })
-          break
-        case '检验模式':
-          wx.showModal({
-            title: '全部掌握啦\r\n正在重置词典',
-            showCancel: false,
-          })
-          break
-      }
-      for (var w in dictionary) {
-        dictionary[w][this.data.chooseStatus] = false
-      }
-      wx.setStorageSync(app.globalData.dictInfo.useDict, dictionary)
-      // index = undefined
-      return this.onLoad()
+      return this.on_alldone()
     }
 
     // 渲染单词卡片
@@ -162,6 +172,7 @@ Page({
     app.globalData.dictInfo[filtername] = filtering
     wx.setStorageSync('dictInfo', app.globalData.dictInfo)
     if (filtering != filtering_past) {
+      wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary)
       this.onLoad()
     }
   },
@@ -216,10 +227,11 @@ Page({
     // this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
     this.setData({target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target})
     wx.setStorage({key: 'tracer', data: app.globalData.tracer})
+    this.onNext()
     console.log(app.globalData.tracer.doneCount, app.globalData.dictInfo.daily_target)
     if (app.globalData.tracer.doneCount == app.globalData.dictInfo.daily_target) {
       wx.showModal({
-        title: "已学习30个词汇组",
+        title: "已学习 "+app.globalData.dictInfo.daily_target+" 个词汇组",
         content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
         confirmText: "明天继续",
         showCancel: false,
@@ -229,7 +241,6 @@ Page({
       })
       this.on_modify_setting()
     }
-    this.onNext()
   },
 
   onToBeDone: async function () {
@@ -261,7 +272,7 @@ Page({
       wx.setStorage({key: '我的收藏', data: this.data.dictionary})
       this.data.index --
       if (this.data.dictionary.length == 0) {
-        this.onLoad()
+        this.nothing_favored()
       } else {
         this.onNext()
       }
@@ -324,16 +335,25 @@ Page({
   onNext: async function (real_touch=true) {
     clearTimeout(this.data.timer_timeout)
     if (real_touch) {
-      console.log("real_touch")
       this.data.since_touch_setting += 1
       this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
     }
 
     if (this.data.index+1 >= this.data.indexArray.length) {
-      var _this = this
-      wx.showToast({
+      let _this = this
+
+      let check_dis_reg = function(still_sth, index) {
+        console.log(_this.checkIfDisplay(index, _this.data.dictionary))
+        return still_sth || _this.checkIfDisplay(index, _this.data.dictionary)
+      }
+      if (!_this.data.indexArray.reduce(check_dis_reg, false)) {
+        console.log('onNext - alldone')
+        return this.on_alldone()
+      }
+      
+      wx.showModal({
+        showCancel: false,
         title: '本词典到底啦\r\n重新翻出尚未掌握的',
-        icon: 'none',
         success: function () {
           wx.setStorageSync(app.globalData.dictInfo.useDict, _this.data.dictionary)
           _this.onLoad()
@@ -347,7 +367,7 @@ Page({
         })
         this.data.index = new_index
         this.data.within3s = true
-        var _this = this
+        let _this = this
         this.data.timer_timeout = setTimeout(function(){_this.data.within3s = false}, 3000)
       } else {
         this.data.index += 1
@@ -360,20 +380,20 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    // this.setData({
-    //   useMode: app.globalData.dictInfo.useMode
-    // })
-    // try{
-    //   if (this.checkIfDisplay(this.data.index, this.data.dictionary)) {
-    //     this.onNext(real_touch=false)
-    //   }
-    // } catch(e) {
-    //   console.log(e)
-    // }
+    this.setData({
+      within3s: true,
+      showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
+      target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
+    })
+
     if (this.data.hasOwnProperty('dictionary') && this.data.hasOwnProperty('index')
      && !this.checkIfDisplay(this.data.index, this.data.dictionary)) {
       let real_touch=false
       this.onNext(real_touch)
+    }
+    
+    if (app.words_need_reload) {
+      this.onLoad()
     }
   },
 
