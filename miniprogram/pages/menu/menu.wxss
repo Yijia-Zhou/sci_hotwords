@@ -1,10 +1,8 @@
-/* pages/menu/menu.wxss */
-
-page {
-  /* background-color: #F0F0E8; */
+/* page {
+  background-color: #F0F0E8;
   background-color: rgba(138, 109, 53, 0.03);
-}
-
+} */
+/* 放到app.wxss和setting共用了
 .title_container{
   display: flex;
   flex-direction: column;
@@ -17,7 +15,7 @@ page {
 .title{
   font-size: 40rpx;
   text-align: center;
-}
+} */
 
 /* 以下3个样式来自 https://blog.csdn.net/Hero_rong/article/details/96971853 */
 picker-view {

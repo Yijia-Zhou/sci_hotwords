@@ -3,26 +3,25 @@
     "miniprogram": {
       "list": [
         {
-          "name": "单词卡片",
-          "pathName": "pages/words/words",
+          "name": "查词结果卡片",
+          "pathName": "/child_package/pages/result/result",
           "query": "",
           "launchMode": "default",
-          "scene": null,
-          "partialCompile": {
-            "enabled": true,
-            "pages": []
-          }
+          "scene": null
         },
         {
-          "name": "词典菜单",
-          "pathName": "pages/menu/menu",
+          "name": "setting 页",
+          "pathName": "/child_package/pages/setting/setting",
           "query": "",
           "launchMode": "default",
-          "scene": 1001,
-          "partialCompile": {
-            "enabled": true,
-            "pages": []
-          }
+          "scene": null
+        },
+        {
+          "name": "进入查词页面",
+          "pathName": "child_package/pages/query/query",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }
@@ -30,5 +29,6 @@
   "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
   "setting": {
     "compileHotReLoad": false
-  }
+  },
+  "libVersion": "2.21.0"
 }

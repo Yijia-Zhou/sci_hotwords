@@ -1,0 +1,16 @@
+<view class="query_bar_container">
+  <view class="query_bar">
+    <view class="query_bar_box">
+      <icon class="query_icon_in_query_bar_box" type="search" size="16"></icon>
+      <input type="text" class="query_input_in_query_bar_box" placeholder="请输入查询词汇"></input>
+    </view>
+  </view>
+  <view class="query_bar_btn" bindtap='onQuery'>查询</view>
+  <view class="cancel_bar_btn" bindtap='onCancel'>取消</view>
+</view>
+
+<view class='{{isShowResultView?"resultBgView":"resultBgView-hidden"}}'>
+	<view class="resultCell" wx:for="{{searchResultArr}}" wx:key="index">
+		<view class="resultText" data-resultindex="{{index}}" bindtap='toResult'> {{searchResultArr[index]._id}}</view>
+	</view>
+</view>

@@ -1,9 +1,28 @@
 {
   "entryPagePath": "pages/menu/menu",
   "pages": [
-    "pages/menu/menu",
-    "pages/words/words"
+    "pages/menu/menu"
   ],
+  "subpackages": [
+    {
+      "root": "child_package",
+      "pages": [
+        "pages/words/words",
+        "pages/setting/setting",
+        "pages/query/query",
+        "pages/result/result",
+        "pages/more_deri/more_deri"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/menu/menu": {
+      "network": "all",
+      "packages": [
+        "child_package"
+      ]
+    }
+  },
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
@@ -12,10 +31,6 @@
     "navigationBarTextStyle": "black"
   },
   "lazyCodeLoading": "requiredComponents",
-  "networkTimeout": {
-    "request": 5000,
-    "connectSocket": 5000
-  },
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }
