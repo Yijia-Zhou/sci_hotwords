@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
   const dbRes = await db.collection('reminder')
   .where({ //_.gt(30).and(_.lt(70))
     // remind_time_ms: _.gt(now_ms-1000*60*6).and(_.lt(now_ms+1)) // 对{设定提醒时间：6分钟前到现在}的记录进行逐一发送
-    remind_time_ms: _.lt(now_ms+1)
+    remind_time_ms: _.lt(now_ms+60000)
   })
   .get()
   console.log(dbRes.data)
@@ -55,12 +55,12 @@ exports.main = async (event, context) => {
     .where({_id: _.in(doc_ids)})
     .remove()
     if (again) {
-      const againRes = await cloud.callFunction({
+      const againRes = cloud.callFunction({
         name: 'send_remind'
       })
-      return result, delRes, againRes
+      return [result, delRes, againRes]
     }
-    return result, delRes
+    return [result, delRes]
   }
   return result
 }
