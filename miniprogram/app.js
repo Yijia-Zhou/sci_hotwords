@@ -151,8 +151,8 @@ App({
             }
           })
           wx.showToast({
-            title: '将于明天 '+remind_time+' 给您发送背单词提醒\r\n您可以再随意地看些单词，或是养精蓄锐明天继续',
-            duration: 3200,
+            title: "将于明天 "+remind_time+" 给您发送征服SCI单词提醒 (●'◡'●) 您可以再随意地看些单词，或是养精蓄锐明天继续",
+            duration: 3600,
             icon: 'none'
           })
         }
