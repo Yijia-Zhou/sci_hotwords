@@ -48,18 +48,21 @@ App({
               "敬请期待"
             ]
           },
-          "marker": 3,
+          "marker": 5,
           "modes": [
             "识记模式",
             "检验模式"
           ],
+          "paper_count": {
+              "基础词库": 1217564
+          },
           daily_target: 30
         }
       },
       complete () {
         // 慢慢进行一个是否需要更新词库的判断
         const db = wx.cloud.database()
-        db.collection('dictInfo').doc('0.9.0').get().then(res => { 
+        db.collection('dictInfo').doc('0.9.15').get().then(res => { 
           _this.globalData.dataTemp = res.data
           if (_this.globalData.dataTemp && (!_this.globalData.dictInfo.marker || _this.globalData.dictInfo.marker!=_this.globalData.dataTemp.marker)) {
             /**
@@ -73,6 +76,7 @@ App({
             _this.globalData.dictInfo.clusters_and_domains = _this.globalData.dataTemp.clusters_and_domains
             _this.globalData.dictInfo.modes = _this.globalData.dataTemp.modes
             _this.globalData.dictInfo.marker = _this.globalData.dataTemp.marker
+            _this.globalData.dictInfo.paper_count = _this.globalData.dataTemp.paper_count
             wx.setStorageSync('dictInfo', _this.globalData.dictInfo)
           }
         }).catch(err => {

@@ -24,6 +24,7 @@ Component({
         fontRes: this.calFontSize(word.deris),
         baseword_len: this.display_length_count(word._id)
       })
+      this.process_fre_text()
       
       // 更新“朗读”内容
       if (!this.data.noAudio) {
@@ -124,9 +125,34 @@ Component({
     },
 
     /**
-     * 工具函数们，目前就俩算字号的
+     * 工具函数们
      */
     
+     // 将词频信息处理成显示在卡片顶端的文字
+    process_fre_text: function () {
+      let paper_count
+      try {
+        if (app.globalData.dictInfo.useDict == '我的收藏') {
+          paper_count = app.globalData.dictInfo.paper_count[this.properties.word.from]
+        } else {
+          paper_count = app.globalData.dictInfo.paper_count[app.globalData.dictInfo.useDict]
+        }
+      } catch(e) {
+        console.log(e)
+      }
+      if (typeof(paper_count) != "number") {
+        paper_count = 1217564
+      }
+      let fre = this.properties.word.total_count / paper_count
+      if (fre >= 5) {
+        this.setData({fre_text: "每篇平均出现 "+String(fre.toFixed(2))+' 次'})
+      } else if (fre >= 0.5) {
+        this.setData({fre_text: "十篇平均出现 "+String((fre*10).toFixed(2))+' 次'})
+      } else {
+        this.setData({fre_text: "百篇平均出现 "+String((fre*100).toFixed(2))+' 次'})
+      }
+    },
+
     // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
     display_length_count: function (word) {
       let res = 0
