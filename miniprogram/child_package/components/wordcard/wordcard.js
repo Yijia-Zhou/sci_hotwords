@@ -25,6 +25,7 @@ Component({
         baseword_len: this.display_length_count(word._id)
       })
       this.process_fre_text()
+      this.explain_style_process()
       
       // 更新“朗读”内容
       if (!this.data.noAudio) {
@@ -175,6 +176,9 @@ Component({
           default:
             res += 14
         }
+        if (escape(word[char]).indexOf("%u") >= 0) { // 判断方法来自 https://juejin.cn/post/6844903745583579149
+          res += 10  // 如果不是英文字符则额外+10（默认当中文(长度24)处理）
+        }
       }
       return res/14
     },
@@ -190,6 +194,15 @@ Component({
       }
       let fontRes = Math.min(44, 555/(max_display_length+1))
       return fontRes
+    },
+
+    explain_style_process() {
+      let disp_len = this.display_length_count(this.properties.word.chosen[0])
+      if (disp_len > 75) {
+        this.setData({explain_style: "font-size:"+String(36*75/disp_len)+"rpx; line-height: 48.6rpx;"})
+        return 0
+      }
+      this.setData({explain_style: ""})
     },
 
     destroy_audio() {

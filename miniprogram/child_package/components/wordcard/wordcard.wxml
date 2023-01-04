@@ -45,7 +45,7 @@
     </view>
 
     <view class="explain_container" catchtap="onShowChinese">
-      <text class="explain_zhcn" wx:if="{{useMode==='识记模式' || showChinese}}">{{word.chosen}}</text>
+      <text class="explain_zhcn" wx:if="{{useMode==='识记模式' || showChinese}}" style="{{explain_style}}">{{word.chosen}}</text>
       <text class="explain_zhcn" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
     </view>
 </view>
