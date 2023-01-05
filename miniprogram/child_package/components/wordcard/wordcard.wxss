@@ -125,11 +125,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 48rpx 30rpx 0 30rpx; 
+  justify-content: space-around;
+  padding: 0 30rpx;
   box-sizing: border-box;
-  width: 88%; 
-  flex: 0 0 auto; 
+  width: 88%;
+  flex: 0 0 auto;
   height: 215rpx;
 }
 
@@ -139,6 +139,7 @@
   text-align: center;
   width: 100%;
   font-weight: 550;
+  margin-bottom: 20rpx;
 }
 
 /* 画 card 左上、右下俩三角 */

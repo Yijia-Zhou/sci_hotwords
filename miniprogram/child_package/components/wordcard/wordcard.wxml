@@ -1,7 +1,7 @@
 <!--components/wordcard/wordcard.wxml-->
 
 <view class="card">
-  <text wx:if='{{word.total_count}}' class="total_count_text">总词频 - {{word.total_count}}</text>
+  <text wx:if='{{word.total_count}}' class="total_count_text">{{fre_text}}</text>
     <view class="main_word_container">
       <text class="main_word" wx:if='{{baseword_len<15}}'>{{word._id}}</text>
       <text class="main_word_smaller" style="font-size: {{1200/baseword_len}}rpx;" wx:else>{{word._id}}</text>
@@ -45,7 +45,7 @@
     </view>
 
     <view class="explain_container" catchtap="onShowChinese">
-      <text class="explain_zhcn" wx:if="{{useMode==='识记模式' || showChinese}}">{{word.chosen}}</text>
+      <text class="explain_zhcn" wx:if="{{useMode==='识记模式' || showChinese}}" style="{{explain_style}}">{{word.chosen}}</text>
       <text class="explain_zhcn" wx:else="index==0" style="font-style: oblique; color: rgba(0, 0, 0, 0.3);">点击查看释义（核对答案~）</text>
     </view>
 </view>
