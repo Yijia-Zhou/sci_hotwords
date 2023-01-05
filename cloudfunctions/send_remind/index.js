@@ -22,31 +22,36 @@ exports.main = async (event, context) => {
       var again = true
       break
     }
-    result[one] = await cloud.openapi.subscribeMessage.send({
-      "touser": dbRes.data[one]['_openid'],
-      "page": 'pages/menu/menu',
-      "data": {
-        "thing1": { // 昨日情况
-          "value": '昨日的征程已在身后'
-          // "value": '抱歉由于一些技术原因，提醒晚了一些'
+    try {
+      result[one] = await cloud.openapi.subscribeMessage.send({
+        "touser": dbRes.data[one]['_openid'],
+        "page": 'pages/menu/menu',
+        "data": {
+          "thing1": { // 昨日情况
+            "value": '昨日的征程已在身后'
+            // "value": '抱歉由于一些技术原因 提醒晚了一些'
+          },
+          "thing2": { // 今日目标
+            "value": '今天的路途就从现在开始'
+            // "value": '问题已修复 明天的提醒会正常发送'
+          },
         },
-        "thing2": { // 今日目标
-          "value": '今天的路途就从现在开始'
-          // "value": '问题已修复，明天的提醒会正常发送'
-        },
-      },
-      "templateId": 'fIbeAXEbSJXGLeVhkuTxth5JrxvXw3sweb0NGd8a83c',
-
-      // "data": {
-      //   "thing2": { // “练习程度”
-      //     "value": '已积跬步'
-      //   },
-      //   "thing6": { // “上次背诵时间”
-      //     "value": '犹在昨日'
-      //   },
-      // },
-      // "templateId": '8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I',
-    })
+        "templateId": 'fIbeAXEbSJXGLeVhkuTxth5JrxvXw3sweb0NGd8a83c',
+  
+        // "data": {
+        //   "thing2": { // “练习程度”
+        //     "value": '已积跬步'
+        //   },
+        //   "thing6": { // “上次背诵时间”
+        //     "value": '犹在昨日'
+        //   },
+        // },
+        // "templateId": '8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I',
+      })
+    } catch(err) {
+      console.log("Sending failed: " + dbRes.data[one]['_openid'])
+      console.log(err)
+    }
     doc_ids[one] = dbRes.data[one]._id
     console.log(result[one])
   }
