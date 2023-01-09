@@ -15,7 +15,7 @@ Page({
    */
   onLoad(options) {
     console.log("show result on load")
-    var resultWord = wx.getStorageSync('resultWord')
+    var resultWord = app.globalData.resultWord
     this.setData({
         word : resultWord
       }

@@ -10,6 +10,6 @@
 
 <view class='{{isShowResultView?"resultBgView":"resultBgView-hidden"}}'>
 	<view class="resultCell" wx:for="{{searchResultArr}}" wx:key="index">
-		<view class="resultText" data-resultindex="{{searchResultArr[index].idx}}" bindtap='toResult'> {{searchResultArr[index].word}}</view>
+		<view class="resultText" data-resultindex="{{searchResultArr[index].idx}}" bindtap='toResult'> {{searchResultArr[index].word}}{{searchResultArr[index].translation}}</view>
 	</view>
 </view>

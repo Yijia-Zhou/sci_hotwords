@@ -63,7 +63,7 @@ Page({
     return matrix[len1][len2]
   },
 
-  onQueryResult:function(src, tgt, resArray, index, isDeris){
+  onQueryResult:function(src, tgt, resArray, index, derisIndex){
     var distance1 = this.levenshteinDistance(src, tgt)
     var distance2 = 10000
     if(tgt.length < src.length)
@@ -73,7 +73,7 @@ Page({
     var distance = Math.min(distance1, distance2)
     if(distance < this.data.upperBound)
     {
-      var tmp = {word:src, dis:distance, idx:index, isDeris:isDeris}
+      var tmp = {dis:distance, idx:index, derisIdx:derisIndex}
       resArray.push(tmp)
       resArray.sort(function(a,b){
         return a.dis - b.dis;
@@ -87,6 +87,7 @@ Page({
 
   onQuery(e){
     var resultArr = []
+    var resultArrWithCN = []
     var target = e.detail.value
     if(target == ""){
       this.setData({
@@ -97,15 +98,38 @@ Page({
     else{
       for(var source in this.data.allDictionary)
       {
-        this.onQueryResult(this.data.allDictionary[source]._id, target, resultArr, source, false)
-        for(var derisIdx in this.data.allDictionary[source].deris)
+        var dictionaryWord = this.data.allDictionary[source]
+        this.onQueryResult(dictionaryWord._id, target, resultArr, source, -1)
+        for(var derisIdx in dictionaryWord.deris)
         {
-          this.onQueryResult(this.data.allDictionary[source].deris[derisIdx].word, target, resultArr, source, true)
+          this.onQueryResult(dictionaryWord.deris[derisIdx].word, target, resultArr, source, derisIdx)
         }
       }
+
+      for(var resultIdx in resultArr)
+      {
+        var resultWordIdx = resultArr[resultIdx].idx
+        var resultDerisIdx = resultArr[resultIdx].derisIdx
+        var resultWord = this.data.allDictionary[resultWordIdx]
+        var word,translation
+
+        if(resultDerisIdx != -1)
+        {
+          word = resultWord.deris[resultDerisIdx].word
+          translation = resultWord.deris[resultDerisIdx].bing
+        }
+        else
+        {
+          word = resultWord._id
+          translation = resultWord.chosen[0]
+        }
+        var tmp = {idx:resultWordIdx, derisIdx:resultDerisIdx, word:word, translation:translation}
+        resultArrWithCN.push(tmp)
+      }
+
       this.setData({
         isShowResultView : true,
-        searchResultArr : resultArr
+        searchResultArr : resultArrWithCN
       })
     }
   },
@@ -119,10 +143,8 @@ Page({
   },
 
   toResult(e){
-    console.log(e.currentTarget)
     var resultIndex = e.currentTarget.dataset["resultindex"]
-    console.log(resultIndex)
-    wx.setStorageSync('resultWord', this.data.allDictionary[resultIndex])
+    app.globalData.resultWord = this.data.allDictionary[resultIndex]
     wx.navigateTo({
         url: '../result/result'
       })
