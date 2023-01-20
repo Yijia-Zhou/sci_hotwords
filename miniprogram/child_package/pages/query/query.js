@@ -1,6 +1,6 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
-var requestDict = require('../../../utils/requestDict.js')
+var requestDict = require('../../utils/requestDict.js')
 
 Page({
 
