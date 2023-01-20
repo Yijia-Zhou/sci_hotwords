@@ -1,5 +1,6 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
+var requestDict = require('../../../utils/requestDict.js')
 
 Page({
 
@@ -16,7 +17,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {
+  onLoad : async function() {
     if (!app.globalData.hasOwnProperty('dictInfo')) {
       return setTimeout(this.onLoad, 50)
     }
@@ -25,14 +26,15 @@ Page({
 
     var useDictList = wx.getStorageSync('dictInfo').useDictList
 
-    console.log(useDictList)
-
     var allDictionary = []
     
     for(var useDict in useDictList)
     {
+      await requestDict.requestDictionary(useDictList[useDict])
       allDictionary.push.apply(allDictionary, wx.getStorageSync(useDictList[useDict]))
     }
+
+    wx.hideLoading()
 
     this.setData({
       allDictionary: allDictionary
