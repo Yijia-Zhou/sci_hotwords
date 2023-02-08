@@ -23,6 +23,12 @@ Page({
     })
   },
 
+  onShow() {
+    this.setData({
+      deris: app.globalData.deris_array
+    })
+  },
+
   /**
    * 用户点击右上角分享
    */

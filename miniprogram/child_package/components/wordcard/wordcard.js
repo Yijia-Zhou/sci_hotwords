@@ -24,10 +24,13 @@ Component({
         fontRes: this.calFontSize(word.deris),
         baseword_len: this.display_length_count(word._id)
       })
+      this.process_fre_text()
+      this.explain_style_process()
       
       // 更新“朗读”内容
       if (!this.data.noAudio) {
         try {
+          clearTimeout(this.data.audio_timeout)
           this.InnerAudioContext.destroy()
         } catch {}
 
@@ -98,7 +101,7 @@ Component({
       var deri_obj = this.properties.word.deris[event.target.id.substr(4,1)]
       wx.showModal({
         title: deri_obj.word,
-        content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 词频：' + String(deri_obj.count), 
+        content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 出现次数：' + String(deri_obj.count), 
         showCancel: false
       })
     },
@@ -123,9 +126,34 @@ Component({
     },
 
     /**
-     * 工具函数们，目前就俩算字号的
+     * 工具函数们
      */
     
+     // 将词频信息处理成显示在卡片顶端的文字
+    process_fre_text: function () {
+      let paper_count
+      try {
+        if (app.globalData.dictInfo.useDict == '我的收藏') {
+          paper_count = app.globalData.dictInfo.paper_count[this.properties.word.from]
+        } else {
+          paper_count = app.globalData.dictInfo.paper_count[app.globalData.dictInfo.useDict]
+        }
+      } catch(e) {
+        console.log(e)
+      }
+      if (typeof(paper_count) != "number") {
+        paper_count = 1217564
+      }
+      let fre = this.properties.word.total_count / paper_count
+      if (fre >= 5) {
+        this.setData({fre_text: "每篇平均出现 "+String(fre.toFixed(2))+' 次'})
+      } else if (fre >= 0.5) {
+        this.setData({fre_text: "十篇平均出现 "+String((fre*10).toFixed(2))+' 次'})
+      } else {
+        this.setData({fre_text: "百篇平均出现 "+String((fre*100).toFixed(2))+' 次'})
+      }
+    },
+
     // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
     display_length_count: function (word) {
       let res = 0
@@ -148,6 +176,9 @@ Component({
           default:
             res += 14
         }
+        if (escape(word[char]).indexOf("%u") >= 0) { // 判断方法来自 https://juejin.cn/post/6844903745583579149
+          res += 10  // 如果不是英文字符则额外+10（默认当中文(长度24)处理）
+        }
       }
       return res/14
     },
@@ -163,6 +194,15 @@ Component({
       }
       let fontRes = Math.min(44, 555/(max_display_length+1))
       return fontRes
+    },
+
+    explain_style_process() {
+      let disp_len = this.display_length_count(this.properties.word.chosen[0])
+      if (disp_len > 75) {
+        this.setData({explain_style: "font-size:"+String(36*75/disp_len)+"rpx; line-height: 48.6rpx;"})
+        return 0
+      }
+      this.setData({explain_style: ""})
     },
 
     destroy_audio() {

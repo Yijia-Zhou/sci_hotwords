@@ -32,7 +32,7 @@
       <text class="sub_title">偏好何时进行单词识记？</text>
       <view class="paragraph">
         <text>如果您</text>
-        <text class="picked_text" catchtap="on_set_reminder">让我们提醒您每日进行单词学习，</text>
+        <text class="picked_text" catchtap="on_set_reminder">让我们明天提醒您进行单词学习，</text>
         <text>当前设定的提醒时间为</text>
         <picker class="picked_text" mode="time" value="{{remind_time}}"  bindchange="on_remind_time_change" start="06:00" end="23:54">{{remind_time}}</picker>
         <text>，您可以点击进行修改</text>

@@ -1,5 +1,7 @@
 <view class="page_container">
-  <view class="title_container" style="height: 365rpx;"><text class="title">请选择您要使用的词库和模式</text></view>
+  <view class="title_container" style="height: 365rpx;"><text class="title">
+    请选择您要使用的词库和模式
+  </text></view>
   
   <picker-view 
     indicator-class="pickerCol" 

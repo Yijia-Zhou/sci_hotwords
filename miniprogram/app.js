@@ -44,21 +44,25 @@ App({
           "clusters_and_domains": {
             "生命科学": [
               "基础词库",
+              "我的收藏",
               "敬请期待"
             ]
           },
-          "marker": 3,
+          "marker": 5,
           "modes": [
             "识记模式",
             "检验模式"
           ],
+          "paper_count": {
+              "基础词库": 1217564
+          },
           daily_target: 30
         }
       },
       complete () {
         // 慢慢进行一个是否需要更新词库的判断
         const db = wx.cloud.database()
-        db.collection('dictInfo').doc('content').get().then(res => { 
+        db.collection('dictInfo').doc('0.9.15').get().then(res => { 
           _this.globalData.dataTemp = res.data
           if (_this.globalData.dataTemp && (!_this.globalData.dictInfo.marker || _this.globalData.dictInfo.marker!=_this.globalData.dataTemp.marker)) {
             /**
@@ -72,6 +76,7 @@ App({
             _this.globalData.dictInfo.clusters_and_domains = _this.globalData.dataTemp.clusters_and_domains
             _this.globalData.dictInfo.modes = _this.globalData.dataTemp.modes
             _this.globalData.dictInfo.marker = _this.globalData.dataTemp.marker
+            _this.globalData.dictInfo.paper_count = _this.globalData.dataTemp.paper_count
             wx.setStorageSync('dictInfo', _this.globalData.dictInfo)
           }
         }).catch(err => {
@@ -128,19 +133,18 @@ App({
     }
   },
 
-  requestReminder() {
-    let tmplId = '8wXHxzTSdCeoHYjVcMYyGKX7DoNGHyq4zMDR9UwMr4I'
-    var _this = this
+  requestReminder(changed_time) {
+    let tmplId = 'fIbeAXEbSJXGLeVhkuTxth5JrxvXw3sweb0NGd8a83c'
+    var remind_time = changed_time ? changed_time : this.globalData.dictInfo.remind_time
+    if (!remind_time) {
+      remind_time = '12:25'
+    }
     wx.requestSubscribeMessage({
       tmplIds: [tmplId],
       success (res) {
         console.log(res)
         if (res[tmplId]=='accept') {
           let db = wx.cloud.database()
-          let remind_time = _this.globalData.dictInfo.remind_time
-          if (!remind_time) {
-            remind_time = '12:25'
-          }
           let remind_time_obj = new Date(new Date().getTime()+72000000)
           remind_time_obj.setHours(remind_time.split(':')[0])
           remind_time_obj.setMinutes(remind_time.split(':')[1])
@@ -151,8 +155,8 @@ App({
             }
           })
           wx.showToast({
-            title: '将于明天 '+_this.globalData.dictInfo.remind_time+' 给您发送背单词提醒\r\n您可以再随意地看些单词，或是养精蓄锐明天继续',
-            duration: 3200,
+            title: "将于明天 "+remind_time+" 给您发送征服SCI单词提醒 (^◡^) 您可以再随意地看些单词，或是养精蓄锐明天继续",
+            duration: 3600,
             icon: 'none'
           })
         }
@@ -216,4 +220,9 @@ App({
       imageUrl: '/images/shareImage.png',
     }
   },
+
+  onHide () {
+    let dblog = require('/utils/dblog.js')
+    dblog.reportUserLog()
+  }
 })
