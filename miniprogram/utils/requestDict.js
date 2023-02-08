@@ -19,7 +19,7 @@ var app = getApp()
       title: '更新词库中，请稍候',
     })
     const db = wx.cloud.database()
-    let reqRes = db.collection('dictionary').doc(useDict).get()
+    let reqRes = await db.collection('dictionary').doc(useDict).get()
     const dataTemp = reqRes.data.dictionary
     console.log('更新词库中', dataTemp)
     for (var i in dictionary) {

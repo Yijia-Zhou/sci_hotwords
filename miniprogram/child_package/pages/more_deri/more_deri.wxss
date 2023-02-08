@@ -40,9 +40,3 @@ page {
   height: 3rem;
   align-items: center;
 }
-
-.bottom_back_from_more_deri {
-  position: fixed;
-  bottom: 143rpx; 
-  left: 19.1vw;
-}

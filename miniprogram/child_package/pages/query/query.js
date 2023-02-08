@@ -23,6 +23,7 @@ Page({
     }
     console.log("query on load")
     wx.setNavigationBarTitle({title: '词汇查询'})
+    dblog.logAction("onQuery")
 
     var useDictList = wx.getStorageSync('dictInfo').useDictList
 
@@ -80,7 +81,7 @@ Page({
       resArray.sort(function(a,b){
         return a.dis - b.dis;
       })
-      if(resArray.length > 5){
+      if(resArray.length > 8){
         resArray.pop()
       }
     }
@@ -91,6 +92,7 @@ Page({
     var resultArr = []
     var resultArrWithCN = []
     var target = e.detail.value
+    console.log(target)
     if(target == ""){
       this.setData({
         isShowResultView : false,
@@ -136,62 +138,19 @@ Page({
     }
   },
 
-  onCancel(){
-    this.setData({
-      isShowResultView : false,
-      searchResultArr : [],
-      inputValue :""
+  onReturn() {
+    wx.redirectTo({
+      url: '/pages/menu/menu',
     })
   },
 
   toResult(e){
     var resultIndex = e.currentTarget.dataset["resultindex"]
     app.globalData.resultWord = this.data.allDictionary[resultIndex]
+    app.globalData.dictInfo.useMode = '识记模式'
     wx.navigateTo({
-        url: '../result/result'
-      })
-  },
-  
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
+      url: '../result/result'
+    })
   },
 
   /**

@@ -42,7 +42,7 @@ Page({
         break
     }
 
-   await requestDict.requestDictionary(useDict)
+    await requestDict.requestDictionary(useDict)
     var dictionary = wx.getStorageSync(useDict)
 
     // 选取最靠前的未掌握词组
