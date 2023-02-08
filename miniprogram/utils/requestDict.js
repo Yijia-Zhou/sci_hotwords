@@ -29,7 +29,6 @@ var app = getApp()
       dataTemp[itemIndex].learnt = theOldItem.learnt
       dataTemp[itemIndex].tested = theOldItem.tested
       // 本地学习过程中在 dictionary 内添加的属性塞进更新过的词典里
-      // 目前因为基本不会改动词库中词的数目，所以是把旧词库各词组属性存入新词库同一个 index 中，但有空可以改成用 word 作为 key 更好
     }
     wx.setStorage({
       key: useDict,
@@ -45,13 +44,32 @@ var app = getApp()
     return dataTemp
   }
 
+  function nothing_favored() {
+    wx.showModal({
+      title: "暂无收藏",
+      content: "在别的词库中收藏一些词汇组后再来吧", 
+      confirmText: "好的吧~",
+      showCancel: false,
+      success () {
+        wx.removeStorageSync('我的收藏')//({key: '我的收藏'})
+        wx.redirectTo({
+          url: '/pages/menu/menu?no_jump=true',
+        })
+      }
+    })
+  }
+  
   async function requestDictionary(useDict){
     var dictionary = wx.getStorageSync(useDict)
     if (!dictionary || dictionary.length==0)
     {
+      if (useDict == '我的收藏') {
+        nothing_favored()
+        return
+      }
       dictionary = await loadDictionary(useDict)
     }
-    else if (wx.getStorageSync('dict_need_refresh').includes(useDict))
+    else if (wx.getStorageSync('dict_need_refresh').includes(useDict) && useDict != "我的收藏")
     {
       dictionary = await updateDictionary(useDict, dictionary)
     }
