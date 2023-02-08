@@ -1,5 +1,6 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
+var requestDict = require('../../../utils/requestDict.js')
 
 Page({
  
@@ -94,48 +95,7 @@ Page({
         break
     }
 
-    var dictionary = wx.getStorageSync(app.globalData.dictInfo.useDict)
-    if (!dictionary || dictionary.length==0) {
-      if (app.globalData.dictInfo.useDict == '我的收藏') {
-        this.nothing_favored()
-        return
-      }
-      wx.showLoading({
-        title: '获取/更新词库中，请稍候',
-      })
-      const db = wx.cloud.database()
-      let getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
-      const dataTemp = getRes.data.dictionary
-
-      wx.setStorage({
-        key: app.globalData.dictInfo.useDict,
-        data: dataTemp
-      })
-      var dictionary = dataTemp
-    }
-    else if (wx.getStorageSync('dict_need_refresh').includes(app.globalData.dictInfo.useDict) 
-          && app.globalData.dictInfo.useDict != "我的收藏") {
-      wx.showLoading({
-        title: '更新词库中，请稍候',
-      })
-      const db = wx.cloud.database()
-      let getRes = await db.collection('dictionary').doc(app.globalData.dictInfo.useDict).get()
-      var dataTemp = getRes.data.dictionary
-      console.log('更新词库中', dataTemp)
-      for (var i in dictionary) {
-        let theOldItem = dictionary[i]
-        let itemIndex = dataTemp.findIndex((item) => item._id === theOldItem._id)
-        dataTemp[itemIndex].learnt = theOldItem.learnt
-        dataTemp[itemIndex].tested = theOldItem.tested
-        // 本地学习过程中在 dictionary 内添加的属性塞进更新过的词典里
-        // 目前因为基本不会改动词库中词的数目，所以是把旧词库各词组属性存入新词库同一个 index 中，但有空可以改成用 word 作为 key 更好
-      }
-      wx.setStorageSync(app.globalData.dictInfo.useDict, dataTemp)
-      console.log('更新词库完毕~')
-      let dict_need_refresh = wx.getStorageSync('dict_need_refresh')
-      dict_need_refresh.splice(dict_need_refresh.indexOf(app.globalData.dictInfo.useDict), 1)
-      wx.setStorageSync('dict_need_refresh', dict_need_refresh)
-    }
+    var dictionary = await requestDict.requestDictionary(useDict)
 
     // 选取最靠前的未掌握词组
     this.data.indexArray = Array.from(Array(dictionary.length).keys())
@@ -159,8 +119,6 @@ Page({
 
     var _this = this
     this.data.timer_timeout = setTimeout(function(){_this.data.within3s = false}, 3000)
-
-    wx.hideLoading()
     
     if (!app.globalData.dictInfo.remind_time) {
       app.globalData.dictInfo.remind_time = '12:25'
