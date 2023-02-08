@@ -138,7 +138,7 @@ Page({
     var dict = ""
     for(dict in this.data.domains)
     {
-      if(this.data.domains[dict] != "敬请期待")
+      if(this.data.domains[dict] != "敬请期待" && this.data.domains[dict] != "我的收藏")
       {
         app.globalData.dictInfo.useDictList.push(this.data.domains[dict])
       }
