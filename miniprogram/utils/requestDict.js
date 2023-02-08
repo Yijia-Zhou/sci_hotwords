@@ -57,8 +57,9 @@ var app = getApp()
         })
       }
     })
+    throw "nothing_favored"
   }
-  
+
   async function requestDictionary(useDict){
     var dictionary = wx.getStorageSync(useDict)
     if (!dictionary || dictionary.length==0)
