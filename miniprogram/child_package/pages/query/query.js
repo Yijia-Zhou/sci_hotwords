@@ -31,11 +31,8 @@ Page({
     
     for(var useDict in useDictList)
     {
-      await requestDict.requestDictionary(useDictList[useDict])
-      allDictionary.push.apply(allDictionary, wx.getStorageSync(useDictList[useDict]))
+      allDictionary.push.apply(allDictionary, await requestDict.requestDictionary(useDictList[useDict]))
     }
-
-    wx.hideLoading()
 
     this.setData({
       allDictionary: allDictionary

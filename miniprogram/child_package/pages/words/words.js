@@ -42,8 +42,7 @@ Page({
         break
     }
 
-    await requestDict.requestDictionary(useDict)
-    var dictionary = wx.getStorageSync(useDict)
+    var dictionary = await requestDict.requestDictionary(useDict)
 
     // 选取最靠前的未掌握词组
     this.data.indexArray = Array.from(Array(dictionary.length).keys())
@@ -100,8 +99,6 @@ Page({
 
     var _this = this
     this.data.timer_timeout = setTimeout(function(){_this.data.within3s = false}, 3000)
-
-    wx.hideLoading()
     
     if (!app.globalData.dictInfo.remind_time) {
       app.globalData.dictInfo.remind_time = '12:25'
