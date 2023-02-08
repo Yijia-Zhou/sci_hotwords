@@ -21,4 +21,4 @@
 
 </view>
 
-<button type="primary" class='btn1 bottom_back_from_more_deri' catchtap="onReturn" style="width: 61.8vw;">返回</button>
+<button type="primary" class='btn1 bottom_back_float' catchtap="onReturn" style="width: 61.8vw;">返回</button>

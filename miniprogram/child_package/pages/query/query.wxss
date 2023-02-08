@@ -1,78 +1,75 @@
-.query_bar_container{
-  position: relative;
-  padding: 8px 10px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  box-sizing: border-box;
-  background-color: #EFEFF4;
-  border-top: 1rpx solid #d7d6dc;
-  border-bottom: 1rpx solid #d7d6dc;
+@import '../../font-face.wxss';
+
+text {
+  font-family: Inter Tight;
 }
 
-.query_icon_in_query_bar_box{
-  position: absolute;
-  left: 10px;
-  top: 7px;
+.query_bar_container{
+  padding: 10px 0;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  /* background-color: #EFEFF4; */
+  justify-content: space-around;
+  /* border-top: 1rpx 0 solid #d7d6dc;
+  border-bottom: 1rpx solid #d7d6dc; */
 }
 
 .query_bar{
-  position: absolute;
-  -webkit-box-flex: 1;
-  -webkit-box-flex: auto;
-  flex: auto;
-  border-radius: 5px;
-  background: #FFFFFF;
-  border: 1rpx solid #E6E6EA
+  display: flex;
+  flex-direction: row;
+  width: 92vw;
+  align-self: center;
+  /* border-radius: 5px; */
+  background-color: rgba(232, 232, 216, 0.1);
+  box-shadow: 0 10rpx 20rpx 0 rgba(0, 0, 0, 0.1);
+  /* border: 1rpx solid #E6E6EA */
 }
 
-.query_bar_box{
-  position: relative;
-  padding-left: 30px;
-  padding-right: 30px;
-  width: 100%;
-  box-sizing: border-box;
-  z-index: 1;
+.query_icon{
+  margin: 12rpx;
 }
 
-.query_input_in_query_bar_box{
+.query_input{
   height: 28px;
   line-height: 28px;
   font-size: 14px;
+  flex-grow: 1;
 }
 
-.query_bar_btn{
-  margin-left: 230px;
+/* .cancel_bar_btn{
   line-height: 28px;
-  color: #09BB07;
-  white-space: nowrap;
-  z-index: 1;
-}
+  color: #06ae56;
+  align-self: center;
+  margin-right: 12rpx;
+} */
 
-.cancel_bar_btn{
-  margin-left: 20px;
-  line-height: 28px;
-  color: #09BB07;
-  white-space: nowrap;
-  z-index: 2;
-}
-
-.resultBgView {
-  background: white;
-}
+/* .resultBgView {
+  background-color: rgba(232, 232, 216, 0.1);
+  box-shadow: 0 5rpx 10rpx 0 rgba(0, 0, 0, 0.1);
+} */
 
 .resultBgView-hidden {
   display: none;
 }
 
 .resultCell {
-  padding-left: 30rpx;
-  height: 100rpx;
-  border-bottom: 1px solid rgb(230, 230, 230);
+  /* padding: 0 30rpx; */
+  margin: 0 3vw;
+  min-height: 100rpx;
+  border-bottom: 1px solid #ddd;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.resultText {
-  padding-left: 30rpx;
+.resultCell:first-child {
+  border-top: 1px solid #ddd;
+}
+
+.resultInnerCell {
+  display: flex;
+  flex-grow: 1;
+  margin: 0 2vw;
+  justify-content: space-between;
 }

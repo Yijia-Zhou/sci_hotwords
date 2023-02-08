@@ -127,3 +127,10 @@ button::after {
   justify-content: flex-start;
   align-items: center;
 }
+
+
+.bottom_back_float {
+  position: fixed;
+  bottom: 143rpx; 
+  left: 19.1vw;
+}
