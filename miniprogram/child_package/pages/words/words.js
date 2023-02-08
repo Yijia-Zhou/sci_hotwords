@@ -95,7 +95,14 @@ Page({
         break
     }
 
-    var dictionary = await requestDict.requestDictionary(useDict)
+    try {
+      var dictionary = await requestDict.requestDictionary(app.globalData.dictInfo.useDict)
+    } catch(err) {
+      if (err=="nothing_favored") {
+        console.log(err)
+        return
+      }
+    }
 
     // 选取最靠前的未掌握词组
     this.data.indexArray = Array.from(Array(dictionary.length).keys())
