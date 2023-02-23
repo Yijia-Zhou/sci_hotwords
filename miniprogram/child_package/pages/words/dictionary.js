@@ -166,6 +166,23 @@ export class NormalDictionary extends Dictionary {
         }
         this.favorList.splice(this.favorList.findIndex(index2del), 1)
     }
+
+    markWord() {
+        this.dictionary[this.index][this.chooseStatus] = true
+        this.markedNum++
+    }
+
+    showCoreWordNum() {
+        return true
+    }
+
+    getCoreWordNum() {
+        return (Math.floor(this.markedNum / 100) + 1)
+    }
+
+    initCoreWordNum() {
+        this.markedNum = this.dictionary.filter(w => w[this.chooseStatus] == true).length;
+    }
 };
 
 export class FavorDictionary extends Dictionary {
@@ -196,5 +213,9 @@ export class FavorDictionary extends Dictionary {
 
     getFavorDict() {
         return this.dictionary
+    }
+
+    showCoreWordNum(){
+        return false
     }
 };

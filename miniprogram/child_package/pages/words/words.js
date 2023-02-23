@@ -123,7 +123,6 @@ Page({
     {
       this.data.dictionary = new NormalDictionary(dictionary)
       let myFavoredDict = wx.getStorageSync('我的收藏')
-      console.log(myFavoredDict)
       if(myFavoredDict)
       {
         this.data.dictionary.updateFavorList(myFavoredDict)
@@ -138,7 +137,7 @@ Page({
 
     let filtername = app.globalData.dictInfo.no_high_school == true
                ? 'no_high_school' : 'none'
-    dataDict.updateFilter(filtername)
+    this.configFilter(filtername)
 
     this.onReload()
   },
@@ -153,6 +152,14 @@ Page({
 
     this.showWord(dataDict.getCurrentWord())
     this.startTimer()
+
+    if(dataDict.showCoreWordNum())
+    {
+      dataDict.initCoreWordNum()
+      let coreNum = this.data.dictionary.getCoreWordNum()
+      wx.setNavigationBarTitle({title: '生命科学 - ' + dataDict.getUseDict() + 
+                                ' - 核心' + coreNum + '00词'})
+    }
     
     if (!app.globalData.dictInfo.remind_time) {
       app.globalData.dictInfo.remind_time = '12:25'
@@ -162,7 +169,6 @@ Page({
   configFilter: function (filtername) {
     if (filtername != this.data.dictionary.getFilter()) {
       this.data.dictionary.updateFilter(filtername)
-      this.onReload()
     }
   },
 
@@ -181,6 +187,7 @@ Page({
         } else if (res.cancel) {
           _this.configFilter('none')
           app.globalData.dictInfo.no_high_school = false
+          _this.onReload()
           dblog.logAction("disable_highschool_filter")
         }
       }
@@ -208,7 +215,15 @@ Page({
   onDone: function () {
     dblog.logAction("onDone")
 
-    this.data.dictionary.markWord()//标记掌握
+    let dataDict = this.data.dictionary
+
+    dataDict.markWord()//标记掌握
+    if(dataDict.showCoreWordNum())
+    {
+      let coreNum = dataDict.getCoreWordNum()
+      wx.setNavigationBarTitle({title: '生命科学 - ' + dataDict.getUseDict() + 
+                                ' - 核心' + coreNum + '00词'})
+    }
 
     // 如果3s内选择掌握、当前无特定filter 且 当前单词在高中范围
     if (this.data.within3s && this.data.dictionary.getFilter() == 'none'
@@ -221,7 +236,6 @@ Page({
     //Todo: this.data.tracer.updateProgress()
     //Todo: if(this.data.tracer.achiveTarget())
     //        this.data.tracer.remindUser()
-    //      this.data.dictionary.onNext() 
 
     app.globalData.tracer.doneCount ++
     // this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
@@ -321,9 +335,16 @@ Page({
       showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
       target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
     })
-    
+
+    if(app.globalData.dictInfo.hasOwnProperty('no_high_school'))
+    {
+      let filtername = app.globalData.dictInfo.no_high_school == true
+                     ? 'no_high_school' : 'none'
+      this.configFilter(filtername)
+    }
+
     if (app.words_need_reload) {
-      this.configFilter('none')
+      this.onReload()
     }
   },
 
@@ -349,11 +370,11 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: async function () {
+    await this.onHide()
     if(Object.keys(this.data.dictionary).length != 0)
     {
       delete this.data.dictionary
     }
-    await this.onHide()
   },
 
   /**
