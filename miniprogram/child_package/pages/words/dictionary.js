@@ -9,8 +9,8 @@ class Dictionary {
       this.useDict = useDict
     }
 
-    getUseDict(useDict) {
-      return useDict
+    getUseDict() {
+      return this.useDict
     }
 
     updateFilter(filter) {
@@ -20,8 +20,8 @@ class Dictionary {
             this.filter = 'none'
     }
 
-    getFilter(filter) {
-        return filter
+    getFilter() {
+        return this.filter
     }
 
     updateUseMode(useMode) {
@@ -66,14 +66,40 @@ class Dictionary {
 
     checkIfDisplay() {
         let res = this.isWordUntraverse()
-        if(this.filter){
+        if(this.filter == 'no_high_school'){
             res = res && this.isWordInfilter()
         }
         return res
     }
 
     isAllDone() {
-        return this.index >= this.dictionary.length
+        if(this.index >= this.dictionary.length)
+        {
+            if(this.filter == 'no_high_school')
+            {
+                const indexFilter = (element) => {
+                    return element[this.chooseStatus] == false
+                        && element.high_school == false
+                }
+                let idx = this.dictionary.findIndex(indexFilter)
+                if(idx == -1) 
+                    return true 
+                else
+                    this.index = idx
+            }
+            else
+            {
+                const indexNoFilter = (element) => {
+                    return element[this.chooseStatus] == false
+                }
+                let idx = this.dictionary.findIndex(indexNoFilter)
+                if(idx == -1) 
+                    return true 
+                else
+                    this.index = idx
+            }
+        }
+        return false
     }
 
     resetDictionary() {

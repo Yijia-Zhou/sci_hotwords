@@ -34,6 +34,16 @@ Page({
     })
   },
 
+  updateUseMode: function(useMode) {
+    this.data.dictionary.updateUseMode(useMode)
+    //TODO wxml 无法调用类方法？
+    let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested'}
+    this.setData({
+      chooseStatus:useModeMap[useMode]
+    })
+    app.globalData.dictInfo.useMode = useMode
+  },
+
   nothing_favored() {
     wx.showModal({
       title: "暂无收藏",
@@ -68,7 +78,7 @@ Page({
             if (res.confirm) {
               dblog.logAction("allDone_begin_test")
               dataDict.resetDictionary()
-              dataDict.updateUseMode('检验模式')
+              _this.updateUseMode('检验模式')
               _this.onReload()
               _this.onShow()
               return 
@@ -112,25 +122,20 @@ Page({
     else 
     {
       this.data.dictionary = new NormalDictionary(dictionary)
-      if(wx.getStorageSync('我的收藏'))
+      let myFavoredDict = wx.getStorageSync('我的收藏')
+      console.log(myFavoredDict)
+      if(myFavoredDict)
       {
-        console.log(wx.getStorageSync('我的收藏'))
-        this.data.dictionary.updateFavorList(wx.getStorageSync('我的收藏'))
+        this.data.dictionary.updateFavorList(myFavoredDict)
       }
     }
 
     let dataDict = this.data.dictionary
     console.log(dataDict)
 
-    dataDict.updateUseMode(dictInfo.useMode)
+    this.updateUseMode(dictInfo.useMode)
     dataDict.updateUseDict(dictInfo.useDict)
 
-    //TODO wxml 无法调用类方法？
-    let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested'}
-    this.setData({
-      chooseStatus:useModeMap[dictInfo.useMode]
-    })
-  
     let filtername = app.globalData.dictInfo.no_high_school == true
                ? 'no_high_school' : 'none'
     dataDict.updateFilter(filtername)
@@ -171,9 +176,11 @@ Page({
       success (res) {
         if (res.confirm) {
           _this.configFilter('no_high_school')
+          app.globalData.dictInfo.no_high_school = true
           dblog.logAction("enable_highschool_filter")
         } else if (res.cancel) {
           _this.configFilter('none')
+          app.globalData.dictInfo.no_high_school = false
           dblog.logAction("disable_highschool_filter")
         }
       }
@@ -271,6 +278,11 @@ Page({
       if(dataDict.isDictionaryEmpty())
       {
         this.nothing_favored()
+        return
+      }
+      if(dataDict.getUseDict() == '我的收藏')
+      {
+        this.onNext()
       }
     }
     else
@@ -283,14 +295,10 @@ Page({
     }
   },
 
-
-
-  onNext: async function (real_touch=true) {
+  onNext: async function () {
     clearTimeout(this.data.timer_timeout)
-    if (real_touch) {
-      this.data.since_touch_setting += 1
-      this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
-    }
+    this.data.since_touch_setting += 1
+    this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
 
     let nextWord = this.data.dictionary.getNextWord()
     if(nextWord != null)
@@ -323,6 +331,13 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
+    if(Object.keys(this.data.dictionary).length != 0)
+    {
+      wx.setStorage({key: app.globalData.dictInfo.useDict, 
+                    data: this.data.dictionary.getDictionary()})
+      wx.setStorage({key: '我的收藏', 
+                     data: this.data.dictionary.getFavorDict()})
+    }
     try {
       clearTimeout(this.data.timer_timeout)
     } catch(e) {
@@ -336,10 +351,6 @@ Page({
   onUnload: async function () {
     if(Object.keys(this.data.dictionary).length != 0)
     {
-      wx.setStorage({key: app.globalData.dictInfo.useDict, 
-                    data: this.data.dictionary.getDictionary()})
-      wx.setStorage({key: '我的收藏', 
-                     data: this.data.dictionary.getFavorDict()})
       delete this.data.dictionary
     }
     await this.onHide()
