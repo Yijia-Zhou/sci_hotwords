@@ -43,18 +43,24 @@ App({
         _this.globalData.dictInfo =   {
           "clusters_and_domains": {
             "生命科学": [
-              "基础词库",
               "我的收藏",
+              "基础词库",
+              "生信&计算",
+              "神经&认知",
+              "分子生物学",
               "敬请期待"
             ]
           },
-          "marker": 5,
+          "marker": 6,
           "modes": [
             "识记模式",
             "检验模式"
           ],
           "paper_count": {
-              "基础词库": 1217564
+            "基础词库": 1217564,
+            "生信&计算": 18965,
+            "神经&认知": 51713,
+            "分子生物学": 75205,
           },
           daily_target: 30
         }
@@ -62,7 +68,7 @@ App({
       complete () {
         // 慢慢进行一个是否需要更新词库的判断
         const db = wx.cloud.database()
-        db.collection('dictInfo').doc('0.9.15').get().then(res => { 
+        db.collection('dictInfo').doc('0.10.test').get().then(res => { 
           _this.globalData.dataTemp = res.data
           if (_this.globalData.dataTemp && (!_this.globalData.dictInfo.marker || _this.globalData.dictInfo.marker!=_this.globalData.dataTemp.marker)) {
             /**

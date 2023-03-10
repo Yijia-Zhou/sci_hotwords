@@ -55,7 +55,7 @@ Page({
     })
     var useDictIndex = this.data.domains.indexOf(app.globalData.dictInfo.useDict)
     if (useDictIndex==-1) {
-      useDictIndex = 0
+      useDictIndex = this.data.domains.indexOf("基础词库")
     }
     var useModeIndex = this.data.modes.indexOf(app.globalData.dictInfo.useMode)
     if (useModeIndex==-1) {
