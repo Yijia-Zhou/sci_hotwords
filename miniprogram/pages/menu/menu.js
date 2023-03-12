@@ -120,7 +120,7 @@ Page({
   },
 
   onConfirm() {
-    app.globalData.dictInfo.useDict = this.data.domains[this.data.value[1]]
+    app.globalData.dictInfo.useDict = this.data.value[1] != -1 ? this.data.domains[this.data.value[1]] : this.data.domains[1]
     app.globalData.dictInfo.useMode = this.data.modes[this.data.value[2]]
     console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     if (app.globalData.dictInfo.useDict=="敬请期待") {
