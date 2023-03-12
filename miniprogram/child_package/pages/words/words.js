@@ -218,15 +218,54 @@ Page({
     let dataDict = this.data.dictionary
 
     dataDict.markWord()//标记掌握
-    if(dataDict.showCoreWordNum())
+    if(dataDict.showCoreWordNum() && dataDict.isCoreNumUpdated())
     {
       let coreNum = dataDict.getCoreWordNum()
       wx.setNavigationBarTitle({title: '生命科学 - ' + dataDict.getUseDict() + 
                                 ' - 核心' + coreNum + '00词'})
+      let _this = this
+      switch (dataDict.getUseMode()) {
+        case '识记模式':
+          wx.showModal({
+            title: '已经学习了100个单词了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                dblog.logAction("100_Words_Confirm")
+                _this.updateUseMode('检验模式')
+                _this.onReload()
+                _this.onShow()
+                return 
+              } else if (res.cancel) {
+              }
+            }
+          })
+          break
+        case '检验模式':
+          wx.showModal({
+            title: '已经复习了100个单词了(^_^) \r\n 要不要试着到识记模式继续学习？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                dblog.logAction("100_Words_Confirm")
+                _this.updateUseMode('识记模式')
+                _this.onReload()
+                _this.onShow()
+                return 
+              } else if (res.cancel) {
+                dblog.logAction("100_Words_Cancel")
+              }
+            }
+          })
+          break
+      }
     }
 
     // 如果3s内选择掌握、当前无特定filter 且 当前单词在高中范围
-    if (this.data.within3s && this.data.dictionary.getFilter() == 'none'
+    if (this.data.within3s && !app.globalData.dictInfo.hasOwnProperty('no_high_school')
+        && this.data.dictionary.getFilter() == 'none'
         && !this.data.dictionary.isWordInfilter())
     {
       this.mayIFiltering('no_high_school')

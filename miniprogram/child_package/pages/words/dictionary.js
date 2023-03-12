@@ -122,6 +122,8 @@ class Dictionary {
 
     markWord() {
         this.dictionary[this.index][this.chooseStatus] = true
+        if(this.chooseStatus == 'tested') 
+            this.dictionary[this.index]['learnt'] = true
     }
 
     isDictionaryEmpty() {
@@ -178,6 +180,10 @@ export class NormalDictionary extends Dictionary {
 
     getCoreWordNum() {
         return (Math.floor(this.markedNum / 100) + 1)
+    }
+
+    isCoreNumUpdated() {
+        return this.markedNum % 100 == 0
     }
 
     initCoreWordNum() {
