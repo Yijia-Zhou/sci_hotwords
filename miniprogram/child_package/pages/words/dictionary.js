@@ -35,9 +35,16 @@ class Dictionary {
     }
 
     getNextWord() {
+        let idx = this.index
+        let retWord = this.jumpToNextWord()
+        this.index = idx
+        return retWord
+    }
+
+    jumpToNextWord() {
         this.index++
         while(!this.isAllDone()) {
-            if(this.checkIfDisplay()){
+            if(this.checkIfDisplay(this.dictionary[this.index])){
                 return this.dictionary[this.index]
             }
             this.index++
@@ -45,12 +52,16 @@ class Dictionary {
         return null
     }
 
-    isWordUntraverse() {
-        return !this.dictionary[this.index][this.chooseStatus]
+    isWordUntraverse(word) {
+        return !word[this.chooseStatus]
     }
 
-    isWordInfilter() {
-        return !this.dictionary[this.index].high_school
+    isWordInfilter(word) {
+        return !word.high_school
+    }
+
+    isCurrentWordInfilter() {
+        return this.isWordInfilter(this.dictionary[this.index])
     }
 
     selectFirstWord() {
@@ -64,10 +75,10 @@ class Dictionary {
         return null
     }
 
-    checkIfDisplay() {
-        let res = this.isWordUntraverse()
+    checkIfDisplay(word) {
+        let res = this.isWordUntraverse(word)
         if(this.filter == 'no_high_school'){
-            res = res && this.isWordInfilter() // // diff_Todo: difficulty_level 低于 diff_threshold 的单词将不予显示
+            res = res && this.isWordInfilter(word) // diff_Todo: difficulty_level 低于 diff_threshold 的单词将不予显示
         }
         return res
     }
@@ -183,7 +194,22 @@ export class NormalDictionary extends Dictionary {
     }
 
     isCoreNumUpdated() {
-        return this.markedNum % 100 == 0
+        if(this.chooseStatus == 'learnt')
+        {
+            return this.markedNum % 100 == 0
+        }
+        else
+        {
+            if(this.dictionary[this.index]['learnt'] == true)
+            {
+                let nextWord = this.getNextWord()
+                if(nextWord && !nextWord.hasOwnProperty('learnt'))
+                {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     initCoreWordNum() {

@@ -227,7 +227,7 @@ Page({
       switch (dataDict.getUseMode()) {
         case '识记模式':
           wx.showModal({
-            title: '已在本词库内识记过' + coreNum + '00个单词了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            title: '已在本词库内识记过' + (coreNum - 1) + '00个单词了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
@@ -249,13 +249,13 @@ Page({
             cancelText: '先不了',
             success (res) {
               if (res.confirm) {
-                dblog.logAction("100_Words_Confirm")
+                dblog.logAction("all_Words_Confirm")
                 _this.updateUseMode('识记模式')
                 _this.onReload()
                 _this.onShow()
                 return 
               } else if (res.cancel) {
-                dblog.logAction("100_Words_Cancel")
+                dblog.logAction("all_Words_Cancel")
               }
             }
           })
@@ -266,12 +266,11 @@ Page({
     // 如果3s内选择掌握、当前无特定filter 且 当前单词在高中范围
     // if (this.data.within3s && !app.globalData.dictInfo.hasOwnProperty('no_high_school')
     //     && this.data.dictionary.getFilter() == 'none'
-    //     && !this.data.dictionary.isWordInfilter())
+    //     && !this.data.dictionary.isCurrentWordInfilter())
     // {
     //   this.mayIFiltering('no_high_school')
     // }
-
-    //diff_Todo: 如果3s内选择掌握 且 未设定过 难度filter 则弹窗询问是否跳转设置页（取代高中filter弹窗），参考文案：
+    //diff_Todo: 如果3s内选择掌握 且 未设定过 难度filter 则弹窗询问是否跳转设置页（取代高中filter弹窗），参考文案：>>>>>>> Stashed changes
       // title: '屏蔽部分低难度单词？',
       // content: '如果您觉得看到的一些单词对于您过于简单，可以设定您希望的难度，之后也可以随时通过“调整设置”修改此设定',
       // confirmText: "调整设置",
@@ -359,7 +358,7 @@ Page({
     this.data.since_touch_setting += 1
     this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
 
-    let nextWord = this.data.dictionary.getNextWord()
+    let nextWord = this.data.dictionary.jumpToNextWord()
     if(nextWord != null)
     {
       this.showWord(nextWord)
