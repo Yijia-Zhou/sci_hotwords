@@ -157,8 +157,7 @@ Page({
     {
       dataDict.initCoreWordNum()
       let coreNum = this.data.dictionary.getCoreWordNum()
-      wx.setNavigationBarTitle({title: '生命科学 - ' + dataDict.getUseDict() + 
-                                ' - 核心' + coreNum + '00词'})
+      wx.setNavigationBarTitle({title: dataDict.getUseDict() + ' - 核心' + coreNum + '00词'})
     }
     
     if (!app.globalData.dictInfo.remind_time) {
@@ -176,7 +175,7 @@ Page({
     let _this = this
     wx.showModal({
       title: '彻底屏蔽高中单词？',
-      content: '部分高中课纲单词在论文中有一些特定用法/释义，您可以选择是否保留它们\r\n您也可以随时通过“调整设置”修改此设定',
+      content: '部分高中课纲单词在论文中有一些特定用法/释义，您可以选择是否保留它们\r\n您也可以随时通过“调整设置”修改此设定以及选择您希望的难度值',
       confirmText: "屏蔽",
       cancelText: "保留",
       success (res) {
@@ -227,7 +226,7 @@ Page({
       switch (dataDict.getUseMode()) {
         case '识记模式':
           wx.showModal({
-            title: '已经学习了100个单词了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            title: '已在本词库内识记过' + coreNum + '00个单词了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
@@ -244,7 +243,7 @@ Page({
           break
         case '检验模式':
           wx.showModal({
-            title: '已经复习了100个单词了(^_^) \r\n 要不要试着到识记模式继续学习？',
+            title: '已经复习完所有识记过的单词(^_^) \r\n 要不要继续前往识记模式学习？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
@@ -270,6 +269,11 @@ Page({
     {
       this.mayIFiltering('no_high_school')
     }
+    //diff_Todo: 如果3s内选择掌握、没有触发 no_high_school 弹窗 且未设定过 难度filter 则弹窗询问是否跳转设置页，参考文案：
+      // title: '屏蔽部分低难度单词？',
+      // content: '如果您觉得看到的一些单词对于您过于简单，可以设定您希望的难度，之后也可以随时通过“调整设置”修改此设定',
+      // confirmText: "调整设置",
+      // cancelText: "暂时不了",
 
     // 每日任务进度更新
     //Todo: this.data.tracer.updateProgress()

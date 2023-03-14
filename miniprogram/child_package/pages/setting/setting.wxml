@@ -1,7 +1,13 @@
 <view class="page_container">
-  <view class="title_container title">设置项调整</view>
 
-  <view class="setting_container">
+  <view class="setting_card">
+    <view class="section">
+      <text class="sub_title">调整您需要的难度</text>
+      <view class="paragraph">
+        <text>当前为您屏蔽词库中简单程度前 {{difficulty}} %的单词，可拖动滑动条修改</text>
+        <slider value="{{difficulty}}" bindchanging="on_changing_diff" block-size="20" class="slider_diff"/>
+      </view>
+    </view>
     <view class="section">
       <text class="sub_title">是否彻底屏蔽高中单词？</text>
       <view class="paragraph">
