@@ -12,7 +12,8 @@ Page({
     word: new Object(),
     dictionary: new Object(),
     within3s: true,
-    showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
+    showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
+     || app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold'),
     since_touch_setting: 0,
     setting_opacity: 0.99,
     target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
@@ -263,13 +264,14 @@ Page({
     }
 
     // 如果3s内选择掌握、当前无特定filter 且 当前单词在高中范围
-    if (this.data.within3s && !app.globalData.dictInfo.hasOwnProperty('no_high_school')
-        && this.data.dictionary.getFilter() == 'none'
-        && !this.data.dictionary.isWordInfilter())
-    {
-      this.mayIFiltering('no_high_school')
-    }
-    //diff_Todo: 如果3s内选择掌握、没有触发 no_high_school 弹窗 且未设定过 难度filter 则弹窗询问是否跳转设置页，参考文案：
+    // if (this.data.within3s && !app.globalData.dictInfo.hasOwnProperty('no_high_school')
+    //     && this.data.dictionary.getFilter() == 'none'
+    //     && !this.data.dictionary.isWordInfilter())
+    // {
+    //   this.mayIFiltering('no_high_school')
+    // }
+
+    //diff_Todo: 如果3s内选择掌握 且 未设定过 难度filter 则弹窗询问是否跳转设置页（取代高中filter弹窗），参考文案：
       // title: '屏蔽部分低难度单词？',
       // content: '如果您觉得看到的一些单词对于您过于简单，可以设定您希望的难度，之后也可以随时通过“调整设置”修改此设定',
       // confirmText: "调整设置",
@@ -373,13 +375,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    console.log("words onShow")
     this.setData({
       within3s: true,
       showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
       target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
     })
 
-    if(app.globalData.dictInfo.hasOwnProperty('no_high_school'))
+    if(app.globalData.dictInfo.hasOwnProperty('no_high_school') && this.data.dictionary.hasOwnProperty('getFilter'))
     {
       let filtername = app.globalData.dictInfo.no_high_school == true
                      ? 'no_high_school' : 'none'

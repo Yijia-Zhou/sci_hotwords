@@ -40,6 +40,17 @@ Page({
     }
   },
 
+  get_domains (cluster) { // 根据第一行的选择生成第二行的domains array
+    let domains_array = Object.keys(app.globalData.dictInfo.clusters_and_domains[cluster])
+    if (!domains_array.includes("我的收藏")) {
+      domains_array.unshift("我的收藏")
+    }
+    if (!domains_array.includes("敬请期待")) {
+      domains_array.push("敬请期待")
+    }
+    return domains_array
+  },
+
   /**
    * 生命周期函数--监听页面显示
    * 主要触发场景：onLoad结束；从words页面返回
@@ -48,14 +59,16 @@ Page({
     if (!app.globalData.hasOwnProperty('dictInfo')) {
       return setTimeout(this.picker_render, 20)
     }
+    
+    let domains_array = this.get_domains("生命科学")
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.clusters_and_domains),
-      domains: app.globalData.dictInfo.clusters_and_domains.生命科学,
+      domains: domains_array, 
       modes: app.globalData.dictInfo.modes
     })
     var useDictIndex = this.data.domains.indexOf(app.globalData.dictInfo.useDict)
     if (useDictIndex==-1) {
-      useDictIndex = this.data.domains.indexOf("基础词库")
+      useDictIndex = this.back2foundermental()
     }
     var useModeIndex = this.data.modes.indexOf(app.globalData.dictInfo.useMode)
     if (useModeIndex==-1) {
@@ -102,9 +115,12 @@ Page({
     }
   },
   back2foundermental() {
+    let index = this.data.domains.indexOf('基础词库')
+    index = index >= 0 ? index : 1
     this.setData({
-      'value[1]': this.data.domains.indexOf('基础词库')
+      'value[1]': index
     })
+    return index
   },
 
   // picker 选择更新时刷新相关变量值

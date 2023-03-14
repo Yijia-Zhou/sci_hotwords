@@ -67,7 +67,7 @@ class Dictionary {
     checkIfDisplay() {
         let res = this.isWordUntraverse()
         if(this.filter == 'no_high_school'){
-            res = res && this.isWordInfilter()
+            res = res && this.isWordInfilter() // // diff_Todo: difficulty_level 低于 diff_threshold 的单词将不予显示
         }
         return res
     }

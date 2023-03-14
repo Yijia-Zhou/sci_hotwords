@@ -16,7 +16,7 @@
       <button type="default" class='following_button' bindtap="onFavor" style="width: 61.8vw;" wx:if="{{chooseStatus=='learnt' || word.favored}}">
         {{word.favored ? '取消收藏' : '收藏本词'}}
       </button>
-      <button type="{{setting_opacity===1?'primary':'default'}}" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{setting_opacity}}" wx:if="{{showSetting}}">调整设置</button>
+      <button type="{{setting_opacity===1?'primary':'default'}}" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{showSetting ? setting_opacity : 0.2}}">调整设置</button>
     </view>
 
 </view>

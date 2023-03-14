@@ -6,7 +6,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    difficulty: 1, // diff_Todo: 修改为实际读取值
+    difficulty: app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
+    ? app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold
+    :0, // diff_Todo: 修改为实际读取值
 
     highschool_filter_array: ["保留它们", "屏蔽它们"],
     highschool_filter_index: app.globalData.dictInfo.no_high_school ? 1 : 0,
@@ -14,7 +16,9 @@ Page({
     daily_target_array: [...Array(100).keys()].slice(5),
     daily_target_index: app.globalData.dictInfo.hasOwnProperty('daily_target') ? app.globalData.dictInfo.daily_target-5 : 25,
 
-    remind_time: app.globalData.dictInfo.hasOwnProperty('remind_time') ? app.globalData.dictInfo.remind_time : '12:25'
+    remind_time: app.globalData.dictInfo.hasOwnProperty('remind_time') ? app.globalData.dictInfo.remind_time : '12:25',
+
+    show_highschool: app.globalData.dictInfo.hasOwnProperty('no_high_school')
   },
 
   on_changing_diff: function(e) {
@@ -39,7 +43,8 @@ Page({
 
   onConfirm: function () {
     let diff_threshold = this.data.difficulty / 100
-    // diff_Todo: 持久化 diff_threshold, difficulty_level 低于 diff_threshold 的单词将不予显示
+    app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold = diff_threshold
+    
     app.globalData.dictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
     app.globalData.dictInfo.remind_time = this.data.remind_time
 
