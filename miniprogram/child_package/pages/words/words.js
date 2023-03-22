@@ -78,19 +78,20 @@ Page({
           success (res) {
             if (res.confirm) {
               dblog.logAction("allDone_begin_test")
-              dataDict.resetDictionary()
               _this.updateUseMode('检验模式')
               _this.onReload()
               _this.onShow()
               return 
             } else if (res.cancel) {
               dblog.logAction("allDone_and_reset")
+              dataDict.resetDictionary()
               reset()
             }
           }
         })
         break
       case '检验模式':
+        dataDict.resetDictionary()
         reset()
         break
     }
@@ -146,11 +147,6 @@ Page({
   onReload: function() {
     let dataDict = this.data.dictionary
     // 选取最靠前的未掌握词组
-    if(dataDict.selectFirstWord())
-    {
-      // this.on_alldone()
-    }
-
     this.showWord(dataDict.getCurrentWord())
     this.startTimer()
 
