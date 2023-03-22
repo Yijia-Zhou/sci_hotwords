@@ -68,6 +68,7 @@ Page({
         title: '全部掌握啦\r\n正在重置词典',
         showCancel: false,
       })
+      dataDict.resetDictionary()
     }
     switch (dataDict.getUseMode()) {
       case '识记模式':
@@ -84,14 +85,12 @@ Page({
               return 
             } else if (res.cancel) {
               dblog.logAction("allDone_and_reset")
-              dataDict.resetDictionary()
               reset()
             }
           }
         })
         break
       case '检验模式':
-        dataDict.resetDictionary()
         reset()
         break
     }

@@ -25,9 +25,11 @@ var app = getApp()
     console.log('更新词库中', dataTemp)
     for (var i in dictionary) {
       let theOldItem = dictionary[i]
-      let itemIndex = dataTemp.findIndex((item) => item._id.toLowerCase() === theOldItem._id.toLowerCase())
-      dataTemp[itemIndex].learnt = theOldItem.learnt
-      dataTemp[itemIndex].tested = theOldItem.tested
+      let itemIndex = dataTemp.findIndex((item) => item._id.toLowerCase().trim() === theOldItem._id.toLowerCase().trim())
+      if (itemIndex != -1) {
+        dataTemp[itemIndex].learnt = theOldItem.learnt
+        dataTemp[itemIndex].tested = theOldItem.tested
+      }
       // 本地学习过程中在 dictionary 内添加的属性塞进更新过的词典里
     }
     wx.setStorage({
