@@ -6,9 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    difficulty: app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
-    ? app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold
-    :0, // diff_Todo: 修改为实际读取值
+    difficulty: 0, 
+    show_diff_setting: true,
 
     highschool_filter_array: ["保留它们", "屏蔽它们"],
     highschool_filter_index: app.globalData.dictInfo.no_high_school ? 1 : 0,
@@ -42,8 +41,10 @@ Page({
   },
 
   onConfirm: function () {
-    let diff_threshold = this.data.difficulty / 100
-    app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold = diff_threshold
+    if (show_diff_setting) {
+      let diff_threshold = this.data.difficulty / 100
+      app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold = diff_threshold
+    }
     
     app.globalData.dictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
     app.globalData.dictInfo.remind_time = this.data.remind_time
@@ -83,6 +84,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    try {
+      this.setData({
+        difficulty: app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
+        ? app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold
+        : 0
+      })
+    } catch(e) {
+      if (e instanceof TypeError) {
+        console.log(e)
+        this.setData({show_diff_setting: false})
+      } else {
+        console.error(e)
+      }
+    }
+
     this.setData({
       highschool_filter_index: app.globalData.dictInfo.no_high_school ? 1 : 0,
       daily_target_index: app.globalData.dictInfo.hasOwnProperty('daily_target') ? app.globalData.dictInfo.daily_target-5 : 25,

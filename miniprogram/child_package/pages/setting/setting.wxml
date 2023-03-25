@@ -1,11 +1,11 @@
 <view class="page_container">
 
   <view class="setting_card">
-    <view class="section">
+    <view class="section" wx:if="{{show_diff_setting}}">
       <text class="sub_title">调整您需要的难度</text>
       <view class="paragraph">
         <text>当前为您屏蔽词库中简单程度前 {{difficulty}} %的单词，可拖动滑动条修改</text>
-        <slider value="{{difficulty}}" bindchanging="on_changing_diff" bindchange="on_changing_diff" block-size="20" class="slider_diff"/>
+        <slider value="{{difficulty}}" bindchanging="on_changing_diff" bindchange="on_changing_diff" block-size="20" max="80" class="slider_diff"/>
       </view>
     </view>
     <view class="section" wx:if="{{show_highschool}}">

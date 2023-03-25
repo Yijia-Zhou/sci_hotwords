@@ -13,6 +13,7 @@ Page({
     dictionary: new Object(),
     within3s: true,
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
+     || app.globalData.dictInfo.clusters_and_domains.生命科学 
      || app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold'),
     since_touch_setting: 0,
     setting_opacity: 0.99,
