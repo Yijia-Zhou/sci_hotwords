@@ -117,6 +117,12 @@ class Dictionary {
         for (var w in this.dictionary) {
             this.dictionary[w][this.chooseStatus] = false
         }
+        if(this.chooseStatus == 'tested')
+        {
+          for (var w in this.dictionary) {
+            this.dictionary[w]['learnt'] = false
+          }
+        }
         this.selectFirstWord()
     }
 

@@ -150,7 +150,13 @@ Page({
   onReload: function() {
     let dataDict = this.data.dictionary
     // 选取最靠前的未掌握词组
-    this.showWord(dataDict.getCurrentWord())
+    let curWord = dataDict.selectFirstWord()
+    if(curWord){
+      this.showWord(curWord)
+    }
+    else{
+      this.on_alldone()
+    }
     this.startTimer()
 
     if(dataDict.showCoreWordNum())
