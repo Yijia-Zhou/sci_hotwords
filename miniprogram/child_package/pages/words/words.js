@@ -27,12 +27,15 @@ Page({
 
   // 渲染单词卡片
   showWord: function(currentWord) {
-    this.setData({
-      word: {...currentWord}
-    })
-    this.setData({
-      'word.favored': this.data.dictionary.isCurrentWordInFavored(currentWord)
-    })
+    if(currentWord != null)
+    {
+      this.setData({
+        word: {...currentWord}
+      })
+      this.setData({
+        'word.favored': this.data.dictionary.isCurrentWordInFavored(currentWord)
+      })
+    }
   },
 
   updateUseMode: function(useMode) {
@@ -95,6 +98,7 @@ Page({
         break
     }
     dataDict.resetDictionary()
+    console.log(dataDict)
     this.onReload()
   },
 
@@ -394,6 +398,7 @@ Page({
   onHide: function () {
     if(Object.keys(this.data.dictionary).length != 0)
     {
+      this.data.dictionary.commitData()
       wx.setStorage({key: app.globalData.dictInfo.useDict, 
                     data: this.data.dictionary.getDictionary()})
       wx.setStorage({key: '我的收藏', 

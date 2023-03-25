@@ -117,6 +117,7 @@ class Dictionary {
         for (var w in this.dictionary) {
             this.dictionary[w][this.chooseStatus] = false
         }
+        this.selectFirstWord()
     }
 
     getDictionary() {
@@ -132,6 +133,7 @@ class Dictionary {
     }
 
     markWord() {
+      console.log(this.dictionary[this.index])
         this.dictionary[this.index][this.chooseStatus] = true
         if(this.chooseStatus == 'tested') 
             this.dictionary[this.index]['learnt'] = true
@@ -139,6 +141,10 @@ class Dictionary {
 
     isDictionaryEmpty() {
         return this.dictionary.length == 0
+    }
+
+    commitData(){
+
     }
 };
 
@@ -232,15 +238,42 @@ export class FavorDictionary extends Dictionary {
         return false
     }
 
-    removeFavorWord() {
-        const index2del = (element) => {
-            return element._id == this.dictionary[this.index]._id
+    checkIfDisplay(word) {
+        let res = this.isWordUntraverse(word)
+        res = res && !word.hasOwnProperty('toBeRemoved')
+        return res
+    }
+
+    isAllDone() {
+      if(this.index >= this.dictionary.length)
+      {
+        const indexNoFilter = (element) => {
+          return element[this.chooseStatus] == false && !element.hasOwnProperty('toBeRemoved')
         }
-        this.dictionary.splice(this.dictionary.findIndex(index2del), 1)
+        let idx = this.dictionary.findIndex(indexNoFilter)
+        if(idx == -1) 
+            return true 
+        else
+            this.index = idx
+      }
+      return false
+    }
+
+    commitData(){
+        for (let i = this.dictionary.length - 1; i >= 0; i--) {
+            if (this.dictionary[i].hasOwnProperty('toBeRemoved')) {
+                this.dictionary.splice(i, 1);
+            }
+        }
+        console.log(this.dictionary)
+    }
+
+    removeFavorWord() {
+        this.dictionary[this.index].toBeRemoved = true
     }
 
     addFavorWord() {
-        this.dictionary.splice(this.index, 0)
+        delete this.dictionary[this.index].toBeRemoved
     }
 
     getFavorDict() {
@@ -249,5 +282,19 @@ export class FavorDictionary extends Dictionary {
 
     showCoreWordNum(){
         return false
+    }
+
+    isDictionaryEmpty() {
+      if(this.dictionary.length == 0)
+      {
+        return true
+      }
+      for (var w in this.dictionary) {
+        if(!this.dictionary[w].hasOwnProperty('toBeRemoved'))
+        {
+            return false
+        }
+      }
+      return true
     }
 };
