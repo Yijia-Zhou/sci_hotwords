@@ -140,13 +140,13 @@ Page({
     this.updateUseMode(dictInfo.useMode)
     dataDict.updateUseDict(dictInfo.useDict)
     
-    if(dictInfo.hasOwnProperty('no_high_school'))
+    if(dataDict.isFilterEnabled() && dictInfo.hasOwnProperty('no_high_school'))
     {
       let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
       this.configFilter(filtername)
     }
     
-    if(dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold'))
+    if(dataDict.isFilterEnabled() && dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold'))
     {
       let difficultyThreshold = dictInfo.dictNames.生命科学[dictInfo.useDict].diff_threshold
       this.configDifficultyFilter(difficultyThreshold)
@@ -191,29 +191,6 @@ Page({
     this.data.dictionary.updateDifficultyFilter(difficultyThreshold)
   },
 
-  mayIFiltering: function () {
-    let _this = this
-    wx.showModal({
-      title: '彻底屏蔽高中单词？',
-      content: '部分高中课纲单词在论文中有一些特定用法/释义，您可以选择是否保留它们\r\n您也可以随时通过“调整设置”修改此设定以及选择您希望的难度值',
-      confirmText: "屏蔽",
-      cancelText: "保留",
-      success (res) {
-        if (res.confirm) {
-          _this.configFilter('no_high_school')
-          app.globalData.dictInfo.no_high_school = true
-          dblog.logAction("enable_highschool_filter")
-        } else if (res.cancel) {
-          _this.configFilter('none')
-          app.globalData.dictInfo.no_high_school = false
-          _this.onReload()
-          dblog.logAction("disable_highschool_filter")
-        }
-      }
-    })
-    this.on_modify_setting()
-  },
-
   on_modify_setting() {
     this.data.since_touch_setting = 0
     this.setData({
@@ -223,7 +200,6 @@ Page({
   },
 
   onConfig: function () {
-    // this.mayIFiltering('no_high_school')
     dblog.logAction("onConfig")
     this.on_modify_setting()
     wx.navigateTo({
@@ -282,13 +258,6 @@ Page({
       }
     }
 
-    // 如果3s内选择掌握、当前无特定filter 且 当前单词在高中范围
-    // if (this.data.within3s && !app.globalData.dictInfo.hasOwnProperty('no_high_school')
-    //     && this.data.dictionary.getFilter() == 'none'
-    //     && !this.data.dictionary.isCurrentWordInfilter())
-    // {
-    //   this.mayIFiltering('no_high_school')
-    // }
     //diff_Todo: 如果3s内选择掌握 且 未设定过 难度filter 则弹窗询问是否跳转设置页（取代高中filter弹窗），参考文案：>>>>>>> Stashed changes
       // title: '屏蔽部分低难度单词？',
       // content: '如果您觉得看到的一些单词对于您过于简单，可以设定您希望的难度，之后也可以随时通过“调整设置”修改此设定',
@@ -401,15 +370,17 @@ Page({
       target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
     })
     
-    let dicInfo = app.globalData.dictInfo 
-    if(dicInfo.hasOwnProperty('no_high_school') && this.data.dictionary.hasOwnProperty('dictionary'))
+    let dictInfo = app.globalData.dictInfo
+    let dataDict = this.data.dictionary
+    if(dictInfo.hasOwnProperty('no_high_school') 
+       && dataDict.hasOwnProperty('dictionary') && dataDict.isFilterEnabled())
     {
       let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
       this.configFilter(filtername)
     }
-    if(this.data.dictionary.hasOwnProperty('dictionary'))
+    if(dataDict.hasOwnProperty('dictionary') && dataDict.isFilterEnabled())
     {
-      let difficultyThreshold = dicInfo.dictNames.生命科学[dicInfo.useDict].diff_threshold
+      let difficultyThreshold = dictInfo.dictNames.生命科学[dictInfo.useDict].diff_threshold
       this.configDifficultyFilter(difficultyThreshold)
     }
 

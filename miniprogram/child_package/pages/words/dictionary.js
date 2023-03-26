@@ -1,9 +1,7 @@
 class Dictionary {
-    constructor(dict, idx, filtername, difficultyFilter) {
+    constructor(dict, idx) {
         this.dictionary = dict
         this.index = idx
-        this.filter = filtername
-        this.difficultyFilter = difficultyFilter
     }
 
     updateUseDict(useDict) {
@@ -14,21 +12,6 @@ class Dictionary {
       return this.useDict
     }
 
-    updateFilter(filter) {
-        if(filter == 'no_high_school')
-            this.filter = 'no_high_school'
-        else
-            this.filter = 'none'
-    }
-
-    updateDifficultyFilter(difficultyFilter) {
-        this.difficultyFilter = difficultyFilter
-    }
-
-    getFilter() {
-        return this.filter
-    }
-
     updateUseMode(useMode) {
         let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested'}
         this.useMode = useMode
@@ -37,6 +20,10 @@ class Dictionary {
 
     getUseMode() {
         return this.useMode
+    }
+
+    isWordUntraverse(word) {
+        return !word[this.chooseStatus]
     }
 
     getNextWord() {
@@ -57,22 +44,6 @@ class Dictionary {
         return null
     }
 
-    isWordUntraverse(word) {
-        return !word[this.chooseStatus]
-    }
-
-    isWordInfilter(word) {
-        return !word.high_school
-    }
-
-    isWordInDiffcultyFilter(word) {
-        return word.difficulty_level > this.difficultyFilter
-    }
-
-    isCurrentWordInfilter() {
-        return this.isWordInfilter(this.dictionary[this.index])
-    }
-
     selectFirstWord() {
         for (var w in this.dictionary) {
             this.index = w
@@ -81,6 +52,72 @@ class Dictionary {
             }
         }
         return null
+    }
+
+    resetDictionary() {
+        for (var w in this.dictionary) {
+            this.dictionary[w][this.chooseStatus] = false
+        }
+        if(this.chooseStatus == 'tested')
+        {
+          for (var w in this.dictionary) {
+            this.dictionary[w]['learnt'] = false
+          }
+        }
+        this.selectFirstWord()
+    }
+
+    getDictionary() {
+        return this.dictionary
+    }
+
+    getCurrentWord() {
+        return this.dictionary[this.index]
+    }
+
+    updateDictionary(dictionary) {
+        this.dictionary = dictionary
+    }
+
+    markWord() {
+      console.log(this.dictionary[this.index])
+        this.dictionary[this.index][this.chooseStatus] = true
+        if(this.chooseStatus == 'tested') 
+            this.dictionary[this.index]['learnt'] = true
+    }
+
+    isDictionaryEmpty() {
+        return this.dictionary.length == 0
+    }
+
+    commitData(){}
+
+    isFilterEnabled() {
+        return false
+    }
+};
+
+export class NormalDictionary extends Dictionary {
+    constructor(dictionary) {
+        super(dictionary, 0)
+        this.favorList = new Array()
+        this.filter = 'none'
+        this.difficultyFilter = 0
+    }
+
+    isFilterEnabled() {
+        return true
+    }
+
+    updateFilter(filter) {
+        if(filter == 'no_high_school')
+            this.filter = 'no_high_school'
+        else
+            this.filter = 'none'
+    }
+
+    updateDifficultyFilter(difficultyFilter) {
+        this.difficultyFilter = difficultyFilter
     }
 
     checkIfDisplay(word) {
@@ -124,51 +161,12 @@ class Dictionary {
         return false
     }
 
-    resetDictionary() {
-        for (var w in this.dictionary) {
-            this.dictionary[w][this.chooseStatus] = false
-        }
-        if(this.chooseStatus == 'tested')
-        {
-          for (var w in this.dictionary) {
-            this.dictionary[w]['learnt'] = false
-          }
-        }
-        this.selectFirstWord()
+    isWordInfilter(word) {
+        return !word.high_school
     }
 
-    getDictionary() {
-        return this.dictionary
-    }
-
-    getCurrentWord() {
-        return this.dictionary[this.index]
-    }
-
-    updateDictionary(dictionary) {
-        this.dictionary = dictionary
-    }
-
-    markWord() {
-      console.log(this.dictionary[this.index])
-        this.dictionary[this.index][this.chooseStatus] = true
-        if(this.chooseStatus == 'tested') 
-            this.dictionary[this.index]['learnt'] = true
-    }
-
-    isDictionaryEmpty() {
-        return this.dictionary.length == 0
-    }
-
-    commitData(){
-
-    }
-};
-
-export class NormalDictionary extends Dictionary {
-    constructor(dictionary) {
-        super(dictionary, 0, 'none',0)
-        this.favorList = new Array()
+    isWordInDiffcultyFilter(word) {
+        return word.difficulty_level > this.difficultyFilter
     }
 
     isCurrentWordInFavored(word) {
@@ -242,7 +240,7 @@ export class NormalDictionary extends Dictionary {
 
 export class FavorDictionary extends Dictionary {
     constructor(dictionary) {
-        super(dictionary, 0, 'none', 0)
+        super(dictionary, 0)
     }
 
     isCurrentWordInFavored(word) {
