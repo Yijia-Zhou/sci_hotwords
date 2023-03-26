@@ -6,7 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    difficulty: 0, 
+    difficulty: app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty("diff_threshold") ?
+                app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100 : 0,
     show_diff_setting: true,
 
     highschool_filter_array: ["保留它们", "屏蔽它们"],
@@ -41,24 +42,33 @@ Page({
   },
 
   onConfirm: function () {
-    if (show_diff_setting) {
-      let diff_threshold = this.data.difficulty / 100
-      app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold = diff_threshold
+    let globalDictInfo = app.globalData.dictInfo
+
+    if (this.data.show_diff_setting) {
+      let newDiffcultyThreshold = this.data.difficulty / 100
+      let oldDiffcultyThreshold = globalDictInfo.clusters_and_domains.生命科学[globalDictInfo.useDict].diff_threshold
+      //necessary?
+      if(oldDiffcultyThreshold > newDiffcultyThreshold)
+      {
+        app.words_need_reload = true
+      }
+      globalDictInfo.clusters_and_domains.生命科学[globalDictInfo.useDict].diff_threshold = newDiffcultyThreshold
     }
     
-    app.globalData.dictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
-    app.globalData.dictInfo.remind_time = this.data.remind_time
+    globalDictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
+    globalDictInfo.remind_time = this.data.remind_time
 
     if (this.data.highschool_filter_array[this.data.highschool_filter_index]=="屏蔽它们") {
-      app.globalData.dictInfo.no_high_school = true
-    } else if (app.globalData.dictInfo.hasOwnProperty('no_high_school')) {
-      if (app.globalData.dictInfo.no_high_school != false) {
+      globalDictInfo.no_high_school = true
+    } else if (globalDictInfo.hasOwnProperty('no_high_school')) {
+      if (globalDictInfo.no_high_school != false) {
+        //necessary?
         app.words_need_reload = true
-        app.globalData.dictInfo.no_high_school = false
+        globalDictInfo.no_high_school = false
       }
     }
 
-    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+    wx.setStorageSync('dictInfo', globalDictInfo)
     wx.navigateBack()
   },
 
@@ -87,7 +97,7 @@ Page({
     try {
       this.setData({
         difficulty: app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
-        ? app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold
+        ? app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100
         : 0
       })
     } catch(e) {

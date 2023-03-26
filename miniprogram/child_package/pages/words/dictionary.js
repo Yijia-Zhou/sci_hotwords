@@ -1,8 +1,9 @@
 class Dictionary {
-    constructor(dict, idx, filtername) {
+    constructor(dict, idx, filtername, difficultyFilter) {
         this.dictionary = dict
         this.index = idx
         this.filter = filtername
+        this.difficultyFilter = difficultyFilter
     }
 
     updateUseDict(useDict) {
@@ -18,6 +19,10 @@ class Dictionary {
             this.filter = 'no_high_school'
         else
             this.filter = 'none'
+    }
+
+    updateDifficultyFilter(difficultyFilter) {
+        this.difficultyFilter = difficultyFilter
     }
 
     getFilter() {
@@ -60,12 +65,15 @@ class Dictionary {
         return !word.high_school
     }
 
+    isWordInDiffcultyFilter(word) {
+        return word.difficulty_level > this.difficultyFilter
+    }
+
     isCurrentWordInfilter() {
         return this.isWordInfilter(this.dictionary[this.index])
     }
 
     selectFirstWord() {
-        console.log(this.dictionary)
         for (var w in this.dictionary) {
             this.index = w
             if(this.checkIfDisplay(this.dictionary[w])) {
@@ -78,8 +86,9 @@ class Dictionary {
     checkIfDisplay(word) {
         let res = this.isWordUntraverse(word)
         if(this.filter == 'no_high_school'){
-            res = res && this.isWordInfilter(word) // diff_Todo: difficulty_level 低于 diff_threshold 的单词将不予显示
+            res = res && this.isWordInfilter(word)
         }
+        res = res && this.isWordInDiffcultyFilter(word)
         return res
     }
 
@@ -91,6 +100,7 @@ class Dictionary {
                 const indexFilter = (element) => {
                     return element[this.chooseStatus] == false
                         && element.high_school == false
+                        && element.difficulty_level > this.difficultyFilter
                 }
                 let idx = this.dictionary.findIndex(indexFilter)
                 if(idx == -1) 
@@ -102,6 +112,7 @@ class Dictionary {
             {
                 const indexNoFilter = (element) => {
                     return element[this.chooseStatus] == false
+                        && element.difficulty_level > this.difficultyFilter
                 }
                 let idx = this.dictionary.findIndex(indexNoFilter)
                 if(idx == -1) 
@@ -156,7 +167,7 @@ class Dictionary {
 
 export class NormalDictionary extends Dictionary {
     constructor(dictionary) {
-        super(dictionary, 0, 'none')
+        super(dictionary, 0, 'none',0)
         this.favorList = new Array()
     }
 
@@ -231,7 +242,7 @@ export class NormalDictionary extends Dictionary {
 
 export class FavorDictionary extends Dictionary {
     constructor(dictionary) {
-        super(dictionary, 0, 'none')
+        super(dictionary, 0, 'none', 0)
     }
 
     isCurrentWordInFavored(word) {

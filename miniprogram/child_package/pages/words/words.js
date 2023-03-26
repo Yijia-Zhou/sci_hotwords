@@ -136,19 +136,30 @@ Page({
     }
 
     let dataDict = this.data.dictionary
-    console.log(dataDict)
-
+    
     this.updateUseMode(dictInfo.useMode)
     dataDict.updateUseDict(dictInfo.useDict)
+    
+    if(dictInfo.hasOwnProperty('no_high_school'))
+    {
+      let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
+      this.configFilter(filtername)
+    }
+    
+    if(dictInfo.clusters_and_domains.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold'))
+    {
+      let difficultyThreshold = dictInfo.clusters_and_domains.生命科学[dictInfo.useDict].diff_threshold
+      this.configDifficultyFilter(difficultyThreshold)
+    }
 
-    let filtername = app.globalData.dictInfo.no_high_school == true
-               ? 'no_high_school' : 'none'
-    this.configFilter(filtername)
+    console.log(dictInfo)
+    console.log(dataDict)
 
     this.onReload()
   },
 
   onReload: function() {
+    console.log("words onReload start")
     let dataDict = this.data.dictionary
     // 选取最靠前的未掌握词组
     let curWord = dataDict.selectFirstWord()
@@ -173,9 +184,11 @@ Page({
   },
 
   configFilter: function (filtername) {
-    if (filtername != this.data.dictionary.getFilter()) {
-      this.data.dictionary.updateFilter(filtername)
-    }
+    this.data.dictionary.updateFilter(filtername)
+  },
+
+  configDifficultyFilter: function(difficultyThreshold) {
+    this.data.dictionary.updateDifficultyFilter(difficultyThreshold)
   },
 
   mayIFiltering: function () {
@@ -381,21 +394,28 @@ Page({
    */
   onShow: function () {
     console.log("words onShow")
+    
     this.setData({
       within3s: true,
       showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
       target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
     })
-
-    if(app.globalData.dictInfo.hasOwnProperty('no_high_school') && this.data.dictionary.hasOwnProperty('getFilter'))
+    
+    let dicInfo = app.globalData.dictInfo 
+    if(dicInfo.hasOwnProperty('no_high_school') && this.data.dictionary.hasOwnProperty('dictionary'))
     {
-      let filtername = app.globalData.dictInfo.no_high_school == true
-                     ? 'no_high_school' : 'none'
+      let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
       this.configFilter(filtername)
+    }
+    if(this.data.dictionary.hasOwnProperty('dictionary'))
+    {
+      let difficultyThreshold = dicInfo.clusters_and_domains.生命科学[dicInfo.useDict].diff_threshold
+      this.configDifficultyFilter(difficultyThreshold)
     }
 
     if (app.words_need_reload) {
       this.onReload()
+      app.words_need_reload = false
     }
   },
 
