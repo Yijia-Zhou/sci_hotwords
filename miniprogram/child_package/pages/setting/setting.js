@@ -6,8 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    difficulty: app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty("diff_threshold") ?
-                app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100 : 0,
+    difficulty: app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty("diff_threshold") ?
+      Math.round(app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100) : 0,
     show_diff_setting: true,
 
     highschool_filter_array: ["保留它们", "屏蔽它们"],
@@ -46,13 +46,13 @@ Page({
 
     if (this.data.show_diff_setting) {
       let newDiffcultyThreshold = this.data.difficulty / 100
-      let oldDiffcultyThreshold = globalDictInfo.clusters_and_domains.生命科学[globalDictInfo.useDict].diff_threshold
+      let oldDiffcultyThreshold = globalDictInfo.dictNames.生命科学[globalDictInfo.useDict].diff_threshold
       //necessary?
-      if(oldDiffcultyThreshold > newDiffcultyThreshold)
+      if(oldDiffcultyThreshold != newDiffcultyThreshold)
       {
         app.words_need_reload = true
       }
-      globalDictInfo.clusters_and_domains.生命科学[globalDictInfo.useDict].diff_threshold = newDiffcultyThreshold
+      globalDictInfo.dictNames.生命科学[globalDictInfo.useDict].diff_threshold = newDiffcultyThreshold
     }
     
     globalDictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
@@ -96,8 +96,8 @@ Page({
   onShow() {
     try {
       this.setData({
-        difficulty: app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
-        ? app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100
+        difficulty: app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
+        ? Math.round(app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100)
         : 0
       })
     } catch(e) {

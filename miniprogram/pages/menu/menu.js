@@ -41,7 +41,7 @@ Page({
   },
 
   get_domains (cluster) { // 根据第一行的选择生成第二行的domains array
-    let domains_array = Object.keys(app.globalData.dictInfo.clusters_and_domains[cluster])
+    let domains_array = Object.keys(app.globalData.dictInfo.dictNames[cluster])
     if (!domains_array.includes("我的收藏")) {
       domains_array.unshift("我的收藏")
     }
@@ -62,7 +62,7 @@ Page({
     
     let domains_array = this.get_domains("生命科学")
     this.setData({
-      clusters: Object.keys(app.globalData.dictInfo.clusters_and_domains),
+      clusters: Object.keys(app.globalData.dictInfo.dictNames),
       domains: domains_array, 
       modes: app.globalData.dictInfo.modes
     })

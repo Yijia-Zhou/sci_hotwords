@@ -13,8 +13,8 @@ Page({
     dictionary: new Object(),
     within3s: true,
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
-     || app.globalData.dictInfo.clusters_and_domains.生命科学 
-     || app.globalData.dictInfo.clusters_and_domains.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold'),
+     || app.globalData.dictInfo.dictNames.生命科学 
+     || app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold'),
     since_touch_setting: 0,
     setting_opacity: 0.99,
     target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
@@ -146,9 +146,9 @@ Page({
       this.configFilter(filtername)
     }
     
-    if(dictInfo.clusters_and_domains.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold'))
+    if(dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold'))
     {
-      let difficultyThreshold = dictInfo.clusters_and_domains.生命科学[dictInfo.useDict].diff_threshold
+      let difficultyThreshold = dictInfo.dictNames.生命科学[dictInfo.useDict].diff_threshold
       this.configDifficultyFilter(difficultyThreshold)
     }
 
@@ -409,7 +409,7 @@ Page({
     }
     if(this.data.dictionary.hasOwnProperty('dictionary'))
     {
-      let difficultyThreshold = dicInfo.clusters_and_domains.生命科学[dicInfo.useDict].diff_threshold
+      let difficultyThreshold = dicInfo.dictNames.生命科学[dicInfo.useDict].diff_threshold
       this.configDifficultyFilter(difficultyThreshold)
     }
 

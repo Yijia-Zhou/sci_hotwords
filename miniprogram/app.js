@@ -35,13 +35,16 @@ App({
       key: 'dictInfo',
       success (res) {
         _this.globalData.dictInfo = res.data
+        if (!_this.globalData.dictInfo.hasOwnProperty('dictNames')) { // 把clusters_and_domains改名成dictNames时的临时措施
+          _this.globalData.dictInfo.dictNames = _this.globalData.dictInfo.clusters_and_domains
+        }
         if (!_this.globalData.dictInfo.hasOwnProperty('daily_target')) {
           _this.globalData.dictInfo.daily_target = 30
         }
       },
       fail () {
         _this.globalData.dictInfo =   {
-          "clusters_and_domains": {
+          "dictNames": {
             "生命科学": {
               "基础词库": {
                   "paper_count": 1217564
@@ -78,8 +81,8 @@ App({
              */
             wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
 
-            // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
-            _this.globalData.dictInfo.clusters_and_domains = _this.globalData.dataTemp.clusters_and_domains
+            // dictInfo: dictNames, modes, useDict, useMode, marker
+            _this.globalData.dictInfo.dictNames = _this.globalData.dataTemp.dictNames
             _this.globalData.dictInfo.modes = _this.globalData.dataTemp.modes
             _this.globalData.dictInfo.marker = _this.globalData.dataTemp.marker
             _this.globalData.dictInfo.paper_count = _this.globalData.dataTemp.paper_count
