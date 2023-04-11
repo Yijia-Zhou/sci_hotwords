@@ -28,6 +28,7 @@ Page({
 
   // 渲染单词卡片
   showWord: function(currentWord) {
+    this.data.dictionary.updateWordFrom(currentWord)
     if(currentWord != null)
     {
       this.setData({

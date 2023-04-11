@@ -26,7 +26,6 @@ var app = getApp()
         if (itemIndex != -1) {
           if(baseDict[itemIndex].hasOwnProperty('learnt')){
             syncItem.learnt = baseDict[itemIndex].learnt
-            console.log("sync success", i)
           }
           if(baseDict[itemIndex].hasOwnProperty('tested')){
             syncItem.tested = baseDict[itemIndex].tested

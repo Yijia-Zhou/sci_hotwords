@@ -236,6 +236,11 @@ export class NormalDictionary extends Dictionary {
     initCoreWordNum() {
         this.markedNum = this.dictionary.filter(w => w[this.chooseStatus] == true).length;
     }
+
+    updateWordFrom(word)
+    {
+        word.from = this.useDict
+    }
 };
 
 export class FavorDictionary extends Dictionary {
@@ -311,5 +316,9 @@ export class FavorDictionary extends Dictionary {
         }
       }
       return true
+    }
+
+    updateWordFrom(word)
+    {
     }
 };
