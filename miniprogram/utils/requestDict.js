@@ -1,6 +1,6 @@
 var app = getApp()
 
- async function loadDictionary(useDict){
+  async function loadDictionary(useDict){
     wx.showLoading({
       title: '获取/更新词库中，请稍候',
     })
@@ -13,6 +13,27 @@ var app = getApp()
       data: dataTemp
     })
     return dataTemp
+  }
+
+  function syncDictionary(dictionary){
+    var baseDict = wx.getStorageSync('基础词库')
+    if(baseDict && baseDict.length != 0)
+    {
+      console.log("Sync dictionary")
+      for (var i in dictionary) {
+        let syncItem = dictionary[i]
+        let itemIndex = baseDict.findIndex((item) => item._id.toLowerCase().trim() === syncItem._id.toLowerCase().trim())
+        if (itemIndex != -1) {
+          if(baseDict[itemIndex].hasOwnProperty('learnt')){
+            syncItem.learnt = baseDict[itemIndex].learnt
+            console.log("sync success", i)
+          }
+          if(baseDict[itemIndex].hasOwnProperty('tested')){
+            syncItem.tested = baseDict[itemIndex].tested
+          }
+        }
+      }
+    }
   }
 
   async function updateDictionary(useDict, dictionary){
@@ -71,6 +92,7 @@ var app = getApp()
         return
       }
       dictionary = await loadDictionary(useDict)
+      syncDictionary(dictionary)
     }
     else if (wx.getStorageSync('dict_need_refresh').includes(useDict) && useDict != "我的收藏")
     {
