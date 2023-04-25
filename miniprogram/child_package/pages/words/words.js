@@ -66,6 +66,7 @@ Page({
   },
 
   on_alldone() {
+    console.log("All word done!")
     let dataDict = this.data.dictionary
     let _this = this
     let reset = function() {
@@ -100,7 +101,6 @@ Page({
         break
     }
     dataDict.resetDictionary()
-    console.log(dataDict)
     this.onReload()
   },
 
@@ -259,16 +259,25 @@ Page({
       }
     }
 
-    //diff_Todo: 如果3s内选择掌握 且 未设定过 难度filter 则弹窗询问是否跳转设置页（取代高中filter弹窗），参考文案：>>>>>>> Stashed changes
-      // title: '屏蔽部分低难度单词？',
-      // content: '如果您觉得看到的一些单词对于您过于简单，可以设定您希望的难度，之后也可以随时通过“调整设置”修改此设定',
-      // confirmText: "调整设置",
-      // cancelText: "暂时不了",
-
-    // 每日任务进度更新
-    //Todo: this.data.tracer.updateProgress()
-    //Todo: if(this.data.tracer.achiveTarget())
-    //        this.data.tracer.remindUser()
+    //如果3s内选择掌握 且 未设定过 难度filter 则弹窗询问是否跳转设置页
+    if(this.data.within3s == true && !app.globalData.dictInfo.hasOwnProperty('firstSetting'))
+    {
+      let _this = this
+      wx.showModal({
+        title: '屏蔽部分低难度单词？',
+        content: '请设定您希望的单词难度，之后也可以随时通过“调整设置”修改此设定',
+        confirmText: '调整设置',
+        cancelText: '暂时不了',
+        success (res) {
+          if (res.confirm) {
+            _this.onConfig()
+          }
+        }
+      })
+      app.globalData.dictInfo.firstSetting = true
+      wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+    }
+    
 
     app.globalData.tracer.doneCount ++
     // this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
@@ -379,7 +388,8 @@ Page({
       let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
       this.configFilter(filtername)
     }
-    if(dataDict.hasOwnProperty('dictionary') && dataDict.isFilterEnabled())
+    if(dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold')
+      && dataDict.hasOwnProperty('dictionary') && dataDict.isFilterEnabled())
     {
       let difficultyThreshold = dictInfo.dictNames.生命科学[dictInfo.useDict].diff_threshold
       this.configDifficultyFilter(difficultyThreshold)

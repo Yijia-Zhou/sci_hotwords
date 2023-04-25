@@ -23,7 +23,7 @@ class Dictionary {
     }
 
     isWordUntraverse(word) {
-        return !word[this.chooseStatus]
+        return !word.hasOwnProperty(this.chooseStatus) || !word[this.chooseStatus]
     }
 
     getNextWord() {
@@ -162,7 +162,7 @@ export class NormalDictionary extends Dictionary {
     }
 
     isWordInfilter(word) {
-        return !word.high_school
+        return !word.hasOwnProperty('high_school') || !word.high_school
     }
 
     isWordInDiffcultyFilter(word) {
