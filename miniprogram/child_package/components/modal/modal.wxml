@@ -1,0 +1,12 @@
+<!--child_package/components/modal/modal.wxml-->
+<view class='modal-mask' wx:if='{{showModal}}' bindtap='preventTouchMove' catchtouchmove="preventTouchMove">
+  <view class='modal-content'>
+    <scroll-view scroll-y class='main-content'>
+      <slot></slot>
+    </scroll-view>
+    <view class='modal-footer'>
+      <view class='cancel-btn' bindtap='onCancel'>取消</view>
+      <view class='confirm-btn' bindtap='onConfirm'>确定 </view>
+    </view>
+  </view>
+</view>

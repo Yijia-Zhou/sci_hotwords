@@ -8,3 +8,21 @@ page {
   top: 0;
   left: 0;
 }
+
+.section {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* background-color: whitesmoke; */
+}
+
+.paragraph {
+  display: inline-block;
+  margin: 0 6rpx;
+}
+
+.slider_diff {
+  max-height: 2vh;
+  margin: 16rpx;
+  margin-bottom: 8rpx;
+}

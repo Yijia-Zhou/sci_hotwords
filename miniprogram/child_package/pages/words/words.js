@@ -11,19 +11,18 @@ Page({
   data: {
     word: new Object(),
     dictionary: new Object(),
-    within3s: true,
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
      || app.globalData.dictInfo.dictNames.生命科学 
      || app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold'),
     since_touch_setting: 0,
     setting_opacity: 0.99,
-    target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
+    target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target,
+    showModal: false,
+    difficulty: 0
   },
 
-  startTimer() {
-    this.data.within3s = true
-    let _this = this
-    this.data.timer_timeout = setTimeout(function(){_this.data.within3s = false}, 3000)
+  on_changing_diff: function(e) {
+    this.setData({difficulty: e.detail.value})
   },
 
   // 渲染单词卡片
@@ -40,9 +39,41 @@ Page({
     }
   },
 
+  modalCancel(e){
+    console.log('点击了取消')
+  },
+
+  modalConfirm(e){
+    console.log('点击了确定')
+  },
+
+  initialSetting: function()
+  {
+    //未设定过 难度filter 则弹窗询问是否跳转设置页
+    // if(!app.globalData.dictInfo.hasOwnProperty('firstSetting'))
+    // {
+      let _this = this
+      // wx.showModal({
+      //   title: '屏蔽部分低难度单词？',
+      //   content: '请设定您希望的单词难度，之后也可以随时通过“调整设置”修改此设定',
+      //   confirmText: '调整设置',
+      //   cancelText: '暂时不了',
+      //   success (res) {
+      //     if (res.confirm) {
+      //       _this.onConfig()
+      //     }
+      //   }
+      // })
+      this.setData({
+        showModal: true
+      })
+      // app.globalData.dictInfo.firstSetting = true
+      // wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+    // }
+  },
+
   updateUseMode: function(useMode) {
     this.data.dictionary.updateUseMode(useMode)
-    //TODO wxml 无法调用类方法？
     let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested'}
     this.setData({
       chooseStatus:useModeMap[useMode]
@@ -156,6 +187,7 @@ Page({
     console.log(dictInfo)
     console.log(dataDict)
 
+    this.initialSetting()
     this.onReload()
   },
 
@@ -170,7 +202,6 @@ Page({
     else{
       this.on_alldone()
     }
-    this.startTimer()
 
     if(dataDict.showCoreWordNum())
     {
@@ -258,27 +289,7 @@ Page({
           break
       }
     }
-
-    //如果3s内选择掌握 且 未设定过 难度filter 则弹窗询问是否跳转设置页
-    if(this.data.within3s == true && !app.globalData.dictInfo.hasOwnProperty('firstSetting'))
-    {
-      let _this = this
-      wx.showModal({
-        title: '屏蔽部分低难度单词？',
-        content: '请设定您希望的单词难度，之后也可以随时通过“调整设置”修改此设定',
-        confirmText: '调整设置',
-        cancelText: '暂时不了',
-        success (res) {
-          if (res.confirm) {
-            _this.onConfig()
-          }
-        }
-      })
-      app.globalData.dictInfo.firstSetting = true
-      wx.setStorageSync('dictInfo', app.globalData.dictInfo)
-    }
     
-
     app.globalData.tracer.doneCount ++
     // this.setData({target_percent: String(100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target)+'%'})
     this.setData({target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target})
@@ -360,7 +371,6 @@ Page({
     if(nextWord != null)
     {
       this.showWord(nextWord)
-      this.startTimer()
     }
     else 
     {
@@ -375,7 +385,6 @@ Page({
     console.log("words onShow")
     
     this.setData({
-      within3s: true,
       showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school'),
       target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target
     })
