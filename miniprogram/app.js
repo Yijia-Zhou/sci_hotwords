@@ -216,15 +216,16 @@ App({
     return fromopenid
   },
 
-  onShareAppMessage: function (res) {
+  async onShareAppMessage(res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       console.log(res.target)
     }
+    let fromOpenId = await this.getOpenId()
     let title = '生科SCI高频单词 扫清文献阅读障碍'
     return {
       title: title,
-      path: '/pages/menu/menu',
+      path: '/pages/menu/menu?fromOpenId='+fromOpenId,
       query: '',
       imageUrl: '/images/shareImage.png',
     }

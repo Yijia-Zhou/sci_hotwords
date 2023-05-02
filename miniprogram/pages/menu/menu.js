@@ -1,5 +1,6 @@
 const app = getApp()
 var dblog = require('../../utils/dblog.js')
+var shareAppInfo = require('../../utils/shareApp.js')
 
 Page({
 
@@ -37,6 +38,11 @@ Page({
       setTimeout(this.auto_navigate, 0)
     } else {
       this.no_jump = true
+    }
+    if (options.fromOpenId)
+    {
+      console.log("From openid", options.fromOpenId)
+      shareAppInfo.reportShareAppInfo(options.fromOpenId);
     }
   },
 
