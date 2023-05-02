@@ -40,36 +40,28 @@ Page({
   },
 
   modalCancel(e){
-    console.log('点击了取消')
   },
 
   modalConfirm(e){
-    console.log('点击了确定')
+    let difficultyThreshold = this.data.difficulty / 100
+    if(difficultyThreshold != 0)
+    {
+      this.configDifficultyFilter(difficultyThreshold)
+    }
   },
 
   initialSetting: function()
   {
-    //未设定过 难度filter 则弹窗询问是否跳转设置页
-    // if(!app.globalData.dictInfo.hasOwnProperty('firstSetting'))
-    // {
-      let _this = this
-      // wx.showModal({
-      //   title: '屏蔽部分低难度单词？',
-      //   content: '请设定您希望的单词难度，之后也可以随时通过“调整设置”修改此设定',
-      //   confirmText: '调整设置',
-      //   cancelText: '暂时不了',
-      //   success (res) {
-      //     if (res.confirm) {
-      //       _this.onConfig()
-      //     }
-      //   }
-      // })
+    //未设定过难度filter 则弹窗询问是否跳转设置页
+    if(!app.globalData.dictInfo.hasOwnProperty('firstSetting'))
+    {
       this.setData({
         showModal: true
       })
-      // app.globalData.dictInfo.firstSetting = true
-      // wx.setStorageSync('dictInfo', app.globalData.dictInfo)
-    // }
+      app.globalData.dictInfo.firstSetting = true
+      wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+      console.log("initialSetting done")
+    }
   },
 
   updateUseMode: function(useMode) {

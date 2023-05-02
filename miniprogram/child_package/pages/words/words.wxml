@@ -25,7 +25,8 @@
       <scroll-view scroll-y class='main-content'>
         <view class="section">
           <view class="paragraph">
-            <text>请设定您希望的单词难度，之后也可以随时通过“调整设置”修改此设定</text>
+            <text>请设定您希望的单词难度，之后也可以随时通过“调整设置”修改此设定。\n</text>
+            <text>当前为您屏蔽词库中简单程度前 {{difficulty}} %的单词，可拖动滑动条修改</text>
             <slider value="{{difficulty}}" bindchanging="on_changing_diff" bindchange="on_changing_diff" block-size="20" max="80" class="slider_diff"/>
           </view>
         </view>

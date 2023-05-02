@@ -20,7 +20,7 @@
   background-color: #fff;
   border-radius: 10rpx;
   padding: 20rpx;
-  text-align: center;
+  text-align: left;
 }
 
 .main-content{
