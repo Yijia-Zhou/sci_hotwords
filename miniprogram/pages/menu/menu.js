@@ -1,6 +1,7 @@
 const app = getApp()
 var dblog = require('../../utils/dblog.js')
 var shareAppInfo = require('../../utils/shareApp.js')
+var requestDict  = require('../../utils/requestDict.js')
 
 Page({
 
@@ -99,6 +100,7 @@ Page({
   bindpickstart: function () {
     this.setData({showBtn: false})
   },
+
   bindpickend: function () {
     this.setData({showBtn: true})
     let _this = this
@@ -118,8 +120,11 @@ Page({
         showCancel: false,
         success: _this.back2foundermental
       })
+    } else {
+      requestDict.preloadDictionary(this.data.domains[this.data.value[1]])
     }
   },
+
   back2foundermental() {
     let index = this.data.domains.indexOf('基础词库')
     index = index >= 0 ? index : 1

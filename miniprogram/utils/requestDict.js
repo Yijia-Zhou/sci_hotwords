@@ -101,4 +101,20 @@ var app = getApp()
     return dictionary
   }
 
+  async function preloadDictionary(useDict)
+  {
+    var dictionary = wx.getStorageSync(useDict)
+    if (!dictionary || dictionary.length==0)
+    {
+      dictionary = await loadDictionary(useDict)
+      syncDictionary(dictionary)
+    }
+    else if (wx.getStorageSync('dict_need_refresh').includes(useDict))
+    {
+      dictionary = await updateDictionary(useDict, dictionary)
+    }
+    wx.hideLoading()
+  }
+
 module.exports.requestDictionary = requestDictionary
+module.exports.preloadDictionary = preloadDictionary
