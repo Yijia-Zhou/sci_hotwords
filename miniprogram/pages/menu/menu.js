@@ -94,6 +94,13 @@ Page({
     if (this.data.domains[useDictIndex] == "我的收藏" && this.no_jump) {
       this.back2foundermental()
     }
+
+    var specialDict = ["我的收藏", "敬请期待"]
+
+    if(!specialDict.includes(this.data.domains[useDictIndex]))
+    {
+      requestDict.preloadDictionary(this.data.domains[useDictIndex])
+    }
   },
 
   onShow() {

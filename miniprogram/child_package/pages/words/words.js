@@ -127,23 +127,18 @@ Page({
     this.onReload()
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: async function () {
-    let dictInfo = app.globalData.dictInfo
-    
-    console.log("words onLoad start")
-    wx.setNavigationBarTitle({title: '生命科学 - ' + dictInfo.useDict})
-
-    try {
-      var dictionary = await requestDict.requestDictionary(dictInfo.useDict)
-    } catch(err) {
-      if (err=="nothing_favored") {
-        console.log(err)
-        return
-      }
+  initialDictionary(dictInfo)
+  {
+    var dictionary = wx.getStorageSync(dictInfo.useDict)
+    if (!dictionary || dictionary.length==0)
+    {
+      wx.showLoading({ title: '正在加载字典~', })
+      let _this = this
+      setTimeout(function(){_this.initialDictionary(dictInfo)}, 50)
+      return
     }
+
+    wx.hideLoading()
 
     if(dictInfo.useDict == '我的收藏')
     {
@@ -176,11 +171,24 @@ Page({
       this.configDifficultyFilter(difficultyThreshold)
     }
 
-    console.log(dictInfo)
     console.log(dataDict)
 
     this.initialSetting()
     this.onReload()
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function () {
+    let dictInfo = app.globalData.dictInfo
+    
+    console.log("words onLoad start")
+    console.log(dictInfo)
+
+    wx.setNavigationBarTitle({title: '生命科学 - ' + dictInfo.useDict})
+
+    this.initialDictionary(dictInfo)
   },
 
   onReload: function() {

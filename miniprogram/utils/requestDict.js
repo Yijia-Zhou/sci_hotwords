@@ -1,9 +1,6 @@
 var app = getApp()
 
   async function loadDictionary(useDict){
-    wx.showLoading({
-      title: '获取/更新词库中，请稍候',
-    })
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(useDict).get()
     const dataTemp = reqRes.data.dictionary
@@ -36,9 +33,6 @@ var app = getApp()
   }
 
   async function updateDictionary(useDict, dictionary){
-    wx.showLoading({
-      title: '更新词库中，请稍候',
-    })
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(useDict).get()
     const dataTemp = reqRes.data.dictionary
@@ -90,11 +84,13 @@ var app = getApp()
         nothing_favored()
         return
       }
+      wx.showLoading({ title: '获取/更新词库中，请稍候' })
       dictionary = await loadDictionary(useDict)
       syncDictionary(dictionary)
     }
     else if (wx.getStorageSync('dict_need_refresh').includes(useDict) && useDict != "我的收藏")
     {
+      wx.showLoading({ title: '更新词库中，请稍候' })
       dictionary = await updateDictionary(useDict, dictionary)
     }
     wx.hideLoading()
@@ -106,14 +102,15 @@ var app = getApp()
     var dictionary = wx.getStorageSync(useDict)
     if (!dictionary || dictionary.length==0)
     {
-      dictionary = await loadDictionary(useDict)
+      console.log("start preload loading", useDict)
+      dictionary = loadDictionary(useDict)
       syncDictionary(dictionary)
     }
     else if (wx.getStorageSync('dict_need_refresh').includes(useDict))
     {
-      dictionary = await updateDictionary(useDict, dictionary)
+      console.log("start preload updating", useDict)
+      dictionary = updateDictionary(useDict, dictionary)
     }
-    wx.hideLoading()
   }
 
 module.exports.requestDictionary = requestDictionary
