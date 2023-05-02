@@ -40,10 +40,17 @@ Page({
     } else {
       this.no_jump = true
     }
+    let launchOption = wx.getLaunchOptionsSync()
+    console.log(launchOption.scene)
     if (options.fromOpenId)
     {
       console.log("From openid", options.fromOpenId)
-      shareAppInfo.reportShareAppInfo(options.fromOpenId);
+      shareAppInfo.reportShareAppInfo(options.fromOpenId, launchOption.scene)
+    }
+    else
+    {
+      console.log("From propaganda")
+      shareAppInfo.reportShareAppInfo(0, launchOption.scene);
     }
   },
 
