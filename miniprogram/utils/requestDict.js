@@ -1,6 +1,13 @@
 var app = getApp()
 
+  function updateDictInfoStatus(useDict, status)
+  {
+    app.globalData.dictInfo.dictNames.生命科学[useDict].status = status
+    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+  }
+
   async function loadDictionary(useDict){
+    updateDictInfoStatus(useDict, 'loading')
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(useDict).get()
     const dataTemp = reqRes.data.dictionary
@@ -9,6 +16,7 @@ var app = getApp()
       key: useDict,
       data: dataTemp
     })
+    updateDictInfoStatus(useDict, 'loaded')
     return dataTemp
   }
 
@@ -33,6 +41,7 @@ var app = getApp()
   }
 
   async function updateDictionary(useDict, dictionary){
+    updateDictInfoStatus(useDict, 'loading')
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(useDict).get()
     const dataTemp = reqRes.data.dictionary
@@ -57,6 +66,7 @@ var app = getApp()
       key: 'dict_need_refresh',
       data: dict_need_refresh
     })
+    updateDictInfoStatus(useDict, 'loaded')
     return dataTemp
   }
 
@@ -80,10 +90,6 @@ var app = getApp()
     var dictionary = wx.getStorageSync(useDict)
     if (!dictionary || dictionary.length==0)
     {
-      if (useDict == '我的收藏') {
-        nothing_favored()
-        return
-      }
       wx.showLoading({ title: '获取/更新词库中，请稍候' })
       dictionary = await loadDictionary(useDict)
       syncDictionary(dictionary)
@@ -97,21 +103,45 @@ var app = getApp()
     return dictionary
   }
 
+  const delay = (n) => new Promise( r => setTimeout(r, n));
+
+  async function getLocalDictionary(useDict)
+  {
+    var dictionary
+    if(useDict != '我的收藏')
+    {
+      let dict = app.globalData.dictInfo.dictNames.生命科学[useDict]
+      while(!dict.hasOwnProperty('status') || dict.status != 'loaded')
+      {
+        wx.showLoading({ title: '获取/更新词库中，请稍候' })
+        await delay(50)
+      }
+      wx.hideLoading()
+    }
+    return wx.getStorageSync(useDict)
+  }
+
   async function preloadDictionary(useDict)
   {
+    let dict = app.globalData.dictInfo.dictNames.生命科学[useDict]
+    if(dict.hasOwnProperty('status') && dict.status == 'loading')
+    {
+      return
+    }
     var dictionary = wx.getStorageSync(useDict)
-    if (!dictionary || dictionary.length==0)
+    if (!dictionary || dictionary.length == 0)
     {
       console.log("start preload loading", useDict)
-      dictionary = loadDictionary(useDict)
+      loadDictionary(useDict)
       syncDictionary(dictionary)
     }
     else if (wx.getStorageSync('dict_need_refresh').includes(useDict))
     {
       console.log("start preload updating", useDict)
-      dictionary = updateDictionary(useDict, dictionary)
+      updateDictionary(useDict, dictionary)
     }
   }
 
 module.exports.requestDictionary = requestDictionary
 module.exports.preloadDictionary = preloadDictionary
+module.exports.getLocalDictionary = getLocalDictionary

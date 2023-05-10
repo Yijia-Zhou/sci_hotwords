@@ -127,21 +127,17 @@ Page({
     this.onReload()
   },
 
-  initialDictionary(dictInfo)
+  async initialDictionary(dictInfo)
   {
-    var dictionary = wx.getStorageSync(dictInfo.useDict)
-    if (!dictionary || dictionary.length==0)
-    {
-      wx.showLoading({ title: '正在加载字典~', })
-      let _this = this
-      setTimeout(function(){_this.initialDictionary(dictInfo)}, 50)
-      return
-    }
-
-    wx.hideLoading()
+    var dictionary = await requestDict.getLocalDictionary(dictInfo.useDict)
 
     if(dictInfo.useDict == '我的收藏')
     {
+      if(!dictionary || dictionary.length == 0)
+      {
+        this.nothing_favored()
+        return
+      }
       this.data.dictionary = new FavorDictionary(dictionary)
     }
     else 
