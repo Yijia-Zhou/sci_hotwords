@@ -2,8 +2,7 @@ var app = getApp()
 
   function updateDictInfoStatus(useDict, status)
   {
-    app.globalData.dictInfo.dictNames.生命科学[useDict].status = status
-    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+    app.globalData.dictStatus.生命科学[useDict].status = status
   }
 
   async function loadDictionary(useDict){
@@ -110,7 +109,7 @@ var app = getApp()
     var dictionary
     if(useDict != '我的收藏')
     {
-      let dict = app.globalData.dictInfo.dictNames.生命科学[useDict]
+      let dict = app.globalData.dictStatus.生命科学[useDict]
       while(!dict.hasOwnProperty('status') || dict.status != 'loaded')
       {
         wx.showLoading({ title: '获取/更新词库中，请稍候' })
@@ -123,7 +122,7 @@ var app = getApp()
 
   async function preloadDictionary(useDict)
   {
-    let dict = app.globalData.dictInfo.dictNames.生命科学[useDict]
+    let dict = app.globalData.dictStatus.生命科学[useDict]
     if(dict.hasOwnProperty('status') && dict.status == 'loading')
     {
       return

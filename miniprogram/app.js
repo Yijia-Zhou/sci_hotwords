@@ -93,6 +93,7 @@ App({
           console.log(err)
           _this.globalData.offline = true
         })
+        _this.globalData.dictStatus = _this.globalData.dictInfo.dictNames
         console.log('getStorage - dictInfo - complete')
       }
     })
