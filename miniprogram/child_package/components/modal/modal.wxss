@@ -16,14 +16,17 @@
 .modal-content{
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 84vw;
   background-color: #fff;
-  border-radius: 10rpx;
+  /* border-radius: 10rpx; */
   padding: 20rpx;
+  /* padding-top: 35rpx; */
   text-align: left;
+  justify-content: space-between;
 }
 
 .main-content{
+  display: flex;
   flex: 1;
   height: 100%;
   overflow-y: hidden; 

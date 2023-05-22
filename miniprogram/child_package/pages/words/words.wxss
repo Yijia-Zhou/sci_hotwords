@@ -10,9 +10,10 @@ page {
 }
 
 .section {
-  flex: 0 0 auto;
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   /* background-color: whitesmoke; */
 }
 
@@ -23,6 +24,28 @@ page {
 
 .slider_diff {
   max-height: 2vh;
-  margin: 16rpx;
-  margin-bottom: 8rpx;
+  margin: 16rpx 10rpx 12rpx;
+  /* margin-bottom: 8rpx; */
+}
+
+.modal-content{
+  display: flex;
+  flex-direction: column;
+  width: 84vw;
+  background-color: #fff;
+  /* border-radius: 10rpx; */
+  padding: 20rpx;
+  /* padding-top: 35rpx; */
+  text-align: left;
+  justify-content: space-between;
+}
+
+.main-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-height: 80%;
+  overflow-y: hidden; 
+  max-height: 80vh; /* 内容高度最高80vh 以免内容太多溢出*/
 }

@@ -12,10 +12,10 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   // 返回当前用户的身份信息，用于数据库记录和查询
   return {
-    event,
+    // event,
     openid: wxContext.OPENID,
-    fromopenid: wxContext.FROM_OPENID,
-    appid: wxContext.APPID,
-    unionid: wxContext.UNIONID,
+    // fromopenid: wxContext.FROM_OPENID,
+    // appid: wxContext.APPID,
+    // unionid: wxContext.UNIONID,
   }
 }

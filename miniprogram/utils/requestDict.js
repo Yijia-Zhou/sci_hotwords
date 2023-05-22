@@ -89,7 +89,7 @@ var app = getApp()
     var dictionary = wx.getStorageSync(useDict)
     if (!dictionary || dictionary.length==0)
     {
-      wx.showLoading({ title: '获取/更新词库中，请稍候' })
+      wx.showLoading({ title: '获取词库中，请稍候' })
       dictionary = await loadDictionary(useDict)
       syncDictionary(dictionary)
     }
