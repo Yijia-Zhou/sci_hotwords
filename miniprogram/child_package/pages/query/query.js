@@ -1,6 +1,7 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
+const DictionaryLoader = new requestDict.DictionaryLoader()
 
 Page({
 
@@ -34,7 +35,7 @@ Page({
     
     for(var useDict in useDictList)
     {
-      allDictionary.push.apply(allDictionary, await requestDict.requestDictionary(useDictList[useDict])) 
+      allDictionary.push.apply(allDictionary, DictionaryLoader.getDictionarySync(useDictList[useDict])) 
       totalLen += wx.getStorageSync(useDictList[useDict]).length
       dictionaryOrder[useDictList[useDict]] = totalLen;
     }

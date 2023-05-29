@@ -2,6 +2,7 @@ const app = getApp()
 var dblog = require('../../utils/dblog.js')
 var shareAppInfo = require('../../utils/shareApp.js')
 var requestDict  = require('../../utils/requestDict.js')
+const DictionaryLoader = new requestDict.DictionaryLoader()
 
 Page({
 
@@ -99,7 +100,7 @@ Page({
 
     if(!specialDict.includes(this.data.domains[useDictIndex]))
     {
-      requestDict.preloadDictionary(this.data.domains[useDictIndex])
+      DictionaryLoader.preloadDictionary(this.data.domains[useDictIndex])
     }
   },
 
@@ -135,7 +136,7 @@ Page({
         success: _this.back2foundermental
       })
     } else {
-      requestDict.preloadDictionary(this.data.domains[this.data.value[1]])
+      DictionaryLoader.preloadDictionary(this.data.domains[this.data.value[1]])
     }
   },
 

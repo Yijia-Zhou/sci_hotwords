@@ -2,6 +2,7 @@ const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
 import { NormalDictionary, FavorDictionary } from './dictionary.js'
+const DictionaryLoader = new requestDict.DictionaryLoader()
 
 Page({
  
@@ -129,7 +130,7 @@ Page({
 
   async initialDictionary(dictInfo)
   {
-    var dictionary = await requestDict.getLocalDictionary(dictInfo.useDict)
+    var dictionary = await DictionaryLoader.getDictionarySync(dictInfo.useDict)
 
     if(dictInfo.useDict == '我的收藏')
     {
