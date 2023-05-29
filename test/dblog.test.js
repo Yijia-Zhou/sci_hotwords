@@ -1,3 +1,4 @@
+require('./wx.js')
 const dblog = require('./../miniprogram/utils/dblog');
 
 test('logAction and report', () => {
