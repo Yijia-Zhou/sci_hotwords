@@ -40,27 +40,34 @@ Page({
     }
   },
 
-  modalCancel(e){
+  modalCancel(){
   },
 
-  modalConfirm(e){
+  modalConfirm(){
     let difficultyThreshold = this.data.difficulty / 100
     if(difficultyThreshold != 0)
     {
       this.configDifficultyFilter(difficultyThreshold)
+      this.onReload()
+      let dataDict = this.data.dictionary
+      app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = difficultyThreshold
+      wx.setStorage({
+        key: 'dictInfo',
+        data: app.globalData.dictInfo
+      })
     }
   },
 
   initialSetting: function()
   {
     //未设定过难度filter 则弹窗询问是否跳转设置页
-    if(!app.globalData.dictInfo.hasOwnProperty('firstSetting'))
+    let dataDict = this.data.dictionary
+    if(!app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].hasOwnProperty('diff_threshold'))
     {
+      app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = 0
       this.setData({
         showModal: true
       })
-      app.globalData.dictInfo.firstSetting = true
-      wx.setStorageSync('dictInfo', app.globalData.dictInfo)
       console.log("initialSetting done")
     }
   },
