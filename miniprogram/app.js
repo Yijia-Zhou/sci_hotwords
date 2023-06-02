@@ -239,6 +239,7 @@ App({
         case 'i':
         case 'j':
         case 'l':
+        case ' ':
           res += 6
           break
         case 'f':
