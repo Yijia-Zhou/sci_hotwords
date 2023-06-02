@@ -22,7 +22,7 @@ Component({
         showChinese: false, //记录检验模式中点击显示释义动作
         showPlay: true,
         fontRes: this.calFontSize(word.deris),
-        baseword_len: this.display_length_count(word._id)
+        baseword_len: app.count_display_length(word._id)
       })
       this.process_fre_text()
       this.explain_style_process()
@@ -144,35 +144,6 @@ Component({
         this.setData({fre_text: "百篇平均出现 "+String((fre*100).toFixed(2))+' 次'})
       }
     },
-
-    // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
-    display_length_count: function (word) {
-      let res = 0
-      for (let char in word) {
-        switch(word[char]) { // 用法参考 https://blog.csdn.net/tel13259437538/article/details/83314965
-          case 'i':
-          case 'j':
-          case 'l':
-            res += 6
-            break
-          case 'f':
-          case 'r':
-          case 't':
-            res += 10
-            break
-          case 'm':
-          case 'w':
-            res += 20
-            break
-          default:
-            res += 14
-        }
-        if (escape(word[char]).indexOf("%u") >= 0) { // 判断方法来自 https://juejin.cn/post/6844903745583579149
-          res += 10  // 如果不是英文字符则额外+10（默认当中文(长度24)处理）
-        }
-      }
-      return res/14
-    },
   
     calFontSize: function (deris) {
       let deris_copy = [...deris]
@@ -181,14 +152,14 @@ Component({
       }
       let max_display_length = 0
       for (let i in [0,1,2,3]) {
-        max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
+        max_display_length = Math.max(max_display_length, app.count_display_length(deris_copy[i].word))
       }
       let fontRes = Math.min(44, 555/(max_display_length+1))
       return fontRes
     },
 
     explain_style_process() {
-      let disp_len = this.display_length_count(this.properties.word.chosen[0])
+      let disp_len = app.count_display_length(this.properties.word.chosen[0])
       if (disp_len > 75) {
         this.setData({explain_style: "font-size:"+String(36*75/disp_len)+"rpx; line-height: 48.6rpx;"})
         return 0
