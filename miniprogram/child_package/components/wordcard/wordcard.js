@@ -21,7 +21,7 @@ Component({
         useMode: app.globalData.dictInfo.useMode,
         showChinese: false, //记录检验模式中点击显示释义动作
         showPlay: true,
-        fontRes: this.calFontSize(word.deris),
+        fontRes: this.cal_font_size(word.deris),
         baseword_len: app.count_display_length(word._id)
       })
       this.process_fre_text()
@@ -33,23 +33,7 @@ Component({
           clearTimeout(this.data.audio_timeout)
           this.InnerAudioContext.destroy()
         } catch {}
-
-        // 预备“朗读”功能
-        try {
-          this.InnerAudioContext = wx.createInnerAudioContext()
-          this.setData({
-            showPlay: true
-          })
-          this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.properties.word._id
-          this.InnerAudioContext.onEnded(() => {
-            this.data.audio_timeout = setTimeout(this.InnerAudioContext.play, 1000)
-          })
-        } catch(e) {
-          console.log(e)
-          this.setData({
-            noAudio: true
-          })
-        }
+        this.prepare_audio()
       }
 
       dblog.logWord(word._id)
@@ -78,7 +62,7 @@ Component({
     // “朗读”与“暂停”
     onPlay: function () {
       dblog.logAction("onPlay")
-      this.InnerAudioContext.play()
+      this.do_play_audio()
       this.setData({
         showPlay: false,
       })
@@ -145,7 +129,7 @@ Component({
       }
     },
   
-    calFontSize: function (deris) {
+    cal_font_size: function (deris) {
       let deris_copy = [...deris]
       for (let i in [0,0,0,0]) {
         deris_copy.push('')
@@ -165,6 +149,29 @@ Component({
         return 0
       }
       this.setData({explain_style: ""})
+    },
+
+    prepare_audio() {
+      // 预备“朗读”功能
+      try {
+        this.InnerAudioContext = wx.createInnerAudioContext()
+        this.setData({
+          showPlay: true
+        })
+        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.properties.word._id
+        this.InnerAudioContext.onEnded(() => {
+          this.data.audio_timeout = setTimeout(this.InnerAudioContext.play, 1000)
+        })
+      } catch(e) {
+        console.log(e)
+        this.setData({
+          noAudio: true
+        })
+      }
+    },
+
+    do_play_audio() {
+      this.InnerAudioContext.play()
     },
 
     destroy_audio() {
@@ -190,6 +197,9 @@ Component({
   pageLifetimes: { // 组件所在页面的生命周期
     hide: function() {
       this.destroy_audio()
+    },
+    show: function() {
+      this.prepare_audio()
     }
   }
 })
