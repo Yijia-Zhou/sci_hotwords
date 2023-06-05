@@ -19,13 +19,16 @@ class DictionaryLoader {
 
   // 获取词典数据接口(同步版本，直接返回词典数据)
   async getDictionarySync(name) {
+    console.log("getDictionarySync -", name)
+    wx.showLoading({ title: '获取/更新词库中，请稍候' })
     if (!this.promises[name]) {
-      wx.showLoading({ title: '获取/更新词库中，请稍候' })
       let dictionary = await this.loadDictionary(name)
       wx.hideLoading()
-      return dictionary
+      return await dictionary
     }
-    return await this.promises[name];
+    let dictionary = await this.promises[name]
+    wx.hideLoading()
+    return await dictionary
   }
 
   // 预加载词典（用于外部调用）
@@ -35,6 +38,11 @@ class DictionaryLoader {
         this.loadDictionary(name);
       }, 0);
     }
+  }
+
+  // 删除对应某个词典的promise（用于外部调用[当词典数据已知发生改变时]）
+  removeDictionary(name) {
+    delete this.promises[name];
   }
   
   // 加载词典数据的方法
@@ -50,7 +58,9 @@ class DictionaryLoader {
       // 如果本地存储中没有数据，调用下载词典数据的方法
       else if (!dictionary || dictionary.length == 0) {
         dictionary = this.downloadDictionary(name)
-        dictionary = this.syncDictionary(dictionary)
+        if (!name.includes('基础')) {
+          dictionary = this.syncDictionary(dictionary)
+        }
       }
       // 如果本地存储中有数据，检查 'need_refresh' 列表，若需要刷新，调用更新词典数据的方法
       else if (wx.getStorageSync('dict_need_refresh').includes(name)) {
@@ -105,7 +115,7 @@ class DictionaryLoader {
   }
 
   syncDictionary(dictionary){
-    var baseDict = wx.getStorageSync('基础词库')
+    var baseDict = this.getDictionarySync('基础词库')
     if(baseDict && baseDict.length != 0)
     {
       console.log("Sync dictionary")

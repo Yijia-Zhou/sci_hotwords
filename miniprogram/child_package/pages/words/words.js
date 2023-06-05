@@ -11,10 +11,12 @@ Page({
    */
   data: {
     word: new Object(),
-    dictionary: new Object(),
+    dictionary: undefined,
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
-     || app.globalData.dictInfo.dictNames.生命科学 
-     || app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold'),
+     || (
+        app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict]
+        && app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
+       ),
     since_touch_setting: 0,
     setting_opacity: 0.99,
     target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target,
@@ -62,7 +64,7 @@ Page({
   {
     //未设定过难度filter 则弹窗询问是否跳转设置页
     let dataDict = this.data.dictionary
-    if(!app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].hasOwnProperty('diff_threshold'))
+    if(dataDict.isFilterEnabled() && !app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].hasOwnProperty('diff_threshold'))
     {
       app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = 0
       this.setData({
@@ -106,6 +108,7 @@ Page({
         showCancel: false,
       })
       dataDict.resetDictionary()
+      _this.onReload()
     }
     switch (dataDict.getUseMode()) {
       case '识记模式':
@@ -131,8 +134,6 @@ Page({
         reset()
         break
     }
-    dataDict.resetDictionary()
-    this.onReload()
   },
 
   async initialDictionary(dictInfo)
@@ -395,14 +396,19 @@ Page({
     
     let dictInfo = app.globalData.dictInfo
     let dataDict = this.data.dictionary
+    if (!dataDict) {
+      this.data.wait_onShow = setTimeout(this.onShow, 50)
+      return 
+    }
+
     if(dictInfo.hasOwnProperty('no_high_school') 
        && dataDict.hasOwnProperty('dictionary') && dataDict.isFilterEnabled())
     {
       let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
       this.configFilter(filtername)
     }
-    if(dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold')
-      && dataDict.hasOwnProperty('dictionary') && dataDict.isFilterEnabled())
+    if(dataDict.isFilterEnabled() && dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold')
+      && dataDict.hasOwnProperty('dictionary'))
     {
       let difficultyThreshold = dictInfo.dictNames.生命科学[dictInfo.useDict].diff_threshold
       this.configDifficultyFilter(difficultyThreshold)
@@ -418,7 +424,18 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    if(Object.keys(this.data.dictionary).length != 0)
+    console.log("words - onHide")
+    try {
+      clearTimeout(this.data.timer_timeout)
+    } catch(e) {
+      console.log(e)
+    }
+    try {
+      clearTimeout(this.data.wait_onShow)
+    } catch(e) {
+      console.log(e)
+    }
+    if(this.data.dictionary && Object.keys(this.data.dictionary).length != 0)
     {
       this.data.dictionary.commitData()
       wx.setStorage({key: app.globalData.dictInfo.useDict, 
@@ -426,11 +443,8 @@ Page({
       wx.setStorage({key: '我的收藏', 
                      data: this.data.dictionary.getFavorDict()})
     }
-    try {
-      clearTimeout(this.data.timer_timeout)
-    } catch(e) {
-      console.log(e)
-    }
+    DictionaryLoader.removeDictionary(app.globalData.dictInfo.useDict)
+    DictionaryLoader.removeDictionary('我的收藏')
   },
 
   /**
@@ -438,7 +452,7 @@ Page({
    */
   onUnload: async function () {
     await this.onHide()
-    if(Object.keys(this.data.dictionary).length != 0)
+    if(this.data.dictionary && Object.keys(this.data.dictionary).length != 0)
     {
       delete this.data.dictionary
     }

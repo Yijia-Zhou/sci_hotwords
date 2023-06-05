@@ -11,8 +11,7 @@
         "pages/setting/setting",
         "pages/query/query",
         "pages/result/result",
-        "pages/more_deri/more_deri",
-        "components/modal/modal"
+        "pages/more_deri/more_deri"
       ]
     }
   ],
