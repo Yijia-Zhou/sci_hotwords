@@ -101,6 +101,7 @@ Page({
   on_alldone() {
     console.log("All word done!")
     let dataDict = this.data.dictionary
+    console.log(dataDict)
     let _this = this
     let reset = function() {
       wx.showModal({
@@ -249,7 +250,7 @@ Page({
 
     let dataDict = this.data.dictionary
 
-    dataDict.markWord()//标记掌握
+    dataDict.markWord(true)//标记掌握
     if(dataDict.showCoreWordNum() && dataDict.isCoreNumUpdated())
     {
       let coreNum = dataDict.getCoreWordNum()
@@ -319,6 +320,7 @@ Page({
     dblog.logAction("onToBeDone")
 
     let dataDict = this.data.dictionary
+    dataDict.markWord(false)
 
     if (!dataDict.isCurrentWordInFavored(this.data.word)) {
       let _this = this

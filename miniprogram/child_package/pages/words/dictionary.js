@@ -37,6 +37,7 @@ class Dictionary {
         this.index++
         while(!this.isAllDone()) {
             if(this.checkIfDisplay(this.dictionary[this.index])){
+                console.log("jumpToNextWord - index:", this.index)
                 return this.dictionary[this.index]
             }
             this.index++
@@ -79,11 +80,12 @@ class Dictionary {
         this.dictionary = dictionary
     }
 
-    markWord() {
+    markWord(mark) {
+      // mark 为一个Boolean值，为是否掌握
       console.log(this.dictionary[this.index])
-        this.dictionary[this.index][this.chooseStatus] = true
-        if(this.chooseStatus == 'tested') 
-            this.dictionary[this.index]['learnt'] = true
+      this.dictionary[this.index][this.chooseStatus] = mark
+      if(mark && this.chooseStatus == 'tested') // 如果识记模式中标记了掌握那也回头标一些learnt
+        this.dictionary[this.index]['learnt'] = true
     }
 
     isDictionaryEmpty() {
@@ -268,7 +270,7 @@ export class FavorDictionary extends Dictionary {
       if(this.index >= this.dictionary.length)
       {
         const indexNoFilter = (element) => {
-          return element[this.chooseStatus] == false && !element.hasOwnProperty('toBeRemoved')
+          return element[this.chooseStatus] != true && !element.hasOwnProperty('toBeRemoved')
         }
         let idx = this.dictionary.findIndex(indexNoFilter)
         if(idx == -1) 
