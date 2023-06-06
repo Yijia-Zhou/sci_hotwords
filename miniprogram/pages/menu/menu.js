@@ -117,27 +117,8 @@ Page({
   },
 
   bindpickend: function () {
+    console.log('bindpickend')
     this.setData({showBtn: true})
-    let _this = this
-    if (this.data.domains[this.data.value[1]] == "敬请期待") {
-      wx.showModal({
-        title: "敬请期待",
-        content: "更多学科/子领域词库正在分析/制作中……", 
-        confirmText: "好的吧~",
-        showCancel: false,
-        success: _this.back2foundermental
-      })
-    } else if (this.data.domains[this.data.value[1]] == "我的收藏" && !wx.getStorageInfoSync().keys.includes('我的收藏')) {
-      wx.showModal({
-        title: "暂无收藏",
-        content: "在别的词库中收藏一些词汇组后再来吧", 
-        confirmText: "好的吧~",
-        showCancel: false,
-        success: _this.back2foundermental
-      })
-    } else {
-      DictionaryLoader.preloadDictionary(this.data.domains[this.data.value[1]])
-    }
   },
 
   back2foundermental() {
@@ -158,6 +139,26 @@ Page({
     this.setData({
       value: val
     })
+    let _this = this
+    if (this.data.domains[this.data.value[1]] == "敬请期待") {
+      wx.showModal({
+        title: "敬请期待",
+        content: "更多学科/子领域词库正在分析/制作中……", 
+        confirmText: "好的吧~",
+        showCancel: false,
+        success: _this.back2foundermental
+      })
+    } else if (this.data.domains[this.data.value[1]] == "我的收藏" && !wx.getStorageInfoSync().keys.includes('我的收藏')) {
+      wx.showModal({
+        title: "暂无收藏",
+        content: "在别的词库中收藏一些词汇组后再来吧", 
+        confirmText: "好的吧~",
+        showCancel: false,
+        success: _this.back2foundermental
+      })
+    } else {
+      DictionaryLoader.preloadDictionary(this.data.domains[this.data.value[1]])
+    }
     console.log("bindChange complete")
   },
 
