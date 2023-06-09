@@ -1,0 +1,24 @@
+{
+  "treeData": [
+    {
+      "title": "基础词库基本功能综合测试",
+      "caseId": "cda49772-d296-4584-8a0e-d83de8efe9b3",
+      "rootPath": ""
+    },
+    {
+      "title": "敬请期待&我的收藏为空提示",
+      "caseId": "6a2ff5aa-d24c-4b7d-b35d-e2e5ace78a89",
+      "rootPath": ""
+    },
+    {
+      "title": "利用收藏词库进行各种“点到底”",
+      "caseId": "0c3aa42e-62b6-47df-ba66-7d6a505e8a0c",
+      "rootPath": ""
+    },
+    {
+      "title": "基础词库向子词库的信息同步",
+      "caseId": "88b48933-0a11-4a3b-a251-c897bb2f0137",
+      "rootPath": ""
+    }
+  ]
+}

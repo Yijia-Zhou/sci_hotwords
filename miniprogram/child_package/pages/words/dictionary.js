@@ -275,8 +275,13 @@ export class FavorDictionary extends Dictionary {
         let idx = this.dictionary.findIndex(indexNoFilter)
         if(idx == -1) 
             return true 
-        else
+        else {
+            wx.showModal({
+                showCancel: false,
+                title: '本词典到底啦\r\n重新翻出尚未掌握的'
+            })
             this.index = idx
+        }
       }
       return false
     }

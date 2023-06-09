@@ -6,8 +6,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    difficulty: app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty("diff_threshold") ?
-      Math.round(app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100) : 0,
+    difficulty: undefined,
     show_diff_setting: true,
 
     highschool_filter_array: ["保留它们", "屏蔽它们"],

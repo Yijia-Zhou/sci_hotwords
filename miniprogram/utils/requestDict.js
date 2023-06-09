@@ -47,7 +47,7 @@ class DictionaryLoader {
   
   // 加载词典数据的方法
   loadDictionary(name) {
-    this.promises[name] = new Promise((resolve, reject) => {
+    this.promises[name] = new Promise(async (resolve, reject) => {
       console.log('Loading', name)
 
       // 首先检查本地存储
@@ -57,7 +57,7 @@ class DictionaryLoader {
       }
       // 如果本地存储中没有数据，调用下载词典数据的方法
       else if (!dictionary || dictionary.length == 0) {
-        dictionary = this.downloadDictionary(name)
+        dictionary = await this.downloadDictionary(name)
         if (!name.includes('基础')) {
           dictionary = this.syncDictionary(dictionary)
         }
@@ -105,7 +105,7 @@ class DictionaryLoader {
   async downloadDictionary(name) {
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(name).get()
-    const dataTemp = reqRes.data.dictionary
+    const dataTemp = await reqRes.data.dictionary
 
     wx.setStorage({
       key: name,
@@ -114,11 +114,11 @@ class DictionaryLoader {
     return dataTemp
   }
 
-  syncDictionary(dictionary){
-    var baseDict = this.getDictionarySync('基础词库')
+  async syncDictionary(dictionary){
+    console.log("Sync dictionary")
+    let baseDict = await this.getDictionary('基础词库')
     if(baseDict && baseDict.length != 0)
     {
-      console.log("Sync dictionary")
       for (var i in dictionary) {
         let syncItem = dictionary[i]
         let itemIndex = baseDict.findIndex((item) => item._id.toLowerCase().trim() === syncItem._id.toLowerCase().trim())

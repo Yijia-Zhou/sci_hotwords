@@ -57,6 +57,13 @@ Page({
 
   get_domains (cluster) { // 根据第一行的选择生成第二行的domains array
     let domains_array = Object.keys(app.globalData.dictInfo.dictNames[cluster])
+    for (let i in domains_array) {
+      if (domains_array[i].includes("基础")) {
+        let temp = domains_array[i]
+        domains_array.splice(i, 1)
+        domains_array.unshift(temp)
+      }
+    }
     if (!domains_array.includes("我的收藏")) {
       domains_array.unshift("我的收藏")
     }
@@ -122,12 +129,16 @@ Page({
   },
 
   back2foundermental() {
-    let index = this.data.domains.indexOf('基础词库')
-    index = index >= 0 ? index : 1
-    this.setData({
-      'value[1]': index
-    })
-    return index
+    let domains_array = this.data.domains
+    for (let i in domains_array) {
+      if (domains_array[i].includes("基础")) {
+        this.setData({
+          'value[1]': i
+        })
+        return i
+      }
+    }
+    return 1
   },
 
   // picker 选择更新时刷新相关变量值
