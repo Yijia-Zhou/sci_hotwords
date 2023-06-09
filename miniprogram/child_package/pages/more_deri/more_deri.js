@@ -24,9 +24,19 @@ Page({
   },
 
   onShow() {
+    let deris = app.globalData.deris_array
+    for (let i in deris) {
+      deris[i].fontSize = this.calSingleFontSize(deris[i].word)
+    }
     this.setData({
-      deris: app.globalData.deris_array
+      deris: deris
     })
+  },
+
+  calSingleFontSize: function (word) {
+    let display_length = app.count_display_length(word)
+    let fontRes = Math.min(32, 555/(display_length+1))
+    return fontRes
   },
 
   /**

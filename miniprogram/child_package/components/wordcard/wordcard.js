@@ -21,8 +21,8 @@ Component({
         useMode: app.globalData.dictInfo.useMode,
         showChinese: false, //记录检验模式中点击显示释义动作
         showPlay: true,
-        fontRes: this.calFontSize(word.deris),
-        baseword_len: this.display_length_count(word._id)
+        fontRes: this.cal_font_size(word.deris),
+        baseword_len: app.count_display_length(word._id)
       })
       this.process_fre_text()
       this.explain_style_process()
@@ -33,23 +33,7 @@ Component({
           clearTimeout(this.data.audio_timeout)
           this.InnerAudioContext.destroy()
         } catch {}
-
-        // 预备“朗读”功能
-        try {
-          this.InnerAudioContext = wx.createInnerAudioContext()
-          this.setData({
-            showPlay: true
-          })
-          this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.properties.word._id
-          this.InnerAudioContext.onEnded(() => {
-            this.data.audio_timeout = setTimeout(this.InnerAudioContext.play, 1000)
-          })
-        } catch(e) {
-          console.log(e)
-          this.setData({
-            noAudio: true
-          })
-        }
+        this.prepare_audio()
       }
 
       dblog.logWord(word._id)
@@ -78,7 +62,7 @@ Component({
     // “朗读”与“暂停”
     onPlay: function () {
       dblog.logAction("onPlay")
-      this.InnerAudioContext.play()
+      this.do_play_audio()
       this.setData({
         showPlay: false,
       })
@@ -131,16 +115,7 @@ Component({
     
      // 将词频信息处理成显示在卡片顶端的文字
     process_fre_text: function () {
-      let paper_count
-      try {
-        if (app.globalData.dictInfo.useDict == '我的收藏') {
-          paper_count = app.globalData.dictInfo.paper_count[this.properties.word.from]
-        } else {
-          paper_count = app.globalData.dictInfo.paper_count[app.globalData.dictInfo.useDict]
-        }
-      } catch(e) {
-        console.log(e)
-      }
+      let paper_count = app.globalData.dictInfo.dictNames.生命科学[this.properties.word.from].paper_count
       if (typeof(paper_count) != "number") {
         paper_count = 1217564
       }
@@ -153,56 +128,50 @@ Component({
         this.setData({fre_text: "百篇平均出现 "+String((fre*100).toFixed(2))+' 次'})
       }
     },
-
-    // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
-    display_length_count: function (word) {
-      let res = 0
-      for (let char in word) {
-        switch(word[char]) { // 用法参考 https://blog.csdn.net/tel13259437538/article/details/83314965
-          case 'i':
-          case 'j':
-          case 'l':
-            res += 6
-            break
-          case 'f':
-          case 'r':
-          case 't':
-            res += 10
-            break
-          case 'm':
-          case 'w':
-            res += 20
-            break
-          default:
-            res += 14
-        }
-        if (escape(word[char]).indexOf("%u") >= 0) { // 判断方法来自 https://juejin.cn/post/6844903745583579149
-          res += 10  // 如果不是英文字符则额外+10（默认当中文(长度24)处理）
-        }
-      }
-      return res/14
-    },
   
-    calFontSize: function (deris) {
+    cal_font_size: function (deris) {
       let deris_copy = [...deris]
       for (let i in [0,0,0,0]) {
         deris_copy.push('')
       }
       let max_display_length = 0
       for (let i in [0,1,2,3]) {
-        max_display_length = Math.max(max_display_length, this.display_length_count(deris_copy[i].word))
+        max_display_length = Math.max(max_display_length, app.count_display_length(deris_copy[i].word))
       }
       let fontRes = Math.min(44, 555/(max_display_length+1))
       return fontRes
     },
 
     explain_style_process() {
-      let disp_len = this.display_length_count(this.properties.word.chosen[0])
+      let disp_len = app.count_display_length(this.properties.word.chosen[0])
       if (disp_len > 75) {
         this.setData({explain_style: "font-size:"+String(36*75/disp_len)+"rpx; line-height: 48.6rpx;"})
         return 0
       }
       this.setData({explain_style: ""})
+    },
+
+    prepare_audio() {
+      // 预备“朗读”功能
+      try {
+        this.InnerAudioContext = wx.createInnerAudioContext()
+        this.setData({
+          showPlay: true
+        })
+        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.properties.word._id
+        this.InnerAudioContext.onEnded(() => {
+          this.data.audio_timeout = setTimeout(this.InnerAudioContext.play, 1000)
+        })
+      } catch(e) {
+        console.log(e)
+        this.setData({
+          noAudio: true
+        })
+      }
+    },
+
+    do_play_audio() {
+      this.InnerAudioContext.play()
     },
 
     destroy_audio() {
@@ -228,6 +197,9 @@ Component({
   pageLifetimes: { // 组件所在页面的生命周期
     hide: function() {
       this.destroy_audio()
+    },
+    show: function() {
+      this.prepare_audio()
     }
   }
 })

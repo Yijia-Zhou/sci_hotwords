@@ -3,18 +3,18 @@
   <view class="tr bg-w">
     <view class="th" style="width: 20%;">出现次数</view>
     <view class="th">单词</view>
-    <view class="th ">释义</view>
+    <view class="th ">释义(机翻)</view>
   </view>
 
-  <block wx:for="{{deris}}" wx:key="*this">
+  <block wx:for="{{deris}}" wx:key="word">
     <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
       <view class="td" style="width: 20%;">{{item.count}}</view>
-      <view class="td">{{item.word}}</view>
+      <view class="td" style="font-size: {{item.fontSize}}rpx;">{{item.word}}</view>
       <view class="td">{{item.bing}}</view>
     </view>
     <view class="tr" wx:else>
       <view class="td" style="width: 20%;">{{item.count}}</view>
-      <view class="td">{{item.word}}</view>
+      <view class="td" style="font-size: {{item.fontSize}}rpx;">{{item.word}}</view>
       <view class="td">{{item.bing}}</view>
     </view>
   </block>

@@ -1,0 +1,24 @@
+## 自动化测试（录制&回放用例）
+
+- 工具无法处理不由用户行为引发的页面跳转，需要灵活运用先清理缓存/点击左上按钮先返回主页等方法避免问题
+  - 设置某用例运行前先清理缓存在真机端是不生效的，需要先手动删除开发版小程序来清理缓存
+- 还有以下功能无法在真机回放中正常工作，需要特殊处理
+  - 弹窗确认（用于真机的用例需删掉弹窗相关/手动点击确认）
+  - deri点击（需改变选择器类型，并在deri弹窗出现后手动点击确认）
+- 进来通过点击方式改变picker选择值
+- 真机回放时局域网模式往往很多问题，不行就还是广域网吧
+
+
+
+### 具体用例的一些需要注意的地方
+
+- 基础词库向子词库的信息同步
+  - 分子生物学原本的前30单词，加粗的为一定在基础词库前30词中出现过的
+    
+    **active**, **protein**, **express**, **gene**, **mouse**, **treat**, **data**, inhibit, acid, **control**, **sample**, compound, concentrate, reduce, **model**, molecule, signal, neural, tumor, induce, table, path, solve, interact, bind, extract, **rate**, tissue, target, cytosol
+
+
+
+### 其它
+
+https://github.com/Yijia-Zhou/sci_hotwords/issues/29

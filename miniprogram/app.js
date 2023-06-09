@@ -35,34 +35,43 @@ App({
       key: 'dictInfo',
       success (res) {
         _this.globalData.dictInfo = res.data
+        if (!_this.globalData.dictInfo.hasOwnProperty('dictNames')) { // 把clusters_and_domains改名成dictNames时的临时措施
+          _this.globalData.dictInfo.dictNames = _this.globalData.dictInfo.clusters_and_domains
+        }
         if (!_this.globalData.dictInfo.hasOwnProperty('daily_target')) {
           _this.globalData.dictInfo.daily_target = 30
         }
       },
       fail () {
         _this.globalData.dictInfo =   {
-          "clusters_and_domains": {
-            "生命科学": [
-              "基础词库",
-              "我的收藏",
-              "敬请期待"
-            ]
+          "dictNames": {
+            "生命科学": {
+              "基础词库": {
+                  "paper_count": 1217564
+              },
+              "分子生物学": {
+                  "paper_count": 75205
+              },
+              "神经&认知": {
+                  "paper_count": 51713
+              },
+              "生信&计算": {
+                  "paper_count": 18965
+              }
+            }
           },
-          "marker": 5,
+          "marker": 8,
           "modes": [
             "识记模式",
             "检验模式"
           ],
-          "paper_count": {
-              "基础词库": 1217564
-          },
-          daily_target: 30
+          "daily_target": 30
         }
       },
       complete () {
         // 慢慢进行一个是否需要更新词库的判断
         const db = wx.cloud.database()
-        db.collection('dictInfo').doc('0.9.15').get().then(res => { 
+        db.collection('dictInfo').doc('0.10.test2').get().then(res => { 
           _this.globalData.dataTemp = res.data
           if (_this.globalData.dataTemp && (!_this.globalData.dictInfo.marker || _this.globalData.dictInfo.marker!=_this.globalData.dataTemp.marker)) {
             /**
@@ -72,8 +81,8 @@ App({
              */
             wx.setStorageSync('dict_need_refresh', wx.getStorageInfoSync().keys)
 
-            // dictInfo: clusters_and_domains, modes, useDict, useMode, marker
-            _this.globalData.dictInfo.clusters_and_domains = _this.globalData.dataTemp.clusters_and_domains
+            // dictInfo: dictNames, modes, useDict, useMode, marker
+            _this.globalData.dictInfo.dictNames = _this.globalData.dataTemp.dictNames
             _this.globalData.dictInfo.modes = _this.globalData.dataTemp.modes
             _this.globalData.dictInfo.marker = _this.globalData.dataTemp.marker
             _this.globalData.dictInfo.paper_count = _this.globalData.dataTemp.paper_count
@@ -207,18 +216,53 @@ App({
     return fromopenid
   },
 
-  onShareAppMessage: function (res) {
+  async onShareAppMessage(res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       console.log(res.target)
     }
+    let fromOpenId = await this.getOpenId()
     let title = '生科SCI高频单词 扫清文献阅读障碍'
     return {
       title: title,
-      path: '/pages/menu/menu',
+      path: '/pages/menu/menu?fromOpenId='+fromOpenId,
       query: '',
       imageUrl: '/images/shareImage.png',
     }
+  },
+
+  // 计算单词显示长度，单位：a 显示时占用 1 长度（过程中 a 等记为 14 长度，故最后除以14）
+  count_display_length: function (word) {
+    let res = 0
+    for (let char in word) {
+      switch(word[char].toLowerCase()) { // 用法参考 https://blog.csdn.net/tel13259437538/article/details/83314965
+        case 'i':
+        case 'j':
+        case 'l':
+        case ' ':
+          res += 6
+          break
+        case 'f':
+        case 'r':
+        case 't':
+        case '-':
+          res += 10
+          break
+        case 'm':
+        case 'w':
+          res += 20
+          break
+        default:
+          res += 14
+      }
+      if (/^[A-Z]$/.test(word[char])) {
+        res += 5  // 如果是大写字母则额外+5
+      }
+      else if (escape(word[char]).indexOf("%u") >= 0) { // 判断方法来自 https://juejin.cn/post/6844903745583579149
+        res += 10  // 如果不是英文字符则额外+10（默认当中文(长度24)处理）
+      }
+    }
+    return res/14
   },
 
   onHide () {

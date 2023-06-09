@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "wordcard" : "../../components/wordcard/wordcard"
+    "wordcard" : "../../components/wordcard/wordcard",
+    "modalView": "../../components/modal/modal"
   }
 }

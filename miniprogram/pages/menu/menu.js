@@ -1,5 +1,8 @@
 const app = getApp()
 var dblog = require('../../utils/dblog.js')
+var shareAppInfo = require('../../utils/shareApp.js')
+var requestDict  = require('../../utils/requestDict.js')
+const DictionaryLoader = new requestDict.DictionaryLoader()
 
 Page({
 
@@ -38,6 +41,36 @@ Page({
     } else {
       this.no_jump = true
     }
+    let launchOption = wx.getLaunchOptionsSync()
+    console.log(launchOption.scene)
+    if (options.fromOpenId)
+    {
+      console.log("From openid", options.fromOpenId)
+      shareAppInfo.reportShareAppInfo(options.fromOpenId, launchOption.scene)
+    }
+    else
+    {
+      console.log("From propaganda")
+      shareAppInfo.reportShareAppInfo(0, launchOption.scene);
+    }
+  },
+
+  get_domains (cluster) { // 根据第一行的选择生成第二行的domains array
+    let domains_array = Object.keys(app.globalData.dictInfo.dictNames[cluster])
+    for (let i in domains_array) {
+      if (domains_array[i].includes("基础")) {
+        let temp = domains_array[i]
+        domains_array.splice(i, 1)
+        domains_array.unshift(temp)
+      }
+    }
+    if (!domains_array.includes("我的收藏")) {
+      domains_array.unshift("我的收藏")
+    }
+    if (!domains_array.includes("敬请期待")) {
+      domains_array.push("敬请期待")
+    }
+    return domains_array
   },
 
   /**
@@ -48,14 +81,16 @@ Page({
     if (!app.globalData.hasOwnProperty('dictInfo')) {
       return setTimeout(this.picker_render, 20)
     }
+    
+    let domains_array = this.get_domains("生命科学")
     this.setData({
-      clusters: Object.keys(app.globalData.dictInfo.clusters_and_domains),
-      domains: app.globalData.dictInfo.clusters_and_domains.生命科学,
+      clusters: Object.keys(app.globalData.dictInfo.dictNames),
+      domains: domains_array, 
       modes: app.globalData.dictInfo.modes
     })
     var useDictIndex = this.data.domains.indexOf(app.globalData.dictInfo.useDict)
     if (useDictIndex==-1) {
-      useDictIndex = 0
+      useDictIndex = this.back2foundermental()
     }
     var useModeIndex = this.data.modes.indexOf(app.globalData.dictInfo.useMode)
     if (useModeIndex==-1) {
@@ -66,6 +101,13 @@ Page({
     })
     if (this.data.domains[useDictIndex] == "我的收藏" && this.no_jump) {
       this.back2foundermental()
+    }
+
+    var specialDict = ["我的收藏", "敬请期待"]
+
+    if(!specialDict.includes(this.data.domains[useDictIndex]))
+    {
+      DictionaryLoader.preloadDictionary(this.data.domains[useDictIndex])
     }
   },
 
@@ -80,8 +122,34 @@ Page({
   bindpickstart: function () {
     this.setData({showBtn: false})
   },
+
   bindpickend: function () {
+    console.log('bindpickend')
     this.setData({showBtn: true})
+  },
+
+  back2foundermental() {
+    let domains_array = this.data.domains
+    for (let i in domains_array) {
+      if (domains_array[i].includes("基础")) {
+        this.setData({
+          'value[1]': i
+        })
+        return i
+      }
+    }
+    return 1
+  },
+
+  // picker 选择更新时刷新相关变量值
+  bindChange: function (e) { 
+    const val = e.detail.value
+    if (val[0]!=this.data.value[0]) {
+      // todo: 当有不止一个大类后，根据第一列（大类）的改变决定第二列（domain）选项显示什么
+    }
+    this.setData({
+      value: val
+    })
     let _this = this
     if (this.data.domains[this.data.value[1]] == "敬请期待") {
       wx.showModal({
@@ -99,28 +167,14 @@ Page({
         showCancel: false,
         success: _this.back2foundermental
       })
+    } else {
+      DictionaryLoader.preloadDictionary(this.data.domains[this.data.value[1]])
     }
-  },
-  back2foundermental() {
-    this.setData({
-      'value[1]': this.data.domains.indexOf('基础词库')
-    })
-  },
-
-  // picker 选择更新时刷新相关变量值
-  bindChange: function (e) { 
-    const val = e.detail.value
-    if (val[0]!=this.data.value[0]) {
-      // todo: 当有不止一个大类后，根据第一列（大类）的改变决定第二列（domain）选项显示什么
-    }
-    this.setData({
-      value: val
-    })
     console.log("bindChange complete")
   },
 
   onConfirm() {
-    app.globalData.dictInfo.useDict = this.data.domains[this.data.value[1]]
+    app.globalData.dictInfo.useDict = this.data.value[1] != -1 ? this.data.domains[this.data.value[1]] : this.data.domains[1]
     app.globalData.dictInfo.useMode = this.data.modes[this.data.value[2]]
     console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     if (app.globalData.dictInfo.useDict=="敬请期待") {
@@ -156,40 +210,6 @@ Page({
     wx.navigateTo({
       url: '/child_package/pages/setting/setting',
     })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-    // dblog.reportUserLog()
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-    // dblog.reportUserLog()
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
   },
 
   /**

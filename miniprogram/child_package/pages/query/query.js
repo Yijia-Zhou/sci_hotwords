@@ -1,6 +1,7 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
+const DictionaryLoader = new requestDict.DictionaryLoader()
 
 Page({
 
@@ -11,7 +12,8 @@ Page({
     isShowResultView: false,
     searchResultArr : [],
     upperBound:100000,
-    allDictionary :[]
+    allDictionary : [],
+    dictionaryOrder : []
   },
 
   /**
@@ -25,17 +27,22 @@ Page({
     wx.setNavigationBarTitle({title: '词汇查询'})
     dblog.logAction("onQuery")
 
-    var useDictList = wx.getStorageSync('dictInfo').useDictList
+    var useDictList = Object.keys(wx.getStorageSync('dictInfo').dictNames.生命科学)
 
     var allDictionary = []
+    var dictionaryOrder = []
+    let totalLen = 0
     
     for(var useDict in useDictList)
     {
-      allDictionary.push.apply(allDictionary, await requestDict.requestDictionary(useDictList[useDict]))
+      allDictionary.push.apply(allDictionary, DictionaryLoader.getDictionarySync(useDictList[useDict])) 
+      totalLen += wx.getStorageSync(useDictList[useDict]).length
+      dictionaryOrder[useDictList[useDict]] = totalLen;
     }
 
     this.setData({
-      allDictionary: allDictionary
+      allDictionary : allDictionary,
+      dictionaryOrder : dictionaryOrder
     })
   },
 
@@ -144,6 +151,15 @@ Page({
   toResult(e){
     var resultIndex = e.currentTarget.dataset["resultindex"]
     app.globalData.resultWord = this.data.allDictionary[resultIndex]
+    console.log(this.data.dictionaryOrder)
+    for(var key in this.data.dictionaryOrder)
+    {
+      if(resultIndex < this.data.dictionaryOrder[key])
+      {
+        app.globalData.resultWord.from = key
+        break
+      }
+    }
     app.globalData.dictInfo.useMode = '识记模式'
     wx.navigateTo({
       url: '../result/result'

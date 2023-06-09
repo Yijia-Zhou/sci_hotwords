@@ -16,7 +16,18 @@
       <button type="default" class='following_button' bindtap="onFavor" style="width: 61.8vw;" wx:if="{{chooseStatus=='learnt' || word.favored}}">
         {{word.favored ? '取消收藏' : '收藏本词'}}
       </button>
-      <button type="{{setting_opacity===1?'primary':'default'}}" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{setting_opacity}}" wx:if="{{showSetting}}">调整设置</button>
-    </view>
+      <button type="{{setting_opacity===1?'primary':'default'}}" class='following_button' bindtap="onConfig" style="width: 61.8vw; opacity: {{showSetting ? setting_opacity : 0.2}}">调整设置</button>
+  </view>
 
+  <!-- modal-->
+  <modalView showModal="{{showModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm'>
+    <view class='modal-content' style="height: 20vh;">
+        <view class="section">
+          <!-- <text style="font-style: oblique; color: rgba(0, 0, 0, 0.5);">您可以拖动下方滑动条设定您希望的单词难度，之后也可以随时根据学习情况通过“调整设置”按钮进行修改。\n</text> -->
+          <slider value="{{difficulty}}" bindchanging="on_changing_diff" bindchange="on_changing_diff" block-size="20" max="80" class="slider_diff"/>
+          <text style="text-align: center; font-size: 36rpx;">将忽略本词库中最简单的 {{difficulty}} % 单词</text>
+          <text style="text-align: center; color: rgba(0, 0, 0, 0.5);">您可以现在设定您希望的单词难度，也可以随时通过“调整设置”按钮进行修改。</text>
+        </view>
+    </view>
+  </modalView>
 </view>
