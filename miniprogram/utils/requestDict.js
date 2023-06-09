@@ -52,19 +52,20 @@ class DictionaryLoader {
 
       // 首先检查本地存储
       var dictionary = wx.getStorageSync(name)
-      if (name == "我的收藏") {
-        // pass
-      }
-      // 如果本地存储中没有数据，调用下载词典数据的方法
-      else if (!dictionary || dictionary.length == 0) {
-        dictionary = await this.downloadDictionary(name)
-        if (!name.includes('基础')) {
+
+      if (name != "我的收藏") {
+        // 如果本地存储中没有数据，调用下载词典数据的方法
+        if (!dictionary || dictionary.length == 0) {
+          dictionary = await this.downloadDictionary(name)
+        }
+        // 如果本地存储中有数据，检查 'need_refresh' 列表，若需要刷新，调用更新词典数据的方法
+        else if (wx.getStorageSync('dict_need_refresh').includes(name)) {
+          dictionary = this.updateDictionary(name, dictionary)
+        }
+        // 如果当前词库没有任何学习记录，则同步基础词库的学习记录
+        if (!name.includes('基础') && dictionary.every(item => !item.learnt && !item.tested)) {
           dictionary = this.syncDictionary(dictionary)
         }
-      }
-      // 如果本地存储中有数据，检查 'need_refresh' 列表，若需要刷新，调用更新词典数据的方法
-      else if (wx.getStorageSync('dict_need_refresh').includes(name)) {
-        dictionary = this.updateDictionary(name, dictionary)
       }
 
       resolve(dictionary);
