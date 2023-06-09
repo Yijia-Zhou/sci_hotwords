@@ -1,0 +1,1076 @@
+{
+  "meta": {
+    "caseId": "0c3aa42e-62b6-47df-ba66-7d6a505e8a0c",
+    "caseName": "利用收藏词库进行各种“点到底”",
+    "remarks": "",
+    "version": "0.0.1",
+    "startTime": 1686250663797,
+    "endTime": 1686250897117,
+    "appid": "wxaba042991ffc15b1",
+    "casePath": "",
+    "caseType": "normal",
+    "commonParams": [
+      {
+        "key": "1686250708681",
+        "name": "",
+        "value": ""
+      }
+    ]
+  },
+  "env": {
+    "wxapplibVersion": "2.21.0",
+    "devtoolsVersion": "1.06.2304191",
+    "openid": "o6zAJs6sJx-gScnVEf-R_KsY8z3c",
+    "entry": {
+      "path": "pages/menu/menu",
+      "query": "",
+      "scene": 1001
+    },
+    "mock": [
+      "none"
+    ],
+    "maxWaitFor": 10000,
+    "ignoreSelectors": [],
+    "mockAPIs": [],
+    "cleanCache": [
+      "all"
+    ],
+    "groupTouch": true,
+    "replaySetting": {
+      "screenshot": "none"
+    },
+    "simulatorType": "wechat",
+    "device": "iPhone X",
+    "recordAPIs": []
+  },
+  "commands": [
+    {
+      "layer": "tool",
+      "commandType": "operate",
+      "command": "startRecord",
+      "waitfor": 0,
+      "timeStamp": 1686250663797,
+      "desc": ""
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "就是这样",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 185.58038330078125,
+            "clientY": 519.4791870117188,
+            "pageX": 185.58038330078125,
+            "pageY": 519.4791870117188,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 246.66668701171875,
+            "screenY": 759.0476684570312
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 3347,
+      "waitfor": 3347,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "tap",
+      "target": "/view/modalview/view/view/view[2]/view[1]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "取消",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 117.96131896972656,
+            "clientY": 453.76495361328125,
+            "pageX": 117.96131896972656,
+            "pageY": 453.76495361328125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 179.04763793945312,
+            "screenY": 693.3333740234375
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/modalview/view/view/view[2]/view[1]"
+      ],
+      "timeStamp": 5597,
+      "waitfor": 2250,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "收藏本词",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 193.19943237304688,
+            "clientY": 571.8601684570312,
+            "pageX": 193.19943237304688,
+            "pageY": 571.8601684570312,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 254.28573608398438,
+            "screenY": 811.4286499023438
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 7679,
+      "waitfor": 2082,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "Next One!",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 203.6756134033203,
+            "clientY": 515.669677734375,
+            "pageX": 203.6756134033203,
+            "pageY": 515.669677734375,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 264.7619323730469,
+            "screenY": 755.2381591796875
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 8247,
+      "waitfor": 568,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "收藏本词",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 189.389892578125,
+            "clientY": 576.6220703125,
+            "pageX": 189.389892578125,
+            "pageY": 576.6220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 250.47621154785156,
+            "screenY": 816.1905517578125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 9634,
+      "waitfor": 1387,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "Next One!",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 205.71429443359375,
+            "clientY": 510.4763488769531,
+            "pageX": 205.71429443359375,
+            "pageY": 510.4763488769531,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 266.66668701171875,
+            "screenY": 750.4762573242188
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 10196,
+      "waitfor": 562,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "收藏本词",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 190.34228515625,
+            "clientY": 566.1458740234375,
+            "pageX": 190.34228515625,
+            "pageY": 566.1458740234375,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 251.4285888671875,
+            "screenY": 805.71435546875
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 11130,
+      "waitfor": 934,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "Next One!",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 198.9136962890625,
+            "clientY": 509.0030822753906,
+            "pageX": 198.9136962890625,
+            "pageY": 509.0030822753906,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.0000305175781,
+            "screenY": 748.5714721679688
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 11779,
+      "waitfor": 649,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 13258,
+      "waitfor": 1479,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "navigateLeft",
+      "text": ""
+    },
+    {
+      "tagName": "view",
+      "command": "tap",
+      "target": "/view/picker-view/picker-view-column[2]/view[1]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "我的收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 195.10418701171875,
+            "clientY": 235.669677734375,
+            "pageX": 195.10418701171875,
+            "pageY": 235.669677734375,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 256.19049072265625,
+            "screenY": 475.2381286621094
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[1]"
+      ],
+      "timeStamp": 14548,
+      "waitfor": 1290,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "就是这样",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 189.389892578125,
+            "clientY": 516.6220703125,
+            "pageX": 189.389892578125,
+            "pageY": 516.6220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 250.47621154785156,
+            "screenY": 756.1905517578125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 16107,
+      "waitfor": 1559,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "我记住了",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 189.389892578125,
+            "clientY": 516.6220703125,
+            "pageX": 189.389892578125,
+            "pageY": 516.6220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 250.47621154785156,
+            "screenY": 756.1905517578125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 17851,
+      "waitfor": 1744,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "我记住了",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 189.389892578125,
+            "clientY": 516.6220703125,
+            "pageX": 189.389892578125,
+            "pageY": 516.6220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 250.47621154785156,
+            "screenY": 756.1905517578125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 18575,
+      "waitfor": 724,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "我记住了",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 189.389892578125,
+            "clientY": 516.6220703125,
+            "pageX": 189.389892578125,
+            "pageY": 516.6220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 250.47621154785156,
+            "screenY": 756.1905517578125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 19149,
+      "waitfor": 574,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 20163,
+      "waitfor": 1014,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "这就去",
+      "ignoreFail": true
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "我记住了",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 187.4851531982422,
+            "clientY": 512.8126220703125,
+            "pageX": 187.4851531982422,
+            "pageY": 512.8126220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 248.57144165039062,
+            "screenY": 752.3809814453125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 21653,
+      "waitfor": 1490,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "我记住了",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 187.4851531982422,
+            "clientY": 512.8126220703125,
+            "pageX": 187.4851531982422,
+            "pageY": 512.8126220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 248.57144165039062,
+            "screenY": 752.3809814453125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 22122,
+      "waitfor": 469,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "我记住了",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 187.4851531982422,
+            "clientY": 512.8126220703125,
+            "pageX": 187.4851531982422,
+            "pageY": 512.8126220703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 248.57144165039062,
+            "screenY": 752.3809814453125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 22614,
+      "waitfor": 492,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 23555,
+      "waitfor": 941,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "确定",
+      "ignoreFail": true
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "还要努力",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 207.4851531982422,
+            "clientY": 570.9077758789062,
+            "pageX": 207.4851531982422,
+            "pageY": 570.9077758789062,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 268.5714416503906,
+            "screenY": 810.4762573242188
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 25582,
+      "waitfor": 2027,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "text",
+      "command": "tap",
+      "target": "/view/wordcard/view/view[2]/text",
+      "value": null,
+      "childName": "main",
+      "path": "child_package/pages/words/words",
+      "text": "点击查看释义（核对答案~）",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 206.53274536132812,
+            "clientY": 391.86016845703125,
+            "pageX": 206.53274536132812,
+            "pageY": 391.86016845703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 267.61907958984375,
+            "screenY": 631.4285888671875
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/wordcard/view/view[2]/text"
+      ],
+      "timeStamp": 26355,
+      "waitfor": 773,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "还要努力",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 186.53274536132812,
+            "clientY": 573.7649536132812,
+            "pageX": 186.53274536132812,
+            "pageY": 573.7649536132812,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 247.6190643310547,
+            "screenY": 813.3333740234375
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 27519,
+      "waitfor": 1164,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "还要努力",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 200,
+            "clientY": 568.5714721679688,
+            "pageX": 200,
+            "pageY": 568.5714721679688,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.952392578125,
+            "screenY": 808.5714721679688
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 27959,
+      "waitfor": 440,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "还要努力",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 194.15179443359375,
+            "clientY": 571.8601684570312,
+            "pageX": 194.15179443359375,
+            "pageY": 571.8601684570312,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 255.2381134033203,
+            "screenY": 811.4286499023438
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 30564,
+      "waitfor": 2605,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "还要努力",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 194.15179443359375,
+            "clientY": 571.8601684570312,
+            "pageX": 194.15179443359375,
+            "pageY": 571.8601684570312,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 255.2381134033203,
+            "screenY": 811.4286499023438
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 30829,
+      "waitfor": 265,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[2]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "还要努力",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 194.15179443359375,
+            "clientY": 571.8601684570312,
+            "pageX": 194.15179443359375,
+            "pageY": 571.8601684570312,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 255.2381134033203,
+            "screenY": 811.4286499023438
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[2]"
+      ],
+      "timeStamp": 31129,
+      "waitfor": 300,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[3]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "取消收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 207.4851531982422,
+            "clientY": 628.05078125,
+            "pageX": 207.4851531982422,
+            "pageY": 628.05078125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 268.5714416503906,
+            "screenY": 867.6190795898438
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[3]"
+      ],
+      "timeStamp": 31865,
+      "waitfor": 736,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[3]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "取消收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 207.4851531982422,
+            "clientY": 628.05078125,
+            "pageX": 207.4851531982422,
+            "pageY": 628.05078125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 268.5714416503906,
+            "screenY": 867.6190795898438
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[3]"
+      ],
+      "timeStamp": 32329,
+      "waitfor": 464,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "/view/view[2]/button[3]",
+      "value": null,
+      "path": "child_package/pages/words/words",
+      "text": "取消收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 207.4851531982422,
+            "clientY": 628.05078125,
+            "pageX": 207.4851531982422,
+            "pageY": 628.05078125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 268.5714416503906,
+            "screenY": 867.6190795898438
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/view[2]/button[3]"
+      ],
+      "timeStamp": 32770,
+      "waitfor": 441,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 35602,
+      "waitfor": 2832,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "好的吧~",
+      "ignoreFail": true
+    },
+    {
+      "tagName": "view",
+      "command": "tap",
+      "target": "/view/picker-view/picker-view-column[2]/view[1]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "我的收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 198.9136962890625,
+            "clientY": 247.09823608398438,
+            "pageX": 198.9136962890625,
+            "pageY": 247.09823608398438,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.0000305175781,
+            "screenY": 486.66668701171875
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[1]"
+      ],
+      "timeStamp": 37704,
+      "waitfor": 2102,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "button",
+      "command": "tap",
+      "target": "button.primary_button",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "就是这样",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 225.58035278320312,
+            "clientY": 510.90777587890625,
+            "pageX": 225.58035278320312,
+            "pageY": 510.90777587890625,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 286.66668701171875,
+            "screenY": 750.4762573242188
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "button.primary_button",
+        ".primary_button",
+        "/view/view[2]/button[1]"
+      ],
+      "timeStamp": 39056,
+      "waitfor": 1352,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 40260,
+      "waitfor": 1204,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "好的吧~",
+      "ignoreFail": true
+    },
+    {
+      "tagName": "view",
+      "command": "tap",
+      "target": "/view/picker-view/picker-view-column[2]/view[1]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "我的收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 200.81845092773438,
+            "clientY": 232.81251525878906,
+            "pageX": 200.81845092773438,
+            "pageY": 232.81251525878906,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 261.90478515625,
+            "screenY": 472.3809814453125
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[1]"
+      ],
+      "timeStamp": 42321,
+      "waitfor": 2061,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 43021,
+      "waitfor": 700,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "好的吧~",
+      "ignoreFail": true
+    },
+    {
+      "timeStamp": 44866,
+      "waitfor": 1845,
+      "desc": "",
+      "layer": "tool",
+      "commandType": "operate",
+      "command": "stopRecord"
+    }
+  ]
+}

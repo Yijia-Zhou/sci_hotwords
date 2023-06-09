@@ -15,6 +15,7 @@ exports.main = async (event, context) => {
   })
   .get()
   console.log(dbRes.data)
+  console.log('-------------------------------------------------')
   let result = new Array()
   let doc_ids = new Array()
   for (one in dbRes.data) {

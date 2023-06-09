@@ -28,7 +28,7 @@ picker-view {
   /* box-shadow: 0px 7px 6px -9px black; */
   box-shadow: 0 20rpx 30rpx 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #ddd;
-  margin-bottom: 12rpx;
+  /* margin-bottom: 12rpx; */
 }
 
 picker-view-column {

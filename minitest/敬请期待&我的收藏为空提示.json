@@ -1,0 +1,459 @@
+{
+  "meta": {
+    "caseId": "6a2ff5aa-d24c-4b7d-b35d-e2e5ace78a89",
+    "caseName": "敬请期待&我的收藏为空提示",
+    "remarks": "",
+    "version": "0.0.1",
+    "startTime": 1686235305971,
+    "endTime": 1686238339246,
+    "appid": "wxaba042991ffc15b1",
+    "casePath": "",
+    "caseType": "normal",
+    "commonParams": [
+      {
+        "key": "1686235316575",
+        "name": "",
+        "value": ""
+      }
+    ]
+  },
+  "env": {
+    "wxapplibVersion": "2.21.0",
+    "devtoolsVersion": "1.06.2304191",
+    "openid": "o6zAJs6sJx-gScnVEf-R_KsY8z3c",
+    "entry": {
+      "path": "pages/menu/menu",
+      "query": "",
+      "scene": 1001
+    },
+    "mock": [
+      "none"
+    ],
+    "maxWaitFor": 10000,
+    "ignoreSelectors": [],
+    "mockAPIs": [],
+    "cleanCache": [
+      "all"
+    ],
+    "groupTouch": false,
+    "replaySetting": {
+      "screenshot": "none"
+    },
+    "simulatorType": "wechat",
+    "device": "iPhone X",
+    "recordAPIs": []
+  },
+  "commands": [
+    {
+      "layer": "tool",
+      "commandType": "operate",
+      "command": "startRecord",
+      "waitfor": 0,
+      "timeStamp": 1686235305971,
+      "desc": ""
+    },
+    {
+      "tagName": "view",
+      "command": "touchstart",
+      "target": "/view/picker-view/picker-view-column[2]/view[1]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "我的收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 198.9136962890625,
+            "clientY": 247.09823608398438,
+            "force": 1,
+            "pageX": 198.9136962890625,
+            "pageY": 247.09823608398438,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.0000305175781,
+            "screenY": 486.66668701171875
+          }
+        ],
+        "touches": [
+          {
+            "clientX": 198.9136962890625,
+            "clientY": 247.09823608398438,
+            "force": 1,
+            "pageX": 198.9136962890625,
+            "pageY": 247.09823608398438,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.0000305175781,
+            "screenY": 486.66668701171875
+          }
+        ]
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[1]"
+      ],
+      "timeStamp": 2622,
+      "waitfor": 2622,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "touchend",
+      "target": "/view/picker-view/picker-view-column[2]/view[1]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "我的收藏",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 198.9136962890625,
+            "clientY": 247.09823608398438,
+            "pageX": 198.9136962890625,
+            "pageY": 247.09823608398438,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.0000305175781,
+            "screenY": 486.66668701171875
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[1]"
+      ],
+      "timeStamp": 2696,
+      "waitfor": 74,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "tap",
+      "target": "/view/picker-view/picker-view-column[2]/view[1]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "我的收藏",
+      "eventData": {
+        "detail": {
+          "x": 198.9136962890625,
+          "y": 247.09823608398438
+        },
+        "changedTouches": [
+          {
+            "clientX": 198.9136962890625,
+            "clientY": 247.09823608398438,
+            "force": 1,
+            "pageX": 198.9136962890625,
+            "pageY": 247.09823608398438,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.0000305175781,
+            "screenY": 486.66668701171875
+          }
+        ],
+        "touches": [
+          {
+            "clientX": 198.9136962890625,
+            "clientY": 247.09823608398438,
+            "force": 1,
+            "pageX": 198.9136962890625,
+            "pageY": 247.09823608398438,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 260.0000305175781,
+            "screenY": 486.66668701171875
+          }
+        ]
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[1]"
+      ],
+      "timeStamp": 2696,
+      "waitfor": 0,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 3866,
+      "waitfor": 4170,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "好的吧~",
+      "ignoreFail": true
+    },
+    {
+      "tagName": "view",
+      "command": "touchstart",
+      "target": "/view/picker-view/picker-view-column[2]/view[4]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "神经&认知",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 391.86016845703125,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 391.86016845703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 631.4285888671875
+          }
+        ],
+        "touches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 391.86016845703125,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 391.86016845703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 631.4285888671875
+          }
+        ]
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[4]"
+      ],
+      "timeStamp": 4799,
+      "waitfor": 933,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "touchend",
+      "target": "/view/picker-view/picker-view-column[2]/view[4]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "神经&认知",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 391.86016845703125,
+            "pageX": 209.389892578125,
+            "pageY": 391.86016845703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 631.4285888671875
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[4]"
+      ],
+      "timeStamp": 4863,
+      "waitfor": 64,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "tap",
+      "target": "/view/picker-view/picker-view-column[2]/view[4]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "神经&认知",
+      "eventData": {
+        "detail": {
+          "x": 209.389892578125,
+          "y": 391.86016845703125
+        },
+        "changedTouches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 391.86016845703125,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 391.86016845703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 631.4285888671875
+          }
+        ],
+        "touches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 391.86016845703125,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 391.86016845703125,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 631.4285888671875
+          }
+        ]
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[4]"
+      ],
+      "timeStamp": 4864,
+      "waitfor": 1,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "touchstart",
+      "target": "/view/picker-view/picker-view-column[2]/view[6]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "敬请期待",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 380.4316101074219,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 380.4316101074219,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 620.0000610351562
+          }
+        ],
+        "touches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 380.4316101074219,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 380.4316101074219,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 620.0000610351562
+          }
+        ]
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[6]"
+      ],
+      "timeStamp": 5953,
+      "waitfor": 1089,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "touchend",
+      "target": "/view/picker-view/picker-view-column[2]/view[6]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "敬请期待",
+      "eventData": {
+        "detail": {},
+        "changedTouches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 380.4316101074219,
+            "pageX": 209.389892578125,
+            "pageY": 380.4316101074219,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 620.0000610351562
+          }
+        ],
+        "touches": []
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[6]"
+      ],
+      "timeStamp": 6027,
+      "waitfor": 74,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "tagName": "view",
+      "command": "tap",
+      "target": "/view/picker-view/picker-view-column[2]/view[6]",
+      "value": null,
+      "path": "pages/menu/menu",
+      "text": "敬请期待",
+      "eventData": {
+        "detail": {
+          "x": 209.389892578125,
+          "y": 380.4316101074219
+        },
+        "changedTouches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 380.4316101074219,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 380.4316101074219,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 620.0000610351562
+          }
+        ],
+        "touches": [
+          {
+            "clientX": 209.389892578125,
+            "clientY": 380.4316101074219,
+            "force": 1,
+            "pageX": 209.389892578125,
+            "pageY": 380.4316101074219,
+            "radiusX": 11.500000953674316,
+            "radiusY": 11.500000953674316,
+            "screenX": 270.4761962890625,
+            "screenY": 620.0000610351562
+          }
+        ]
+      },
+      "targetCandidates": [
+        "/view/picker-view/picker-view-column[2]/view[6]"
+      ],
+      "timeStamp": 6028,
+      "waitfor": 1,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "pageframe"
+    },
+    {
+      "timeStamp": 8738,
+      "waitfor": 2710,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "好的吧~",
+      "ignoreFail": true
+    },
+    {
+      "timeStamp": 10589,
+      "waitfor": 1851,
+      "desc": "",
+      "layer": "tool",
+      "commandType": "operate",
+      "command": "stopRecord"
+    }
+  ]
+}

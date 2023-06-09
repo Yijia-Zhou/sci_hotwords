@@ -41,6 +41,7 @@
     "showES6CompileOption": false,
     "useCompilerPlugins": false,
     "ignoreUploadUnusedFiles": true,
+    "condition": false,
     "useStaticServer": true
   },
   "compileType": "miniprogram",
