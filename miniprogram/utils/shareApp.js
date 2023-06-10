@@ -1,15 +1,14 @@
 var app = getApp()
 
-function reportShareAppInfo(openId, scene) {
+function reportShareAppInfo(newUserData) {
     const db = wx.cloud.database()
     try
     {
+        newUserData.timeStamp = new Date().getTime()
         db.collection('new_user_from').add({
-          data : {
-            fromOpenId: openId,
-            scene:scene
-          },
+          data : newUserData,
           success: function() {
+            console.log('newUserData report success')
           }
         })
     }
