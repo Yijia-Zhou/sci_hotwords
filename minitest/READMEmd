@@ -12,7 +12,12 @@
 
 ### 具体用例的一些需要注意的地方
 
-- 基础词库向子词库的信息同步
+- **利用收藏词库进行各种“点到底”**
+
+  - 在开发者工具中进行回放时无法正确加载收藏词库
+
+- **基础词库向子词库的信息同步**
+  
   - 分子生物学原本的前30单词，加粗的为一定在基础词库前30词中出现过的
     
     **active**, **protein**, **express**, **gene**, **mouse**, **treat**, **data**, inhibit, acid, **control**, **sample**, compound, concentrate, reduce, **model**, molecule, signal, neural, tumor, induce, table, path, solve, interact, bind, extract, **rate**, tissue, target, cytosol
