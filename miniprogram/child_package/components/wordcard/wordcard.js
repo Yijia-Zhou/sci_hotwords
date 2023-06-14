@@ -158,7 +158,14 @@ Component({
         this.setData({
           showPlay: true
         })
-        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + this.properties.word._id
+        let word_obj = this.properties.word
+        // word和deris的前四项合并，以"; "连接，一并朗读
+        let words = word_obj._id
+        if (word_obj.deris && word_obj.deris.length > 0) {
+          let deris = word_obj.deris.slice(0, 4).map(item => item.word)
+          words = words + "; " + deris.join("; ")
+        }
+        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + encodeURI(words)
         this.InnerAudioContext.onEnded(() => {
           this.data.audio_timeout = setTimeout(this.InnerAudioContext.play, 1000)
         })

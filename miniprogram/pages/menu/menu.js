@@ -41,17 +41,25 @@ Page({
     } else {
       this.no_jump = true
     }
-    let launchOption = wx.getLaunchOptionsSync()
-    console.log(launchOption.scene)
-    if (options.fromOpenId)
-    {
-      console.log("From openid", options.fromOpenId)
-      shareAppInfo.reportShareAppInfo(options.fromOpenId, launchOption.scene)
-    }
-    else
-    {
-      console.log("From propaganda")
-      shareAppInfo.reportShareAppInfo(0, launchOption.scene);
+
+    // 记录新用户来源信息
+    if (wx.getStorageInfoSync().keys.length < 3) {
+      let launchOption = wx.getLaunchOptionsSync()
+      let newUserData = {
+        scene: launchOption.scene
+      }
+      if (options.fromOpenId)
+      {
+        newUserData.fromType = 'user_share'
+        newUserData.fromOpenId = options.fromOpenId
+      }
+      else if (options.promoID)
+      {
+        newUserData.fromType = 'promo'
+        newUserData.promoID = options.promoID
+      }
+      shareAppInfo.reportShareAppInfo(newUserData)
+      console.log('newUserData:', newUserData)
     }
   },
 
