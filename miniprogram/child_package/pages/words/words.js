@@ -33,11 +33,10 @@ Page({
     this.data.dictionary.updateWordFrom(currentWord)
     if(currentWord != null)
     {
+      let word = {...currentWord}
+      word.favored = this.data.dictionary.isCurrentWordInFavored(currentWord)
       this.setData({
-        word: {...currentWord}
-      })
-      this.setData({
-        'word.favored': this.data.dictionary.isCurrentWordInFavored(currentWord)
+        word: word
       })
     }
   },
