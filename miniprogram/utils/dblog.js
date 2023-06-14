@@ -19,6 +19,7 @@ function reportUserLog() {
       },
       useMode: app.globalData.dictInfo.useMode,
       useDict: app.globalData.dictInfo.useDict,
+      scene: wx.getLaunchOptionsSync().scene
     },
     success: function() {
       userLog = new Array()
