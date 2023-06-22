@@ -1,6 +1,7 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
+var reminder = require('../../../utils/reminder.js')
 import { NormalDictionary, FavorDictionary } from './dictionary.js'
 const DictionaryLoader = new requestDict.DictionaryLoader()
 
@@ -308,7 +309,7 @@ Page({
         confirmText: "明天继续",
         showCancel: false,
         success () {
-          app.requestReminder()
+          reminder.requestReminder()
         }
       })
       this.on_modify_setting()

@@ -1,5 +1,6 @@
-var dblog = require('../../../utils/dblog.js')
 var app = getApp()
+var dblog = require('../../../utils/dblog.js')
+var display = require('../../../utils/display.js')
 
 Component({
   /**
@@ -22,7 +23,7 @@ Component({
         showChinese: false, //记录检验模式中点击显示释义动作
         showPlay: true,
         fontRes: this.cal_font_size(word.deris),
-        baseword_len: app.count_display_length(word._id)
+        baseword_len: display.count_display_length(word._id)
       })
       this.process_fre_text()
       this.explain_style_process()
@@ -136,14 +137,14 @@ Component({
       }
       let max_display_length = 0
       for (let i in [0,1,2,3]) {
-        max_display_length = Math.max(max_display_length, app.count_display_length(deris_copy[i].word))
+        max_display_length = Math.max(max_display_length, display.count_display_length(deris_copy[i].word))
       }
       let fontRes = Math.min(44, 555/(max_display_length+1))
       return fontRes
     },
 
     explain_style_process() {
-      let disp_len = app.count_display_length(this.properties.word.chosen[0])
+      let disp_len = display.count_display_length(this.properties.word.chosen[0])
       if (disp_len > 75) {
         this.setData({explain_style: "font-size:"+String(36*75/disp_len)+"rpx; line-height: 48.6rpx;"})
         return 0
