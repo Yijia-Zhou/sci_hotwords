@@ -90,7 +90,7 @@ Page({
       return setTimeout(this.picker_render, 20)
     }
     
-    let domains_array = this.get_domains("生命科学")
+    let domains_array = this.get_domains(Object.keys(app.globalData.dictInfo.dictNames)[0])
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.dictNames),
       domains: domains_array, 
@@ -153,11 +153,18 @@ Page({
   bindChange: function (e) { 
     const val = e.detail.value
     if (val[0]!=this.data.value[0]) {
-      // todo: 当有不止一个大类后，根据第一列（大类）的改变决定第二列（domain）选项显示什么
+      let domains_array = this.get_domains(Object.keys(app.globalData.dictInfo.dictNames)[val[0]])
+      let useDictIndex = this.back2foundermental()
+      this.setData({
+        domains: domains_array,
+        value: [val[0], useDictIndex, val[2]]
+      })
     }
-    this.setData({
-      value: val
-    })
+    else {
+      this.setData({
+        value: val
+      })
+    }
     let _this = this
     if (this.data.domains[this.data.value[1]] == "敬请期待") {
       wx.showModal({
