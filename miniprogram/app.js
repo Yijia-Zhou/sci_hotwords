@@ -43,35 +43,26 @@ App({
         }
       },
       fail () {
-        _this.globalData.dictInfo =   {
-          "dictNames": {
-            "生命科学": {
-              "基础词库": {
-                  "paper_count": 1217564
-              },
-              "分子生物学": {
-                  "paper_count": 75205
-              },
-              "神经&认知": {
-                  "paper_count": 51713
-              },
-              "生信&计算": {
-                  "paper_count": 18965
-              }
+        _this.globalData.dictInfo =   {"_id":"diff_showcase_test","modes":["识记模式","检验模式"],"dictNames":{"生命科学":
+        {
+            "基础词库":{
+                "paper_count":1.217564E+06,
+                "diff_showcase": ["signal", "researcher", "institute", "displaced", "distal", "deform", "elisa", "resuspend", "homogeneous", "catheter"]
+            },
+            "分子生物学":{"paper_count":75205.0,
+            "diff_showcase": ["case", "capacity", "digest", "lncRNA", "vital", "phenyl", "pole", "fluid", "penetrate", "proton"]},
+            "神经&认知":{"paper_count":51713.0,
+            "diff_showcase": ["temporal", "assume", "microscope", "glucose", "poly", "excite", "propagate", "dysfunction", "cardiac", "gait"]
+        },
+            "生信&计算":{"paper_count":18965.0,
+            "diff_showcase": ["network", "database", "reconstruct", "indices", "discharge", "cortex", "fuzzy", "probe", "primer", "poisson"]}
             }
-          },
-          "marker": 8,
-          "modes": [
-            "识记模式",
-            "检验模式"
-          ],
-          "daily_target": 30
-        }
+            },"daily_target":30.0,"marker":12.0}
       },
       complete () {
         // 慢慢进行一个是否需要更新词库的判断
         const db = wx.cloud.database()
-        db.collection('dictInfo').doc('0.10.test2').get().then(res => { 
+        db.collection('dictInfo').doc('diff_showcase_test').get().then(res => { 
           _this.globalData.dataTemp = res.data
           if (_this.globalData.dataTemp && (!_this.globalData.dictInfo.marker || _this.globalData.dictInfo.marker!=_this.globalData.dataTemp.marker)) {
             /**

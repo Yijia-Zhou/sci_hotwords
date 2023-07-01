@@ -9,18 +9,22 @@ function reportUserLog() {
   }
   const db = wx.cloud.database()
   const deviceInfo = wx.getDeviceInfo()
-  db.collection('log').add({
-    data : {
-      userLog,
-      deviceInfo: {
-        model: deviceInfo.model,
-        system: deviceInfo.system,
-        benchmarkLevel: deviceInfo.benchmarkLevel
-      },
-      useMode: app.globalData.dictInfo.useMode,
-      useDict: app.globalData.dictInfo.useDict,
-      scene: wx.getLaunchOptionsSync().scene
+  let temp = {
+    userLog,
+    deviceInfo: {
+      model: deviceInfo.model,
+      system: deviceInfo.system,
+      benchmarkLevel: deviceInfo.benchmarkLevel
     },
+    useMode: app.globalData.dictInfo.useMode,
+    useDict: app.globalData.dictInfo.useDict,
+    scene: wx.getLaunchOptionsSync().scene
+  }
+  try {
+    temp.difficulty_setting = app.globalData.dictInfo.dictNames.生命科学[temp.useDict].diff_threshold
+  } catch {}
+  db.collection('log').add({
+    data : temp,
     success: function() {
       userLog = new Array()
       currentLogNum = 0
@@ -29,11 +33,14 @@ function reportUserLog() {
   return 0
 }
 
-function logAction(action) {
+function logAction(action, value=undefined) {
   if(currentLogNum < logNumLimit)
   {
     let logaction = new Object()
     logaction.action = action
+    if (value) {
+      logaction.value = value
+    }
     logaction.timeStamp = new Date().getTime()
     userLog.push(logaction)
     currentLogNum++
@@ -44,11 +51,12 @@ function logAction(action) {
 function logWord(wordIdx) {
   if(currentLogNum < logNumLimit)
   {
-    let logWord = new Object()
-    logWord.wordIdx = wordIdx
-    logWord.timeStamp = new Date().getTime()
-    userLog.push(logWord)
-    currentLogNum++
+    logAction("loadWord", wordIdx)
+    // let logWord = new Object()
+    // logWord.wordIdx = wordIdx
+    // logWord.timeStamp = new Date().getTime()
+    // userLog.push(logWord)
+    // currentLogNum++
   }
   return 0
 }

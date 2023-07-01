@@ -20,14 +20,28 @@
   </view>
 
   <!-- modal-->
-  <modalView showModal="{{showModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm'>
-    <view class='modal-content' style="height: 20vh;">
-        <view class="section">
-          <!-- <text style="font-style: oblique; color: rgba(0, 0, 0, 0.5);">您可以拖动下方滑动条设定您希望的单词难度，之后也可以随时根据学习情况通过“调整设置”按钮进行修改。\n</text> -->
-          <slider value="{{difficulty}}" bindchanging="on_changing_diff" bindchange="on_changing_diff" block-size="20" max="80" class="slider_diff"/>
-          <text style="text-align: center; font-size: 36rpx;">将忽略本词库中最简单的 {{difficulty}} % 单词</text>
-          <text style="text-align: center; color: rgba(0, 0, 0, 0.5);">您可以现在设定您希望的单词难度，也可以随时通过“调整设置”按钮进行修改。</text>
+  <modalView showModal="{{showModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm' style="padding-top: 0;">
+    <view class='modal-content'>
+      <text class="title">难度设定</text>
+      <text style="text-align: center; font-family: Inter Tight;">欢迎进入难度设定环节！
+      您可以参考下列示例单词，根据您认识的单词比例设定难度。
+      </text>
+      <view class="showcase_container_whole">
+        <view class="showcase_container_horizon" wx:for="{{[0,1,2,3,4]}}" wx:key="*this">
+          <text class="showcase_left" style="font-size: {{diff_showcase_here[item].font}}rpx;">
+            {{diff_showcase_here[item].word}}
+          </text>
+          <text class="showcase_right" style="font-size: {{diff_showcase_here[item*2+1].font}}rpx;">
+            {{diff_showcase_here[item*2+1].word}}
+          </text>
         </view>
+      </view>
+      <text style="text-align: center; font-family: Inter Tight;">如认识 40% 的单词，则可拖动下方滑动条，忽略词库中最简单的 40% 的词汇。
+      之后若发现设定不合适，也可以随时根据学习情况通过“调整设置”进行修改。
+      </text>
+      <slider value="{{difficulty}}" bindchanging="on_changing_diff" bindchange="on_changing_diff" block-size="20" max="80" class="slider_diff"/>
+      <text style="text-align: center; font-family: Inter Tight;">↑当前忽略本词库中最简单的 {{difficulty}}% 单词↑</text>
+
     </view>
   </modalView>
 </view>

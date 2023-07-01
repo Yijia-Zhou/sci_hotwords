@@ -49,6 +49,7 @@ Page({
     if(difficultyThreshold != 0)
     {
       this.configDifficultyFilter(difficultyThreshold)
+      dblog.logAction("configDifficultyFilter", difficultyThreshold)
       this.onReload()
       let dataDict = this.data.dictionary
       app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = difficultyThreshold
@@ -66,8 +67,22 @@ Page({
     if(dataDict.isFilterEnabled() && !app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].hasOwnProperty('diff_threshold'))
     {
       app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = 0
+      // 加载难度示例
+      let cal_font_size = function (word) {
+        let len = app.count_display_length(word)
+        return Math.min(40, 500/(len+1))
+      }
+      let diff_showcase_here = new Array()
+      let words = app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_showcase
+      for (let i in words) {
+        diff_showcase_here.push({
+          word: words[i],
+          font: cal_font_size(words[i])
+        })
+      }
       this.setData({
-        showModal: true
+        showModal: true,
+        diff_showcase_here: diff_showcase_here
       })
       console.log("initialSetting done")
     }
@@ -177,7 +192,7 @@ Page({
     }
 
     console.log(dataDict)
-
+    dblog.logAction("initialDictionary", dictInfo.useDict)
     this.initialSetting()
     this.onReload()
   },
