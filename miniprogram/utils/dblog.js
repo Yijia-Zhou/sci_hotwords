@@ -21,7 +21,7 @@ function reportUserLog() {
     scene: wx.getLaunchOptionsSync().scene
   }
   try {
-    temp.difficulty_setting = app.globalData.dictInfo.dictNames.生命科学[temp.useDict].diff_threshold
+    temp.difficulty_setting = app.globalData.dictInfo.diff_thresholds[temp.useDict]
   } catch {}
   db.collection('log').add({
     data : temp,

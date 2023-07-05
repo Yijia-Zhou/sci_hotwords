@@ -34,15 +34,33 @@ App({
     wx.getStorage({
       key: 'dictInfo',
       success (res) {
+        console.log('getStorage - dictInfo - success:', res)
         _this.globalData.dictInfo = res.data
         if (!_this.globalData.dictInfo.hasOwnProperty('dictNames')) { // 把clusters_and_domains改名成dictNames时的临时措施
           _this.globalData.dictInfo.dictNames = _this.globalData.dictInfo.clusters_and_domains
+        }
+        // 临时：将难度设置(diff_threshold)存储位置从 dictNames 中移出
+        if (!_this.globalData.dictInfo.hasOwnProperty('diff_thresholds')) {
+          _this.globalData.dictInfo.diff_thresholds = new Object()
+          let clusters = _this.globalData.dictInfo.dictNames
+          console.log(clusters)
+          for (let cluster_keyi in Object.keys(clusters)) {
+            let dicts = clusters[Object.keys(clusters)[cluster_keyi]]
+            for (let dict_keyi in Object.keys(dicts)) {
+              let dict = dicts[Object.keys(dicts)[dict_keyi]]
+              if (dict.hasOwnProperty('diff_threshold')) {
+                _this.globalData.dictInfo.diff_thresholds[Object.keys(dicts)[dict_keyi]] = dict.diff_threshold
+              }
+            }
+          }
+          console.log('diff_thresholds', _this.globalData.dictInfo.diff_thresholds)
         }
         if (!_this.globalData.dictInfo.hasOwnProperty('daily_target')) {
           _this.globalData.dictInfo.daily_target = 30
         }
       },
       fail () {
+        console.log('getStorage - dictInfo - fail:')
         _this.globalData.dictInfo =   {"_id":"diff_showcase_test","modes":["识记模式","检验模式"],"dictNames":{"生命科学":
         {
             "基础词库":{
@@ -57,7 +75,7 @@ App({
             "生信&计算":{"paper_count":18965.0,
             "diff_showcase": ["network", "database", "reconstruct", "indices", "discharge", "cortex", "fuzzy", "probe", "primer", "poisson"]}
             }
-            },"daily_target":30.0,"marker":12.0}
+            },"daily_target":30.0,"marker":12.0, diff_thresholds:{}}
       },
       complete () {
         // 慢慢进行一个是否需要更新词库的判断
