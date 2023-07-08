@@ -1,6 +1,7 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
+var reminder = require('../../../utils/reminder.js')
 import { NormalDictionary, FavorDictionary } from './dictionary.js'
 const DictionaryLoader = new requestDict.DictionaryLoader()
 
@@ -14,7 +15,8 @@ Page({
     dictionary: undefined,
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
      || (
-        app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict]
+        app.globalData.dictInfo.dictNames[app.globalData.dictInfo.useCluster]
+        && app.globalData.dictInfo.dictNames[app.globalData.dictInfo.useCluster][app.globalData.dictInfo.useDict]
         && app.globalData.dictInfo.diff_thresholds.hasOwnProperty(app.globalData.dictInfo.useDict)
        ),
     since_touch_setting: 0,
@@ -322,7 +324,7 @@ Page({
         confirmText: "明天继续",
         showCancel: false,
         success () {
-          app.requestReminder()
+          reminder.requestReminder()
         }
       })
       this.on_modify_setting()

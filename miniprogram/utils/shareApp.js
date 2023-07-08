@@ -1,5 +1,3 @@
-var app = getApp()
-
 function reportShareAppInfo(newUserData) {
     const db = wx.cloud.database()
     try

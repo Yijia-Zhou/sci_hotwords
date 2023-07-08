@@ -1,4 +1,5 @@
 var app = getApp()
+var reminder = require('../../../utils/reminder.js')
 
 Page({
 
@@ -37,7 +38,7 @@ Page({
   },
 
   on_set_reminder: function () {
-    app.requestReminder(this.data.remind_time)
+    reminder.requestReminder(this.data.remind_time)
   },
 
   onConfirm: function () {
