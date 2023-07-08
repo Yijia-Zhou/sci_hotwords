@@ -10,30 +10,22 @@ App({
 
   initGlobalDictInfo()
   {
-    this.globalData.dictInfo = {
-      "dictNames": {
-        "生命科学": {
-          "基础词库": {
-              "paper_count": 1217564
-          },
-          "分子生物学": {
-              "paper_count": 75205
-          },
-          "神经&认知": {
-              "paper_count": 51713
-          },
-          "生信&计算": {
-              "paper_count": 18965
-          }
+    console.log('getStorage - dictInfo - fail:')
+    this.globalData.dictInfo =   {"_id":"diff_showcase_test","modes":["识记模式","检验模式"],"dictNames":{"生命科学":
+    {
+        "基础词库":{
+            "paper_count":1.217564E+06,
+            "diff_showcase": ["signal", "researcher", "institute", "displaced", "distal", "deform", "elisa", "resuspend", "homogeneous", "catheter"]
+        },
+        "分子生物学":{"paper_count":75205.0,
+        "diff_showcase": ["case", "capacity", "digest", "lncRNA", "vital", "phenyl", "pole", "fluid", "penetrate", "proton"]},
+        "神经&认知":{"paper_count":51713.0,
+        "diff_showcase": ["temporal", "assume", "microscope", "glucose", "poly", "excite", "propagate", "dysfunction", "cardiac", "gait"]
+    },
+        "生信&计算":{"paper_count":18965.0,
+        "diff_showcase": ["network", "database", "reconstruct", "indices", "discharge", "cortex", "fuzzy", "probe", "primer", "poisson"]}
         }
-      },
-      "marker": 8,
-      "modes": [
-        "识记模式",
-        "检验模式"
-      ],
-      "daily_target": 30
-    }
+        },"daily_target":30.0,"marker":12.0, diff_thresholds:{}}
   },
 
   isSameDay(prevDay, curDay){
@@ -67,11 +59,29 @@ App({
     wx.getStorage({
       key: 'dictInfo',
       success (res) {
+        console.log('getStorage - dictInfo - success:', res)
         _this.globalData.dictInfo = res.data
-        let globalDictInfo = _this.globalData.dictInfo
-
-        if (!globalDictInfo.hasOwnProperty('daily_target')) {
-          globalDictInfo.daily_target = 30
+        if (!_this.globalData.dictInfo.hasOwnProperty('dictNames')) { // 把clusters_and_domains改名成dictNames时的临时措施
+          _this.globalData.dictInfo.dictNames = _this.globalData.dictInfo.clusters_and_domains
+        }
+        // 临时：将难度设置(diff_threshold)存储位置从 dictNames 中移出
+        if (!_this.globalData.dictInfo.hasOwnProperty('diff_thresholds')) {
+          _this.globalData.dictInfo.diff_thresholds = new Object()
+          let clusters = _this.globalData.dictInfo.dictNames
+          console.log(clusters)
+          for (let cluster_keyi in Object.keys(clusters)) {
+            let dicts = clusters[Object.keys(clusters)[cluster_keyi]]
+            for (let dict_keyi in Object.keys(dicts)) {
+              let dict = dicts[Object.keys(dicts)[dict_keyi]]
+              if (dict.hasOwnProperty('diff_threshold')) {
+                _this.globalData.dictInfo.diff_thresholds[Object.keys(dicts)[dict_keyi]] = dict.diff_threshold
+              }
+            }
+          }
+          console.log('diff_thresholds', _this.globalData.dictInfo.diff_thresholds)
+        }
+        if (!_this.globalData.dictInfo.hasOwnProperty('daily_target')) {
+          _this.globalData.dictInfo.daily_target = 30
         }
       },
       fail () {
@@ -81,9 +91,10 @@ App({
         // 慢慢进行一个是否需要更新词库的判断
         let globalDictInfo = _this.globalData.dictInfo
         const db = wx.cloud.database()
-        db.collection('dictInfo').doc('cluster_test').get().then(res => { 
-          let remoteData = res.data
-          if (remoteData && (!globalDictInfo.marker || globalDictInfo.marker != remoteData.marker)) {
+
+        db.collection('dictInfo').doc('diff_showcase_test').get().then(res => { 
+          _this.globalData.dataTemp = res.data
+          if (_this.globalData.dataTemp && (!globalDictInfo.marker || globalDictInfo.marker!=_this.globalData.dataTemp.marker)) {
             /**
              * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
              * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新

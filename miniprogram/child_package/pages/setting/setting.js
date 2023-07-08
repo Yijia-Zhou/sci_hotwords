@@ -46,13 +46,13 @@ Page({
 
     if (this.data.show_diff_setting) {
       let newDiffcultyThreshold = this.data.difficulty / 100
-      let oldDiffcultyThreshold = globalDictInfo.dictNames.生命科学[globalDictInfo.useDict].diff_threshold
+      let oldDiffcultyThreshold = globalDictInfo.diff_thresholds[globalDictInfo.useDict]
       //necessary?
       if(oldDiffcultyThreshold != newDiffcultyThreshold)
       {
         app.words_need_reload = true
       }
-      globalDictInfo.dictNames.生命科学[globalDictInfo.useDict].diff_threshold = newDiffcultyThreshold
+      globalDictInfo.diff_thresholds[globalDictInfo.useDict] = newDiffcultyThreshold
     }
     
     globalDictInfo.daily_target = this.data.daily_target_array[this.data.daily_target_index]
@@ -82,8 +82,8 @@ Page({
   onShow() {
     try {
       this.setData({
-        difficulty: app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
-        ? Math.round(app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].diff_threshold * 100)
+        difficulty: app.globalData.dictInfo.diff_thresholds.hasOwnProperty(app.globalData.dictInfo.useDict)
+        ? Math.round(app.globalData.dictInfo.diff_thresholds[app.globalData.dictInfo.useDict] * 100)
         : 0
       })
     } catch(e) {

@@ -16,7 +16,7 @@ Page({
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
      || (
         app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict]
-        && app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict].hasOwnProperty('diff_threshold')
+        && app.globalData.dictInfo.diff_thresholds.hasOwnProperty(app.globalData.dictInfo.useDict)
        ),
     since_touch_setting: 0,
     setting_opacity: 0.99,
@@ -50,9 +50,10 @@ Page({
     if(difficultyThreshold != 0)
     {
       this.configDifficultyFilter(difficultyThreshold)
+      dblog.logAction("configDifficultyFilter", difficultyThreshold)
       this.onReload()
       let dataDict = this.data.dictionary
-      app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = difficultyThreshold
+      app.globalData.dictInfo.diff_thresholds[dataDict.getUseDict()] = difficultyThreshold
       wx.setStorage({
         key: 'dictInfo',
         data: app.globalData.dictInfo
@@ -64,11 +65,25 @@ Page({
   {
     //未设定过难度filter 则弹窗询问是否跳转设置页
     let dataDict = this.data.dictionary
-    if(dataDict.isFilterEnabled() && !app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].hasOwnProperty('diff_threshold'))
+    if(dataDict.isFilterEnabled() && !app.globalData.dictInfo.diff_thresholds.hasOwnProperty(dataDict.getUseDict()))
     {
-      app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = 0
+      app.globalData.dictInfo.diff_thresholds[dataDict.getUseDict()] = 0
+      // 加载难度示例
+      let cal_font_size = function (word) {
+        let len = app.count_display_length(word)
+        return Math.min(40, 500/(len+1))
+      }
+      let diff_showcase_here = new Array()
+      let words = app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_showcase
+      for (let i in words) {
+        diff_showcase_here.push({
+          word: words[i],
+          font: cal_font_size(words[i])
+        })
+      }
       this.setData({
-        showModal: true
+        showModal: true,
+        diff_showcase_here: diff_showcase_here
       })
       console.log("initialSetting done")
     }
@@ -170,15 +185,14 @@ Page({
       let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
       this.configFilter(filtername)
     }
-    
-    if(dataDict.isFilterEnabled() && dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold'))
+    if(dataDict.isFilterEnabled() && dictInfo.diff_thresholds.hasOwnProperty(dictInfo.useDict))
     {
-      let difficultyThreshold = dictInfo.dictNames.生命科学[dictInfo.useDict].diff_threshold
+      let difficultyThreshold = dictInfo.diff_thresholds[dictInfo.useDict]
       this.configDifficultyFilter(difficultyThreshold)
     }
 
     console.log(dataDict)
-
+    dblog.logAction("initialDictionary", dictInfo.useDict)
     this.initialSetting()
     this.onReload()
   },
@@ -409,10 +423,10 @@ Page({
       let filtername = dictInfo.no_high_school == true ? 'no_high_school' : 'none'
       this.configFilter(filtername)
     }
-    if(dataDict.isFilterEnabled() && dictInfo.dictNames.生命科学[dictInfo.useDict].hasOwnProperty('diff_threshold')
+    if(dataDict.isFilterEnabled() && dictInfo.diff_thresholds.hasOwnProperty(dictInfo.useDict)
       && dataDict.hasOwnProperty('dictionary'))
     {
-      let difficultyThreshold = dictInfo.dictNames.生命科学[dictInfo.useDict].diff_threshold
+      let difficultyThreshold = dictInfo.diff_thresholds[dictInfo.useDict]
       this.configDifficultyFilter(difficultyThreshold)
     }
 
