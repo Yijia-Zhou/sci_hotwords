@@ -81,6 +81,10 @@ Page({
     return domains_array
   },
 
+  get_cluster(clusterIdx){
+    return Object.keys(app.globalData.dictInfo.dictNames)[clusterIdx]
+  },
+
   /**
    * 生命周期函数--监听页面显示
    * 主要触发场景：onLoad结束；从words页面返回
@@ -90,22 +94,24 @@ Page({
       return setTimeout(this.picker_render, 20)
     }
     
-    let domains_array = this.get_domains(Object.keys(app.globalData.dictInfo.dictNames)[0])
+    let domains_array = this.get_domains(this.get_cluster(0))
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.dictNames),
       domains: domains_array, 
       modes: app.globalData.dictInfo.modes
     })
+
+    var useCluster = this.data.clusters.indexOf(app.globalData.dictInfo.useCluster)
+    useCluster = useCluster == -1 ? 0 : useCluster
+    
     var useDictIndex = this.data.domains.indexOf(app.globalData.dictInfo.useDict)
-    if (useDictIndex==-1) {
-      useDictIndex = this.back2foundermental()
-    }
+    useDictIndex = useDictIndex == -1 ? this.back2foundermental() : useDictIndex
+
     var useModeIndex = this.data.modes.indexOf(app.globalData.dictInfo.useMode)
-    if (useModeIndex==-1) {
-      useModeIndex = 0
-    }
+    useModeIndex = useModeIndex == -1 ? 0 : useModeIndex
+
     this.setData({
-      value: [0, useDictIndex, useModeIndex]
+      value: [useCluster, useDictIndex, useModeIndex]
     })
     if (this.data.domains[useDictIndex] == "我的收藏" && this.no_jump) {
       this.back2foundermental()
@@ -153,7 +159,7 @@ Page({
   bindChange: function (e) { 
     const val = e.detail.value
     if (val[0]!=this.data.value[0]) {
-      let domains_array = this.get_domains(Object.keys(app.globalData.dictInfo.dictNames)[val[0]])
+      let domains_array = this.get_domains(this.get_cluster(val[0]))
       let useDictIndex = this.back2foundermental()
       this.setData({
         domains: domains_array,
@@ -189,6 +195,7 @@ Page({
   },
 
   onConfirm() {
+    app.globalData.dictInfo.useCluster = this.get_cluster(this.data.value[0])
     app.globalData.dictInfo.useDict = this.data.value[1] != -1 ? this.data.domains[this.data.value[1]] : this.data.domains[1]
     app.globalData.dictInfo.useMode = this.data.modes[this.data.value[2]]
     console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)

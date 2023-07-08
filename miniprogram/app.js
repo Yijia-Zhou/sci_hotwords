@@ -92,9 +92,9 @@ App({
         let globalDictInfo = _this.globalData.dictInfo
         const db = wx.cloud.database()
 
-        db.collection('dictInfo').doc('diff_showcase_test').get().then(res => { 
-          _this.globalData.dataTemp = res.data
-          if (_this.globalData.dataTemp && (!globalDictInfo.marker || globalDictInfo.marker!=_this.globalData.dataTemp.marker)) {
+        db.collection('dictInfo').doc('cluster_test').get().then(res => { 
+          let remoteData = res.data
+          if (remoteData && (!globalDictInfo.marker || globalDictInfo.marker!= remoteData.marker)) {
             /**
              * 本地 Storage 的 keys 为已缓存的词典们和一些其它字段，dictInfo.marker 是标记其状态以便判断是否需要刷新缓存的标记值
              * 当 dictInfo.marker 与数据库中 marker 不一致时标记所有词库需要更新

@@ -15,7 +15,8 @@ Page({
     dictionary: undefined,
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
      || (
-        app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict]
+        app.globalData.dictInfo.dictNames[app.globalData.dictInfo.useCluster]
+        && app.globalData.dictInfo.dictNames[app.globalData.dictInfo.useCluster][app.globalData.dictInfo.useDict]
         && app.globalData.dictInfo.diff_thresholds.hasOwnProperty(app.globalData.dictInfo.useDict)
        ),
     since_touch_setting: 0,
