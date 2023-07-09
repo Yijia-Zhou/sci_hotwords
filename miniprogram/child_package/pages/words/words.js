@@ -1,6 +1,8 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
+var reminder = require('../../../utils/reminder.js')
+var display = require('../../../utils/display.js')
 import { NormalDictionary, FavorDictionary } from './dictionary.js'
 const DictionaryLoader = new requestDict.DictionaryLoader()
 
@@ -14,7 +16,8 @@ Page({
     dictionary: undefined,
     showSetting: app.globalData.dictInfo.hasOwnProperty('no_high_school')
      || (
-        app.globalData.dictInfo.dictNames.生命科学[app.globalData.dictInfo.useDict]
+        app.globalData.dictInfo.dictNames[app.globalData.dictInfo.useCluster]
+        && app.globalData.dictInfo.dictNames[app.globalData.dictInfo.useCluster][app.globalData.dictInfo.useDict]
         && app.globalData.dictInfo.diff_thresholds.hasOwnProperty(app.globalData.dictInfo.useDict)
        ),
     since_touch_setting: 0,
@@ -69,7 +72,7 @@ Page({
       app.globalData.dictInfo.diff_thresholds[dataDict.getUseDict()] = 0
       // 加载难度示例
       let cal_font_size = function (word) {
-        let len = app.count_display_length(word)
+        let len = display.count_display_length(word)
         return Math.min(40, 500/(len+1))
       }
       let diff_showcase_here = new Array()
@@ -322,7 +325,7 @@ Page({
         confirmText: "明天继续",
         showCancel: false,
         success () {
-          app.requestReminder()
+          reminder.requestReminder()
         }
       })
       this.on_modify_setting()
