@@ -2,6 +2,7 @@ const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
 var reminder = require('../../../utils/reminder.js')
+var display = require('../../../utils/display.js')
 import { NormalDictionary, FavorDictionary } from './dictionary.js'
 const DictionaryLoader = new requestDict.DictionaryLoader()
 
@@ -71,7 +72,7 @@ Page({
       app.globalData.dictInfo.diff_thresholds[dataDict.getUseDict()] = 0
       // 加载难度示例
       let cal_font_size = function (word) {
-        let len = app.count_display_length(word)
+        let len = display.count_display_length(word)
         return Math.min(40, 500/(len+1))
       }
       let diff_showcase_here = new Array()

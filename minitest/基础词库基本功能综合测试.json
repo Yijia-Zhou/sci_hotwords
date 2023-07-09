@@ -5,7 +5,7 @@
     "remarks": "",
     "version": "0.0.1",
     "startTime": 1686194842378,
-    "endTime": 1686245369448,
+    "endTime": 1688905233044,
     "appid": "wxaba042991ffc15b1",
     "casePath": "",
     "caseType": "normal",
@@ -7806,7 +7806,8 @@
       "commandType": "operate",
       "layer": "native",
       "command": "confirmModal",
-      "text": "允许"
+      "text": "允许",
+      "ignoreFail": true
     },
     {
       "tagName": "button",
