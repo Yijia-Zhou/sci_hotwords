@@ -5,11 +5,19 @@ class Dictionary {
     }
 
     updateUseDict(useDict) {
-      this.useDict = useDict
+        this.useDict = useDict
+    }
+
+    updateUseCluster(useCluster) {
+        this.useCluster = useCluster
     }
 
     getUseDict() {
-      return this.useDict
+        return this.useDict
+    }
+
+    getUseCluster() {
+        return this.useCluster
     }
 
     updateUseMode(useMode) {
@@ -191,14 +199,15 @@ export class NormalDictionary extends Dictionary {
 
     addFavorWord() {
         let temp = {...this.dictionary[this.index]}
-        temp.from = this.useDict
+        this.updateWordFrom(temp)
         this.favorList.push({...temp})
     }
 
     removeFavorWord() {
         const index2del = (element) => {
             return element._id == this.dictionary[this.index]._id
-                               && element.from == this.useDict
+                && element.fromCluster == this.useCluster
+                && element.fromDict == this.useDict 
         }
         this.favorList.splice(this.favorList.findIndex(index2del), 1)
     }
@@ -241,7 +250,8 @@ export class NormalDictionary extends Dictionary {
 
     updateWordFrom(word)
     {
-        word.from = this.useDict
+        word.fromCluster = this.useCluster
+        word.fromDict = this.useDict
     }
 };
 

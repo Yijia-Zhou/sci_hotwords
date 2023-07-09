@@ -75,7 +75,7 @@ Page({
         return Math.min(40, 500/(len+1))
       }
       let diff_showcase_here = new Array()
-      let words = app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_showcase
+      let words = app.globalData.dictInfo.dictNames[dataDict.getUseCluster()][dataDict.getUseDict()].diff_showcase
       for (let i in words) {
         diff_showcase_here.push({
           word: words[i],
@@ -179,6 +179,7 @@ Page({
     let dataDict = this.data.dictionary
     
     this.updateUseMode(dictInfo.useMode)
+    dataDict.updateUseCluster(dictInfo.useCluster)
     dataDict.updateUseDict(dictInfo.useDict)
     
     if(dataDict.isFilterEnabled() && dictInfo.hasOwnProperty('no_high_school'))
@@ -207,7 +208,7 @@ Page({
     console.log("words onLoad start")
     console.log(dictInfo)
 
-    wx.setNavigationBarTitle({title: '生命科学 - ' + dictInfo.useDict})
+    wx.setNavigationBarTitle({title: dictInfo.useCluster + ' - ' + dictInfo.useDict})
 
     this.initialDictionary(dictInfo)
   },
@@ -269,7 +270,7 @@ Page({
     if(dataDict.showCoreWordNum() && dataDict.isCoreNumUpdated())
     {
       let coreNum = dataDict.getCoreWordNum()
-      wx.setNavigationBarTitle({title: '生命科学 - ' + dataDict.getUseDict() + 
+      wx.setNavigationBarTitle({title: dataDict.getUseCluster() + ' - ' + dataDict.getUseDict() + 
                                 ' - 核心' + coreNum + '00词'})
       let _this = this
       switch (dataDict.getUseMode()) {
