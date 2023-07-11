@@ -1,6 +1,6 @@
 function requestReminder(changed_time) {
     let tmplId = 'fIbeAXEbSJXGLeVhkuTxth5JrxvXw3sweb0NGd8a83c'
-    var remind_time = changed_time ? changed_time : this.globalData.dictInfo.remind_time
+    var remind_time = changed_time ? changed_time : getApp().globalData.dictInfo.remind_time
     if (!remind_time) {
       remind_time = '12:25'
     }
