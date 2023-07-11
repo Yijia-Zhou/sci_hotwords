@@ -45,6 +45,12 @@ Page({
   },
 
   modalCancel(){
+    let dataDict = this.data.dictionary
+    app.globalData.dictInfo.diff_thresholds[dataDict.getUseDict()] = 0
+    wx.setStorage({
+      key: 'dictInfo',
+      data: app.globalData.dictInfo
+    })
   },
 
   modalConfirm(){
