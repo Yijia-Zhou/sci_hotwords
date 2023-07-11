@@ -456,10 +456,8 @@ Page({
     if(this.data.dictionary && Object.keys(this.data.dictionary).length != 0)
     {
       this.data.dictionary.commitData()
-      wx.setStorage({key: app.globalData.dictInfo.useDict, 
-                    data: this.data.dictionary.getDictionary()})
-      wx.setStorage({key: '我的收藏', 
-                     data: this.data.dictionary.getFavorDict()})
+      wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary.getDictionary())
+      wx.setStorageSync('我的收藏', this.data.dictionary.getFavorDict())
     }
     DictionaryLoader.removeDictionary(app.globalData.dictInfo.useDict)
     DictionaryLoader.removeDictionary('我的收藏')

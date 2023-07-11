@@ -1,4 +1,5 @@
 var app = getApp()
+var dblog = require('./dblog.js')
 
 class DictionaryLoader {
   constructor() {
@@ -104,6 +105,7 @@ class DictionaryLoader {
 
   // 下载词典数据的方法
   async downloadDictionary(name) {
+    dblog.logAction('downloadDictionary', name)
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(name).get()
     const dataTemp = await reqRes.data.dictionary
