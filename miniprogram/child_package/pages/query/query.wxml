@@ -8,7 +8,7 @@
 
 <view class='{{isShowResultView?"resultBgView":"resultBgView-hidden"}}'>
 	<view class="resultCell" wx:for="{{searchResultArr}}" wx:key="index">
-		<view class="resultInnerCell" data-resultindex="{{searchResultArr[index].idx}}" bindtap='toResult'>
+		<view class="resultInnerCell" data-resultindex="{{searchResultArr[index].idx}}" data-derisindex="{{searchResultArr[index].derisIdx}}" bindtap='toResult'>
      <text style="min-width: 240rpx; align-self: center; margin-right: 20rpx; font-size:smaller;">{{searchResultArr[index].word}}</text>
      <text style="align-self: center; flex-grow: 1;">{{searchResultArr[index].translation}}</text>
     </view>

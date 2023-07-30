@@ -38,6 +38,11 @@ Component({
       }
 
       dblog.logWord(word._id)
+
+      if(word.hasOwnProperty('derisIndex'))
+      {
+        this.onDeriDetailWithIdx(word.derisIndex)
+      }
     }
   },
 
@@ -84,6 +89,16 @@ Component({
     onDeriDetail: function (event) {
       dblog.logAction("onDeriDetail")
       var deri_obj = this.properties.word.deris[event.target.id.substr(4,1)]
+      wx.showModal({
+        title: deri_obj.word,
+        content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 出现次数：' + String(deri_obj.count), 
+        showCancel: false
+      })
+    },
+
+    onDeriDetailWithIdx : function(derisIndex) {
+      dblog.logAction("onDeriDetailWithIdx")
+      var deri_obj = this.properties.word.deris[derisIndex]
       wx.showModal({
         title: deri_obj.word,
         content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 出现次数：' + String(deri_obj.count), 

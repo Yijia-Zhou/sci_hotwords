@@ -35,10 +35,11 @@ Page({
     
     for(var useDict in useDictList)
     {
-      allDictionary.push.apply(allDictionary, DictionaryLoader.getDictionarySync(useDictList[useDict])) 
+      allDictionary.push.apply(allDictionary, await DictionaryLoader.getDictionarySync(useDictList[useDict])) 
       totalLen += wx.getStorageSync(useDictList[useDict]).length
       dictionaryOrder[useDictList[useDict]] = totalLen;
     }
+    console.log(allDictionary)
 
     this.setData({
       allDictionary : allDictionary,
@@ -149,7 +150,8 @@ Page({
   },
 
   toResult(e){
-    var resultIndex = e.currentTarget.dataset["resultindex"]
+    let resultIndex = e.currentTarget.dataset["resultindex"]
+    let derisIndex = e.currentTarget.dataset["derisindex"]
     app.globalData.resultWord = this.data.allDictionary[resultIndex]
     console.log(this.data.dictionaryOrder)
     for(var key in this.data.dictionaryOrder)
@@ -160,6 +162,8 @@ Page({
         break
       }
     }
+    app.globalData.resultWord.derisIndex = derisIndex
+    console.log("result word : ", app.globalData.resultWord)
     app.globalData.dictInfo.useMode = '识记模式'
     wx.navigateTo({
       url: '../result/result'

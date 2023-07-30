@@ -1,7 +1,9 @@
 <view class="page_container">
   <wordcard word='{{word}}'></wordcard>
   <view class="main_button_container">
-    <button type="primary" class="primary_button" style="width: 61.8vw;">占位按钮1</button>
-    <button type="default" class="following_button" style="width: 61.8vw;">占位按钮2</button>
+    <button type="primary" class='primary_button' bindtap="onFavor" style="width: 61.8vw;">
+        {{word.favored ? '取消收藏' : '收藏本词'}}
+    </button>
+    <button type="default" class="following_button" style="width: 61.8vw;">返回</button>
   </view>
 </view>
