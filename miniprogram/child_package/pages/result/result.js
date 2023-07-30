@@ -9,7 +9,7 @@ Page({
   data: {
     word : {},
     dictionary : {},
-    favoredIdx : 0
+    favoredIdx : -1
   },
 
   /**
@@ -26,7 +26,7 @@ Page({
     }
 
     let word = {...resultWord}
-    word.favored = this.isWordInFavored(this.data.word)
+    word.favored = this.isWordInFavored(word)
     this.setData({
       word: word
     })
@@ -48,25 +48,33 @@ Page({
 
   onFavor()
   {
-    let dataDict = this.data.dictionary
     let word = this.data.word
-
-    if(this.data.word.favored)
-    {
-      dataDict.splice(this.data.favoredIdx, 1);
-    }
-    else
-    {
-      dataDict.push({...this.data.word})
-    }
-
     word.favored = !word.favored
+    if(word.hasOwnProperty('derisIndex'))
+    {
+      delete word['derisIndex']
+    }
     this.setData({
       word: word
     })
   },
 
-  onUnload: async function () {
+  onUnload: function () {
+    let word = this.data.word
+    if(word.hasOwnProperty('derisIndex'))
+    {
+      delete word['derisIndex']
+    }
+    let dataDict = this.data.dictionary
+    if(this.data.favoredIdx > -1 && !word.favored)
+    {
+      dataDict.splice(this.data.favoredIdx, 1);
+    }
+    else if(this.data.favoredIdx == -1 && word.favored)
+    {
+      dataDict.push({...word})
+    }
+    console.log(dataDict)
     wx.setStorageSync('我的收藏', dataDict)
   },
 

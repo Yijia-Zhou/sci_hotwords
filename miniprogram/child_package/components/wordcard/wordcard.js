@@ -39,7 +39,7 @@ Component({
 
       dblog.logWord(word._id)
 
-      if(word.hasOwnProperty('derisIndex'))
+      if(word.hasOwnProperty('derisIndex') && word.derisIndex > -1)
       {
         this.onDeriDetailWithIdx(word.derisIndex)
       }
