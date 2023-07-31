@@ -78,6 +78,10 @@ Page({
     wx.setStorageSync('我的收藏', dataDict)
   },
 
+  onReturn: function() {
+    wx.navigateBack()
+  },
+
   /**
    * 用户点击右上角分享
    */
