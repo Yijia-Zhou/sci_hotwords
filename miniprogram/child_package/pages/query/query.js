@@ -139,6 +139,7 @@ Page({
           {
             let paper_count = app.globalData.dictInfo.dictNames.生命科学[key].paper_count
             var fre = resultWord.total_count / paper_count
+            break
           }
         }
 
