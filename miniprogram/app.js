@@ -92,7 +92,7 @@ App({
         let globalDictInfo = _this.globalData.dictInfo
         const db = wx.cloud.database()
 
-        db.collection('dictInfo').doc('cluster_test').get().then(res => { 
+        db.collection('dictInfo').doc('diff_showcase_test').get().then(res => { 
           let remoteData = res.data
           if (remoteData && (!globalDictInfo.marker || globalDictInfo.marker!= remoteData.marker)) {
             /**

@@ -4748,6 +4748,15 @@
       "layer": "pageframe"
     },
     {
+      "timeStamp": 13258,
+      "waitfor": 1479,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "navigateLeft",
+      "text": ""
+    },
+    {
       "timeStamp": 30613,
       "waitfor": 1005,
       "desc": "",

@@ -1,4 +1,5 @@
 var app = getApp()
+var dblog = require('./dblog.js')
 
 class DictionaryLoader {
   constructor() {
@@ -60,7 +61,7 @@ class DictionaryLoader {
         }
         // 如果本地存储中有数据，检查 'need_refresh' 列表，若需要刷新，调用更新词典数据的方法
         else if (wx.getStorageSync('dict_need_refresh').includes(name)) {
-          dictionary = this.updateDictionary(name, dictionary)
+          dictionary = await this.updateDictionary(name, dictionary)
         }
         // 如果当前词库没有任何学习记录，则同步基础词库的学习记录
         if (!name.includes('基础') && dictionary.every(item => !item.learnt && !item.tested)) {
@@ -104,6 +105,7 @@ class DictionaryLoader {
 
   // 下载词典数据的方法
   async downloadDictionary(name) {
+    dblog.logAction('downloadDictionary', name)
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(name).get()
     const dataTemp = await reqRes.data.dictionary

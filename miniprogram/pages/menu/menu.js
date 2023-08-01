@@ -93,7 +93,6 @@ Page({
     if (!app.globalData.hasOwnProperty('dictInfo')) {
       return setTimeout(this.picker_render, 20)
     }
-
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.dictNames),
       modes: app.globalData.dictInfo.modes,
