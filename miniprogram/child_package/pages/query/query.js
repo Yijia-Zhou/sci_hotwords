@@ -27,21 +27,25 @@ Page({
     wx.setNavigationBarTitle({title: '词汇查询'})
     dblog.logAction("onQuery")
 
+
+
     var useClusterList = Object.keys(wx.getStorageSync('dictInfo').dictNames)
 
-    for(var useCluster in useClusterList)
+    for(let useCluster in useClusterList)
     {
-      var useDictList = Object.keys(wx.getStorageSync('dictInfo').dictNames[useCluster])
+      var useDictList = Object.keys(wx.getStorageSync('dictInfo').dictNames[useClusterList[useCluster]])
   
       var allDictionary = []
       var dictionaryOrder = []
       let totalLen = 0
+
+      dictionaryOrder[useClusterList[useCluster]] = []
       
-      for(var useDict in useDictList)
+      for(let useDict in useDictList)
       {
-        allDictionary.push.apply(allDictionary, DictionaryLoader.getDictionarySync(useDictList[useDict])) 
+        allDictionary.push.apply(allDictionary, await DictionaryLoader.getDictionarySync(useDictList[useDict])) 
         totalLen += wx.getStorageSync(useDictList[useDict]).length
-        dictionaryOrder[useCluster][useDictList[useDict]] = totalLen;
+        dictionaryOrder[useClusterList[useCluster]][useDictList[useDict]] = totalLen;
       }
     }
     console.log(allDictionary)
@@ -138,13 +142,16 @@ Page({
           translation = resultWord.chosen[0]
         }
 
-        for(let key in this.data.dictionaryOrder)
+        for(let clusterKey in this.data.dictionaryOrder)
         {
-          if(resultWordIdx < this.data.dictionaryOrder[key])
+          for(let dictKey in this.data.dictionaryOrder[clusterKey])
           {
-            let paper_count = app.globalData.dictInfo.dictNames.生命科学[key].paper_count
-            var fre = resultWord.total_count / paper_count
-            break
+            if(resultWordIdx < this.data.dictionaryOrder[clusterKey][dictKey])
+            {
+              let paper_count = app.globalData.dictInfo.dictNames[clusterKey][dictKey].paper_count
+              var fre = resultWord.total_count / paper_count
+              break
+            }
           }
         }
 
@@ -191,9 +198,9 @@ Page({
     let derisIndex = e.currentTarget.dataset["derisindex"]
     app.globalData.resultWord = this.data.allDictionary[resultIndex]
     console.log(this.data.dictionaryOrder)
-    for(var clusterKey in this.data.dictionaryOrder)
+    for(let clusterKey in this.data.dictionaryOrder)
     {
-      for(var dictKey in this.data.dictionaryOrder[clusterKey])
+      for(let dictKey in this.data.dictionaryOrder[clusterKey])
       {
           if(resultIndex < this.data.dictionaryOrder[clusterKey][dictKey])
           {
