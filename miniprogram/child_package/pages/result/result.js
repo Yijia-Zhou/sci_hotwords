@@ -1,5 +1,5 @@
 const app = getApp()
-var dblog = require('../../../utils/dblog.js')
+import { FavorDictionary } from '../words/dictionary.js'
 
 Page({
 
@@ -7,7 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    word : {}
+    word : {},
+    dictionary : {},
+    favoredIdx : -1
   },
 
   /**
@@ -15,11 +17,69 @@ Page({
    */
   onLoad() {
     console.log("show result on load")
-    var resultWord = app.globalData.resultWord
+    let resultWord = app.globalData.resultWord
+
+    this.data.dictionary = wx.getStorageSync('我的收藏')
+    if(!this.data.dictionary)
+    {
+      this.data.dictionary = new Array()
+    }
+
+    let word = {...resultWord}
+    word.favored = this.isWordInFavored(word)
     this.setData({
-        word : resultWord
-      }
-    )
+      word: word
+    })
+    console.log(this.data.word)
+  },
+
+  isWordInFavored(word)
+  {
+    let dataDict = this.data.dictionary
+    for (var w in dataDict) {
+        if(dataDict[w]._id == word._id)
+        {
+          this.data.favoredIdx = w
+          return true
+        }
+    }
+    return false
+  },
+
+  onFavor()
+  {
+    let word = this.data.word
+    word.favored = !word.favored
+    if(word.hasOwnProperty('derisIndex'))
+    {
+      delete word['derisIndex']
+    }
+    this.setData({
+      word: word
+    })
+  },
+
+  onUnload: function () {
+    let word = this.data.word
+    if(word.hasOwnProperty('derisIndex'))
+    {
+      delete word['derisIndex']
+    }
+    let dataDict = this.data.dictionary
+    if(this.data.favoredIdx > -1 && !word.favored)
+    {
+      dataDict.splice(this.data.favoredIdx, 1);
+    }
+    else if(this.data.favoredIdx == -1 && word.favored)
+    {
+      dataDict.push({...word})
+    }
+    console.log(dataDict)
+    wx.setStorageSync('我的收藏', dataDict)
+  },
+
+  onReturn: function() {
+    wx.navigateBack()
   },
 
   /**

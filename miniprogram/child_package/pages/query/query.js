@@ -44,6 +44,7 @@ Page({
         dictionaryOrder[useCluster][useDictList[useDict]] = totalLen;
       }
     }
+    console.log(allDictionary)
 
     this.setData({
       allDictionary : allDictionary,
@@ -98,9 +99,9 @@ Page({
   },
 
   onQuery(e){
-    var resultArr = []
-    var resultArrWithCN = []
-    var target = e.detail.value
+    let resultArr = []
+    let resultArrWithCN = []
+    let target = e.detail.value
     console.log(target)
     if(target == ""){
       this.setData({
@@ -109,7 +110,7 @@ Page({
       })
     }
     else{
-      for(var source in this.data.allDictionary)
+      for(let source in this.data.allDictionary)
       {
         var dictionaryWord = this.data.allDictionary[source]
         this.onQueryResult(dictionaryWord._id, target, resultArr, source, -1)
@@ -119,7 +120,7 @@ Page({
         }
       }
 
-      for(var resultIdx in resultArr)
+      for(let resultIdx in resultArr)
       {
         var resultWordIdx = resultArr[resultIdx].idx
         var resultDerisIdx = resultArr[resultIdx].derisIdx
@@ -136,8 +137,40 @@ Page({
           word = resultWord._id
           translation = resultWord.chosen[0]
         }
-        var tmp = {idx:resultWordIdx, derisIdx:resultDerisIdx, word:word, translation:translation}
-        resultArrWithCN.push(tmp)
+
+        for(let key in this.data.dictionaryOrder)
+        {
+          if(resultWordIdx < this.data.dictionaryOrder[key])
+          {
+            let paper_count = app.globalData.dictInfo.dictNames.生命科学[key].paper_count
+            var fre = resultWord.total_count / paper_count
+            break
+          }
+        }
+
+        let tmp = {idx:resultWordIdx, derisIdx:resultDerisIdx, word:word, 
+                   translation:translation, fre: fre}
+        let isRepeat = false
+
+        resultArrWithCN.forEach(list=>{
+          if(list.word == tmp.word)
+          {
+            isRepeat = true
+            if(tmp.fre > list.fre) 
+            {
+              list.idx = tmp.idx
+              list.derisIdx = tmp.derisIdx
+              list.word = tmp.word
+              list.translation = tmp.translation
+              list.fre = tmp.fre
+            }
+          }
+        })
+
+        if(!isRepeat)
+        {
+          resultArrWithCN.push(tmp)
+        }
       }
 
       this.setData({
@@ -154,7 +187,8 @@ Page({
   },
 
   toResult(e){
-    var resultIndex = e.currentTarget.dataset["resultindex"]
+    let resultIndex = e.currentTarget.dataset["resultindex"]
+    let derisIndex = e.currentTarget.dataset["derisindex"]
     app.globalData.resultWord = this.data.allDictionary[resultIndex]
     console.log(this.data.dictionaryOrder)
     for(var clusterKey in this.data.dictionaryOrder)
@@ -169,6 +203,8 @@ Page({
           }
       }
     }
+    app.globalData.resultWord.derisIndex = derisIndex
+    console.log("result word : ", app.globalData.resultWord)
     app.globalData.dictInfo.useMode = '识记模式'
     wx.navigateTo({
       url: '../result/result'
