@@ -93,26 +93,28 @@ Page({
     if (!app.globalData.hasOwnProperty('dictInfo')) {
       return setTimeout(this.picker_render, 20)
     }
-    
-    let domains_array = this.get_domains(this.get_cluster(0))
     this.setData({
       clusters: Object.keys(app.globalData.dictInfo.dictNames),
-      domains: domains_array, 
-      modes: app.globalData.dictInfo.modes
+      modes: app.globalData.dictInfo.modes,
     })
-
-    var useCluster = this.data.clusters.indexOf(app.globalData.dictInfo.useCluster)
-    useCluster = useCluster == -1 ? 0 : useCluster
     
-    var useDictIndex = this.data.domains.indexOf(app.globalData.dictInfo.useDict)
+    let useCluster = this.data.clusters.indexOf(app.globalData.dictInfo.useCluster)
+    useCluster = useCluster == -1 ? 0 : useCluster
+
+    let domains_array = this.get_domains(this.get_cluster(useCluster))
+
+    this.setData({domains:domains_array})
+
+    let useDictIndex = this.data.domains.indexOf(app.globalData.dictInfo.useDict)
     useDictIndex = useDictIndex == -1 ? this.back2foundermental() : useDictIndex
 
-    var useModeIndex = this.data.modes.indexOf(app.globalData.dictInfo.useMode)
+    let useModeIndex = this.data.modes.indexOf(app.globalData.dictInfo.useMode)
     useModeIndex = useModeIndex == -1 ? 0 : useModeIndex
 
     this.setData({
       value: [useCluster, useDictIndex, useModeIndex]
     })
+
     if (this.data.domains[useDictIndex] == "我的收藏" && this.no_jump) {
       this.back2foundermental()
     }

@@ -17,3 +17,5 @@ node_modules/
 
 # 微信开发者工具
 *testResult*
+
+*.config.json

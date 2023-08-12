@@ -27,17 +27,22 @@ Page({
     wx.setNavigationBarTitle({title: '词汇查询'})
     dblog.logAction("onQuery")
 
-    var useDictList = Object.keys(wx.getStorageSync('dictInfo').dictNames.生命科学)
+    var useClusterList = Object.keys(wx.getStorageSync('dictInfo').dictNames)
 
-    var allDictionary = []
-    var dictionaryOrder = []
-    let totalLen = 0
-    
-    for(var useDict in useDictList)
+    for(var useCluster in useClusterList)
     {
-      allDictionary.push.apply(allDictionary, await DictionaryLoader.getDictionarySync(useDictList[useDict])) 
-      totalLen += wx.getStorageSync(useDictList[useDict]).length
-      dictionaryOrder[useDictList[useDict]] = totalLen;
+      var useDictList = Object.keys(wx.getStorageSync('dictInfo').dictNames[useCluster])
+  
+      var allDictionary = []
+      var dictionaryOrder = []
+      let totalLen = 0
+      
+      for(var useDict in useDictList)
+      {
+        allDictionary.push.apply(allDictionary, DictionaryLoader.getDictionarySync(useDictList[useDict])) 
+        totalLen += wx.getStorageSync(useDictList[useDict]).length
+        dictionaryOrder[useCluster][useDictList[useDict]] = totalLen;
+      }
     }
     console.log(allDictionary)
 
@@ -186,12 +191,16 @@ Page({
     let derisIndex = e.currentTarget.dataset["derisindex"]
     app.globalData.resultWord = this.data.allDictionary[resultIndex]
     console.log(this.data.dictionaryOrder)
-    for(var key in this.data.dictionaryOrder)
+    for(var clusterKey in this.data.dictionaryOrder)
     {
-      if(resultIndex < this.data.dictionaryOrder[key])
+      for(var dictKey in this.data.dictionaryOrder[clusterKey])
       {
-        app.globalData.resultWord.from = key
-        break
+          if(resultIndex < this.data.dictionaryOrder[clusterKey][dictKey])
+          {
+            app.globalData.resultWord.fromCluster = clusterKey
+            app.globalData.resultWord.fromDict = dictKey
+            break
+          }
       }
     }
     app.globalData.resultWord.derisIndex = derisIndex
