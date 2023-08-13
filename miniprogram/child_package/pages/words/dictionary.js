@@ -212,8 +212,8 @@ export class NormalDictionary extends Dictionary {
         this.favorList.splice(this.favorList.findIndex(index2del), 1)
     }
 
-    markWord() {
-        this.dictionary[this.index][this.chooseStatus] = true
+    markWord(mark) {
+        super.markWord(mark)
         this.markedNum++
     }
 
@@ -221,37 +221,26 @@ export class NormalDictionary extends Dictionary {
         return true
     }
 
-    getCoreWordNum() {
-        return (Math.floor(this.markedNum / 100) + 1)
+    getMarkedWordNum() {
+        return this.markedNum
     }
 
-    isCoreNumUpdated() {
-        if(this.chooseStatus == 'learnt')
-        {
-            return this.markedNum % 100 == 0
-        }
-        else
-        {
-            if(this.dictionary[this.index]['learnt'] == true)
-            {
-                let nextWord = this.getNextWord()
-                if(nextWord && !nextWord.hasOwnProperty('learnt'))
-                {
-                    return true
-                }
-            }
-        }
-        return false
-    }
 
-    initCoreWordNum() {
+    initMarkedWordNum() {
         this.markedNum = this.dictionary.filter(w => w[this.chooseStatus] == true).length;
+        console.log("markednum", this.markedNum)
     }
 
     updateWordFrom(word)
     {
         word.fromCluster = this.useCluster
         word.fromDict = this.useDict
+    }
+
+    resetDictionary()
+    {
+        super.resetDictionary()
+        this.markedNum = 0
     }
 };
 

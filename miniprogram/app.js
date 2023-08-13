@@ -1,13 +1,5 @@
 App({
 
-  initGlobalTracer(date)
-  {
-    this.globalData.tracer = {
-      doneCount: 0,
-      date: date
-    }
-  },
-
   initGlobalDictInfo()
   {
     console.log('getStorage - dictInfo - fail:')
@@ -25,32 +17,11 @@ App({
         "生信&计算":{"paper_count":18965.0,
         "diff_showcase": ["network", "database", "reconstruct", "indices", "discharge", "cortex", "fuzzy", "probe", "primer", "poisson"]}
         }
-        },"daily_target":30.0,"marker":12.0, diff_thresholds:{}}
+        },"daily_target":30.0,"marker":12.0, diff_thresholds:{},tracer:{}}
   },
 
   isSameDay(prevDay, curDay){
     return prevDay == curDay
-  },
-
-  loadTracer()
-  {
-    let _this = this, curDay = new Date().toLocaleDateString()
-    wx.getStorage({
-      key: 'tracer',
-      success (res) {
-        if (_this.isSameDay(res.data.date, curDay)) {
-          _this.globalData.tracer = res.data
-        } else {
-          _this.initGlobalTracer.call(_this, curDay)
-        }
-      },
-      fail () {
-        _this.initGlobalTracer.call(_this, curDay)
-      },
-      complete () {
-        console.log('getStorage - tracer - complete')
-      }
-    })
   },
 
   loadDictInfo(){
@@ -79,6 +50,9 @@ App({
             }
           }
           console.log('diff_thresholds', _this.globalData.dictInfo.diff_thresholds)
+        }
+        if(!_this.globalData.dictInfo.hasOwnProperty("tracer")){
+          _this.globalData.dictInfo.tracer = {}
         }
         if (!_this.globalData.dictInfo.hasOwnProperty('daily_target')) {
           _this.globalData.dictInfo.daily_target = 30
@@ -120,13 +94,9 @@ App({
 
   async onLaunch() {
     console.log('app.onLaunch')
-
     this.initcloud()
     this.globalData = new Object()
-
-    this.loadTracer()
     this.loadDictInfo()
-
     console.log("onLaunch end")
   },
 
