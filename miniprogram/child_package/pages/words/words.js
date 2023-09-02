@@ -37,10 +37,8 @@ Page({
     let globalDictInfo = app.globalData.dictInfo
     let dataDict = this.data.dictionary
     let dailyTgt = globalDictInfo.daily_target
-    let lastProgress = globalDictInfo.tracer[dataDict.getUseDict()].lastProgress
-    console.log("lastProgress ", lastProgress, " dataDict.getMarkedWordNum() ", dataDict.getMarkedWordNum())
     this.setData({
-      coreNum: lastProgress + (Math.floor((dataDict.getMarkedWordNum() - lastProgress) / dailyTgt) + 1) * dailyTgt
+      coreNum: (Math.floor((dataDict.getMarkedWordNum()) / dailyTgt) + 1) * dailyTgt
     })
     wx.setNavigationBarTitle({title: dataDict.getUseDict() + ' - 核心' + this.data.coreNum + '词'})
   },
@@ -49,12 +47,11 @@ Page({
     return prevDay == curDay
   },
 
-  initGlobalTracer(useDict, date, lastProgress)
+  initGlobalTracer(useDict, date)
   {
     app.globalData.dictInfo.tracer[useDict] = {
       date: date,
       doneCount: 0,
-      lastProgress: lastProgress,
       isTodayFinished: false
     }
   },
@@ -73,7 +70,7 @@ Page({
       this.initGlobalTracer(useDict, curDay, this.data.dictionary.getMarkedWordNum())
     }
 
-    wx.setStorage({
+    wx.setStorageSync({
       key: 'dictInfo',
       data: app.globalData.dictInfo
     })
@@ -87,7 +84,7 @@ Page({
     if(currentWord != null)
     {
       let word = {...currentWord}
-      word.favored = this.data.dictionary.isCurrentWordInFavored(currentWord)
+      word.favored = this.data.dictionary.isWordInFavored(currentWord)
       this.setData({
         word: word
       })
@@ -181,8 +178,6 @@ Page({
         title: '全部掌握啦\r\n正在重置词典',
         showCancel: false,
       })
-      app.globalData.dictInfo.tracer[dataDict.getUseDict()].lastProgress = 0
-      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
       dataDict.resetDictionary()
       _this.onReload()
     }
@@ -254,7 +249,12 @@ Page({
 
     console.log(dataDict)
     dblog.logAction("initialDictionary", dictInfo.useDict)
-    this.loadTracer()
+
+    if(dictInfo.useDict != '我的收藏')
+    {
+      this.loadTracer()
+    }
+
     this.initialSetting()
     this.onReload()
   },
@@ -285,7 +285,7 @@ Page({
       this.on_alldone()
     }
 
-    if(dataDict.showCoreWordNum())
+    if(dataDict.needTracer())
     {
       dataDict.initMarkedWordNum()
       this.setCoreWordsBarTitle()
@@ -329,61 +329,112 @@ Page({
 
     console.log(dailyTgt, globalDictTracer)
 
-    dataDict.markWord(true)//标记掌握
-    if(dataDict.showCoreWordNum() && (globalDictTracer.doneCount + 1) % dailyTgt == 0)
+    if(dataDict.needTracer())
+    {
+      let _this = this
+      if(dataDict.getUseMode() == '检验模式' && globalDictTracer.isTodayFinished == false 
+         && globalDictTracer.doneCount >= dailyTgt && !dataDict.isCurrentWordLeant())
+      {
+        globalDictTracer.isTodayFinished = true
+        wx.showModal({
+          title: "已检验完所有已学习词汇组",
+          content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
+          confirmText: "明天继续",
+          showCancel: false,
+          success () {
+            reminder.requestReminder()
+            _this.updateUseMode('识记模式')
+            _this.onReload()
+            _this.onShow()
+          }
+        })
+        this.on_modify_setting()
+        return
+      }
+      if(dataDict.getUseMode() == '识记模式' && globalDictTracer.isTodayFinished == false
+         && globalDictTracer.doneCount >= dailyTgt)
+      {
+        if(globalDictTracer.doneCount > dailyTgt)
+        {
+          globalDictTracer.isTodayFinished = true
+          reminder.requestReminder()
+        }
+        else
+        {
+          wx.showModal({
+            title: '已在本词库内达到今日目标了了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                _this.updateUseMode('检验模式')
+                _this.onReload()
+                _this.onShow()
+                return 
+              } else if (res.cancel) {
+                globalDictTracer.isTodayFinished = true
+                this.setCoreWordsBarTitle()
+                reminder.requestReminder()
+              }
+            }
+          })
+        }
+      }
+    }
+
+    if(dataDict.needTracer() && globalDictTracer.isTodayFinished == true && dataDict.getMarkedWordNum() % dailyTgt == 0)
     {
       this.setCoreWordsBarTitle()
 
       let _this = this
       switch (dataDict.getUseMode()) {
         case '识记模式':
-            if(globalDictTracer.isTodayFinished == false)
-            {
-              wx.showModal({
-                title: '已在本词库内达到今日目标了了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
-                confirmText: '这就去',
-                cancelText: '先不了',
-                success (res) {
-                  if (res.confirm) {
-                    _this.updateUseMode('检验模式')
-                    _this.onReload()
-                    _this.onShow()
-                    return 
-                  } else if (res.cancel) {
-                    globalDictTracer.isTodayFinished = true
-                    reminder.requestReminder()
-                  }
-                }
-              })
+          wx.showModal({
+            title: '又在本词库内学习了'+ dailyTgt +'个单词了，(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                _this.updateUseMode('检验模式')
+                _this.onReload()
+                _this.onShow()
+                return 
+              } 
+              else if (res.cancel) {
+              }
             }
-            break
-          case '检验模式':
-            if(globalDictTracer.isTodayFinished == false)
-            {
-              globalDictTracer.isTodayFinished = true
-              wx.showModal({
-                title: "已检验完所有已学习词汇组",
-                content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
-                confirmText: "明天继续",
-                showCancel: false,
-                success () {
-                  reminder.requestReminder()
-                  _this.updateUseMode('识记模式')
-                  _this.onReload()
-                  _this.onShow()
-                }
-              })
+          })
+        break
+        case '检验模式':
+          wx.showModal({
+            title: '又在本词库内检验了'+ dailyTgt  +'个单词了，(^_^) \r\n 要不要到识记模式继续学习？',
+            confirmText: '这就去',
+            cancelText: '先不了',
+            success (res) {
+              if (res.confirm) {
+                _this.updateUseMode('识记模式')
+                _this.onReload()
+                _this.onShow()
+                return 
+              } 
+              else if (res.cancel) {
+              }
             }
-            this.on_modify_setting()
-            break
+          })
+        break
       }
     }
 
-    globalDictTracer.doneCount ++
-    this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
-    wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    dataDict.markWord(true)
+
+    if(dataDict.needTracer())
+    {
+      globalDictTracer.doneCount ++
+      this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
+      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    }
+
     this.onNext()
-    console.log(globalDictTracer.doneCount, app.globalData.dictInfo.daily_target)
   },
 
   onToBeDone: async function () {
@@ -392,7 +443,7 @@ Page({
     let dataDict = this.data.dictionary
     dataDict.markWord(false)
 
-    if (!dataDict.isCurrentWordInFavored(this.data.word)) {
+    if (!dataDict.isWordInFavored(this.data.word)) {
       let _this = this
       wx.showModal({
         title: '是否收藏当前词汇组？',
@@ -413,7 +464,7 @@ Page({
   onFavor() {
     let dataDict = this.data.dictionary
 
-    if(dataDict.isCurrentWordInFavored(this.data.word))
+    if(dataDict.isWordInFavored(this.data.word))
     {
       this.setData({
         'word.favored': false
@@ -472,12 +523,14 @@ Page({
       return 
     }
 
-    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()]
-    this.setData({
-      target_percent: 100 * globalDictTracer.doneCount / app.globalData.dictInfo.daily_target
-    })
-
-    this.setCoreWordsBarTitle()
+    if(dataDict.needTracer())
+    {
+      let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()]
+      this.setData({
+        target_percent: 100 * globalDictTracer.doneCount / app.globalData.dictInfo.daily_target
+      })
+      this.setCoreWordsBarTitle()
+    }
 
     if(dictInfo.hasOwnProperty('no_high_school') 
        && dataDict.hasOwnProperty('dictionary') && dataDict.isFilterEnabled())

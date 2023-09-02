@@ -179,9 +179,9 @@ export class NormalDictionary extends Dictionary {
         return word.difficulty_level > this.difficultyFilter
     }
 
-    isCurrentWordInFavored(word) {
+    isWordInFavored(word) {
         for (var w in this.favorList) {
-            if(this.favorList[w]._id == this.getCurrentWord()._id)
+            if(this.favorList[w]._id == word._id)
             {
                 return true
             }
@@ -217,7 +217,7 @@ export class NormalDictionary extends Dictionary {
         this.markedNum++
     }
 
-    showCoreWordNum() {
+    needTracer() {
         return true
     }
 
@@ -242,6 +242,11 @@ export class NormalDictionary extends Dictionary {
         super.resetDictionary()
         this.markedNum = 0
     }
+
+    isCurrentWordLeant()
+    {
+        return this.dictionary[this.index]['learnt'] == true
+    }
 };
 
 export class FavorDictionary extends Dictionary {
@@ -249,7 +254,7 @@ export class FavorDictionary extends Dictionary {
         super(dictionary, 0)
     }
 
-    isCurrentWordInFavored(word) {
+    isWordInFavored(word) {
         for (var w in this.dictionary) {
             if(this.dictionary[w]._id == word._id)
             {
@@ -306,7 +311,7 @@ export class FavorDictionary extends Dictionary {
         return this.dictionary
     }
 
-    showCoreWordNum(){
+    needTracer(){
         return false
     }
 
