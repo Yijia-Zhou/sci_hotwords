@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    deris: app.globalData.deris_array
+    deris: app.globalData.current_word_obj.deris
   },
 
   onReturn() {
@@ -25,7 +25,7 @@ Page({
   },
 
   onShow() {
-    let deris = app.globalData.deris_array
+    let deris = app.globalData.current_word_obj.deris
     for (let i in deris) {
       deris[i].fontSize = this.calSingleFontSize(deris[i].word)
     }

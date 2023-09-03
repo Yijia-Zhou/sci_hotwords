@@ -85,6 +85,15 @@ Component({
       })
     },
 
+    // 详解
+    onDetails: function () {
+      app.globalData.current_word_obj = this.properties.word
+      console.log(app.globalData.current_word_obj)
+      wx.navigateTo({
+        url: '/child_package/pages/details/details',
+      })
+    },
+
     // 点击衍生词可显示该衍生词释义
     onDeriDetail: function (event) {
       dblog.logAction("onDeriDetail")
@@ -107,7 +116,7 @@ Component({
     },
 
     onMoreDeri: function () {
-      app.globalData.deris_array = this.properties.word.deris
+      app.globalData.current_word_obj = this.properties.word
       wx.navigateTo({
         url: '/child_package/pages/more_deri/more_deri',
       })
