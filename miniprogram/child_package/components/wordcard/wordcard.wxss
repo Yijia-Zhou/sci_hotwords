@@ -85,7 +85,7 @@
   box-sizing: border-box;
   border: 1px dashed steelblue;
   position: relative;
-  padding-bottom: 55rpx;
+  /* padding-bottom: 55rpx; */
   flex: 0 0 auto;
   height: 240rpx;
 }
@@ -118,6 +118,12 @@
   flex-grow: 0;
   font-style: oblique;
   padding-left: 3%;
+}
+
+.ellipsis_container {
+  line-height: 25rpx; 
+  margin: 0; 
+  padding-bottom: 18rpx;
 }
 
 .button_more_deri {

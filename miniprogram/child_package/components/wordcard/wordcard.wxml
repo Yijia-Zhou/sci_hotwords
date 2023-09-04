@@ -37,8 +37,9 @@
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </text>
         </view>
-        <view class="button_more_deri" catchtap="onMoreDeri" wx:if="{{word.deris[4]}}">
-            更多衍生词……
+        <view class="deri_container_horizon ellipsis_container" catchtap="onMoreDeri" wx:if="{{word.deris[4]}}">
+          <view class="word_deri_left" style="font-size: {{fontRes}}rpx;">…</view>
+          <view class="word_deri_right" style="font-size: {{fontRes}}rpx;">…</view>
         </view>
       </view>
 

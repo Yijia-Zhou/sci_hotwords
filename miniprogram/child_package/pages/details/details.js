@@ -12,12 +12,12 @@ function grouping(raw_string, word_list) {
   lines.forEach(line => {
     // 判断是否包含word_list中的单词
     const found = word_list.some(word => {
-      const re = new RegExp(`^${word}`, 'i'); // 大小写模糊匹配
-      return re.test(line.trim()) && !/[\u4e00-\u9fa5]/.test(line.slice(0, line.indexOf(word)));
+      const re = new RegExp(`^${word}.*`, 'i'); // 大小写模糊匹配
+      return re.test(line.trim()) && !/[\u4e00-\u9fa5]/.test(line.slice(0, 5));
     });
 
     // 判断是否以"其他"或"其它"开头
-    const isOther = /^其他|^其它/.test(line.trim());
+    const isOther = /^其他|^其它|^以上|^这些/.test(line.trim());
 
     if (found || isOther) {
       if (currentChunk.length > 0) {
@@ -50,6 +50,7 @@ Page({
     let word_object = app.globalData.current_word_obj
     let originalText = word_object.gpt
     let word_list = [word_object._id, ...word_object.deris.map(deri => deri.word)];
+    word_list = word_list.map(word => word.slice(0, -1)); //把word_list 中每个单词的最后一个字符去掉
     let paragraphs = grouping(originalText, word_list);  // 根据你的分段规则进行拆分
     this.setData({
       paragraphs: paragraphs
