@@ -36,7 +36,7 @@ Page({
 
   calSingleFontSize: function (word) {
     let display_length = display.count_display_length(word)
-    let fontRes = Math.min(32, 555/(display_length+1))
+    let fontRes = Math.min(32, 400/(display_length+1))
     return fontRes
   },
 

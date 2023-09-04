@@ -1,24 +1,14 @@
-
-<view class="table_more_deri">
-  <view class="tr bg-w">
-    <view class="th" style="width: 20%;">出现次数</view>
-    <view class="th">单词</view>
-    <view class="th ">释义(机翻)</view>
-  </view>
-
-  <block wx:for="{{deris}}" wx:key="word">
-    <view class="tr bg-g" wx:if="{{index % 2 == 0}}">
-      <view class="td" style="width: 20%;">{{item.count}}</view>
-      <view class="td" style="font-size: {{item.fontSize}}rpx;">{{item.word}}</view>
-      <view class="td">{{item.bing}}</view>
+<view class="table-container">
+    <view class="table-header">
+        <view class="table-cell word_column">单词</view>
+        <view class="table-cell count_column">出现次数</view>
+        <view class="table-cell translate_column">释义(机翻)</view>
     </view>
-    <view class="tr" wx:else>
-      <view class="td" style="width: 20%;">{{item.count}}</view>
-      <view class="td" style="font-size: {{item.fontSize}}rpx;">{{item.word}}</view>
-      <view class="td">{{item.bing}}</view>
+    <view class="table-row" wx:for="{{deris}}" wx:key="word">
+        <view class="table-cell word_column" style="font-size: {{item.fontSize}}rpx; font-family: Inter Tight;">{{item.word}}</view>
+        <view class="table-cell count_column">{{item.count}}</view>
+        <view class="table-cell translate_column">{{item.bing}}</view>
     </view>
-  </block>
-
 </view>
 
 <button type="primary" class='btn1 bottom_back_float' catchtap="onReturn" style="width: 61.8vw;">返回</button>
