@@ -27,8 +27,6 @@ Page({
     wx.setNavigationBarTitle({title: '词汇查询'})
     dblog.logAction("onQuery")
 
-
-
     var useClusterList = Object.keys(wx.getStorageSync('dictInfo').dictNames)
 
     for(let useCluster in useClusterList)
@@ -48,12 +46,9 @@ Page({
         dictionaryOrder[useClusterList[useCluster]][useDictList[useDict]] = totalLen;
       }
     }
-    console.log(allDictionary)
 
-    this.setData({
-      allDictionary : allDictionary,
-      dictionaryOrder : dictionaryOrder
-    })
+    this.data.allDictionary = allDictionary
+    this.data.dictionaryOrder = dictionaryOrder
   },
 
   levenshteinDistance:function(str1, str2) {

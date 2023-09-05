@@ -67,7 +67,6 @@ class DictionaryLoader {
         if (!name.includes('基础') && dictionary.every(item => !item.learnt && !item.tested)) {
           dictionary = await this.syncDictionary(dictionary)
         }
-        console.log(dictionary)
         wx.setStorage({
           key: name,
           data: dictionary

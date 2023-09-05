@@ -4,26 +4,60 @@ text {
   font-family: Inter Tight;
 }
 
-.query_bar_container{
-  padding: 10px 0;
+.whole-page-container { 
+  width: 92vw; 
+  height: 92vh; 
+  max-width: 1160px; /* 可调整以适应平板等设备，限制最大宽度以便在大屏上查看时仍有良好的阅读体验 */ 
+  margin: 3.5vh auto 4vh auto; /* 横向居中容器，纵向稍稍往上提 */ 
+  padding: 1rem 2vw; /* 添加一些内边距以改善文本与容器边缘的间距 */ 
+  line-height: 1.5; /* 增加行高以提高可读性 */ 
+  border: 1px solid #ddd; 
+  background-size: cover; 
+  background-clip: content-box; 
+  /* background-color: rgba(255, 250, 205, 0.1); */ 
+  background-color: rgba(232, 232, 216, 0.1); 
+  box-sizing: border-box; 
+  box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.1); 
+} 
+
+/* 搜索框样式 */
+.search-box {
   display: flex;
   flex-direction: row;
-  box-sizing: border-box;
-  /* background-color: #EFEFF4; */
-  justify-content: space-around;
-  /* border-top: 1rpx 0 solid #d7d6dc;
-  border-bottom: 1rpx solid #d7d6dc; */
+  width: auto;
+  padding: 10rpx;
+  margin-bottom: 20rpx;
+  border: 1px solid #ddd;
 }
 
-.query_bar{
+/* 搜索结果列表样式 */
+.result-list {
+  padding: 10rpx 16rpx;
   display: flex;
-  flex-direction: row;
-  width: 92vw;
-  align-self: center;
-  /* border-radius: 5px; */
-  background-color: rgba(232, 232, 216, 0.1);
-  box-shadow: 0 10rpx 20rpx 0 rgba(0, 0, 0, 0.1);
-  /* border: 1rpx solid #E6E6EA */
+  flex-direction: column;
+}
+
+/* 单个搜索结果项样式 */
+.result-item {
+  padding: 0 16rpx;
+  display: flex;
+  width: 100%;
+  min-height: 112rpx;
+  justify-content: space-between;
+  box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.05); 
+  background-color: rgba(232, 232, 216, 0.1); 
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
+}
+
+.result-word {
+  min-width: 180rpx; 
+  align-self: center; 
+  margin-right: 20rpx; 
+  font-size:smaller;
+}
+
+.result-translation {
+  align-self: center; flex-grow: 1;
 }
 
 .query_icon{
@@ -35,41 +69,4 @@ text {
   line-height: 28px;
   font-size: 14px;
   flex-grow: 1;
-}
-
-/* .cancel_bar_btn{
-  line-height: 28px;
-  color: #06ae56;
-  align-self: center;
-  margin-right: 12rpx;
-} */
-
-/* .resultBgView {
-  background-color: rgba(232, 232, 216, 0.1);
-  box-shadow: 0 5rpx 10rpx 0 rgba(0, 0, 0, 0.1);
-} */
-
-.resultBgView-hidden {
-  display: none;
-}
-
-.resultCell {
-  /* padding: 0 30rpx; */
-  margin: 0 3vw;
-  min-height: 100rpx;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.resultCell:first-child {
-  border-top: 1px solid #ddd;
-}
-
-.resultInnerCell {
-  display: flex;
-  flex-grow: 1;
-  margin: 0 2vw;
-  justify-content: space-between;
 }
