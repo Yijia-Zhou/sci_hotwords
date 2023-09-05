@@ -15,7 +15,7 @@
       bindtap='toResult'
     >
       <text class="result-word">{{searchResultArr[index].word}}</text>
-      <text class="result-translation">{{searchResultArr[index].translation}}</text>
+      <text class="result-translation">{{searchResultArr[index].derisIdx == -1 ? '' : '[机翻]'}}{{searchResultArr[index].translation}}</text>
     </view>
   </view>
 </view>

@@ -100,7 +100,7 @@ Component({
       var deri_obj = this.properties.word.deris[event.target.id.substr(4,1)]
       wx.showModal({
         title: deri_obj.word,
-        content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 出现次数：' + String(deri_obj.count), 
+        content: (Boolean(deri_obj.bing)?'[机翻]'+deri_obj.bing:"暂无释义") + '\r\n 出现次数：' + String(deri_obj.count), 
         showCancel: false
       })
     },
@@ -110,7 +110,7 @@ Component({
       var deri_obj = this.properties.word.deris[derisIndex]
       wx.showModal({
         title: deri_obj.word,
-        content: (Boolean(deri_obj.bing)?deri_obj.bing:"暂无释义") + '\r\n 出现次数：' + String(deri_obj.count), 
+        content: (Boolean(deri_obj.bing)?'[机翻]'+deri_obj.bing:"暂无释义") + '\r\n 出现次数：' + String(deri_obj.count), 
         showCancel: false
       })
     },
