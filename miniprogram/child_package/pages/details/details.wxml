@@ -1,0 +1,7 @@
+<view class="text-container">
+    <view wx:for="{{paragraphs}}" wx:key="index" class="paragraph">
+    <text>{{item}}</text>
+    </view>
+</view>
+
+<button type="primary" class='btn1 bottom_back_float' catchtap="onReturn" style="width: 61.8vw;">返回</button>

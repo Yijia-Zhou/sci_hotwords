@@ -2,41 +2,53 @@
 
 page {
   position: relative;
+  padding-bottom: 300rpx;
 }
 
-.table_more_deri {
-  border: 0px solid darkgray;
-  width: 100%;
-  position: absolute;
-  top: 5vh;
-  padding-bottom: 260rpx;
+.table-container {
+  width: 92vw;
+  max-width: 1160px;
+  margin: 3.5vh auto 0 auto;
+  padding: 4rpx 1vw;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  background-color: rgba(232, 232, 216, 0.1);
+  box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.1);
 }
-.tr {
+
+.table-header, .table-row {
   display: flex;
   width: 100%;
-  justify-content: center;
-  min-height: 3rem;
-  /* height: 3rem; */
-  align-items: center;
+  min-height: 112rpx;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.td {
-  width:40%;
-  justify-content: center;
+
+.table-cell {
+  /* flex: 1; */
   text-align: center;
-  font-family: Inter Tight;
+  padding: 15rpx 0;
+  display: flex;        /* 添加此属性 */
+  align-items: center;  /* 添加此属性 */
+  justify-content: center;  /* 横向居中，如果需要 */
 }
-.bg-w{
-  background: snow;
+
+.table-header .table-cell {
+  font-weight: bold;
 }
-.bg-g{
-  background: #E6F3F9;
+
+.table-row:last-child {
+  border-bottom: 0;
 }
-.th {
-  width: 40%;
-  justify-content: center;
-  background: #3366FF;
-  color: #fff;
-  display: flex;
-  height: 3rem;
-  align-items: center;
+
+.word_column {
+  width: 30%;
+}
+
+.count_column {
+  width: 20%;
+}
+
+.translate_column {
+  width: 50%;
 }

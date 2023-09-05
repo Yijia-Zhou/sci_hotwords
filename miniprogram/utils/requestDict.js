@@ -65,8 +65,12 @@ class DictionaryLoader {
         }
         // 如果当前词库没有任何学习记录，则同步基础词库的学习记录
         if (!name.includes('基础') && dictionary.every(item => !item.learnt && !item.tested)) {
-          dictionary = this.syncDictionary(dictionary)
+          dictionary = await this.syncDictionary(dictionary)
         }
+        wx.setStorage({
+          key: name,
+          data: dictionary
+        })
       }
 
       resolve(dictionary);
@@ -76,9 +80,7 @@ class DictionaryLoader {
 
   // 更新词典数据的方法
   async updateDictionary(name, dictionary){
-    const db = wx.cloud.database()
-    let reqRes = await db.collection('dictionary').doc(name).get()
-    const dataTemp = reqRes.data.dictionary
+    let dataTemp = await this.downloadDictionary(name)
     console.log('更新词库中', dataTemp)
     for (var i in dictionary) {
       let theOldItem = dictionary[i]
@@ -89,10 +91,6 @@ class DictionaryLoader {
       }
       // 本地学习过程中在 dictionary 内添加的属性塞进更新过的词典里
     }
-    wx.setStorage({
-      key: name,
-      data: dataTemp
-    })
     console.log('更新词库完毕~')
     let dict_need_refresh = wx.getStorageSync('dict_need_refresh')
     dict_need_refresh.splice(dict_need_refresh.indexOf(app.globalData.dictInfo.name), 1)
@@ -105,15 +103,17 @@ class DictionaryLoader {
 
   // 下载词典数据的方法
   async downloadDictionary(name) {
+    console.log('downloadDictionary', name)
     dblog.logAction('downloadDictionary', name)
     const db = wx.cloud.database()
     let reqRes = await db.collection('dictionary').doc(name).get()
-    const dataTemp = await reqRes.data.dictionary
+    let dataTemp = await reqRes.data.dictionary
 
-    wx.setStorage({
-      key: name,
-      data: dataTemp
-    })
+    if (reqRes.data.followedBy) { // 分段下载时递归下载并合并后段
+        let following = await this.downloadDictionary(reqRes.data.followedBy)
+        dataTemp = dataTemp.concat(following)
+    }
+
     return dataTemp
   }
 

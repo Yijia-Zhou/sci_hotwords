@@ -51,16 +51,27 @@
   height: 96rpx;
   margin-top: 12rpx;
 }
-
-.read_button_container{
+.small_button_container {
+  width: 61.80%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  padding: 15rpx 0;
+  justify-content: center;
+  /* padding: 15rpx 400rpx; */
+}
+.small_button_wrapper {
+  padding: 30rpx 18rpx;  /* 扩大触控面积 */
+}
+.small_button_wrapper:first-child {
+  padding-left: 40rpx;  /* 增加最左按钮的左侧padding */
+}
+.small_button_wrapper:last-child {
+  padding-right: 40rpx;  /* 增加最右按钮的右侧padding */
 }
 
-.read_button {
+.small_button {
+  padding: 10px 20px;
+  border: none;
   font-size: 36rpx;
   text-align: center;
   background-color: #07c160;
@@ -74,7 +85,7 @@
   box-sizing: border-box;
   border: 1px dashed steelblue;
   position: relative;
-  padding-bottom: 55rpx;
+  /* padding-bottom: 55rpx; */
   flex: 0 0 auto;
   height: 240rpx;
 }
@@ -107,6 +118,12 @@
   flex-grow: 0;
   font-style: oblique;
   padding-left: 3%;
+}
+
+.ellipsis_container {
+  line-height: 25rpx; 
+  margin: 0; 
+  padding-bottom: 18rpx;
 }
 
 .button_more_deri {

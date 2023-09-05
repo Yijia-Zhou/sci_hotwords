@@ -1,0 +1,29 @@
+page {
+  position: relative;
+  padding-bottom: 300rpx;
+}
+
+.text-container {
+  width: 92vw;
+  min-height: 92vh;
+  max-width: 1160px; /* 可调整以适应平板等设备，限制最大宽度以便在大屏上查看时仍有良好的阅读体验 */
+  margin: 3.5vh auto 0 auto; /* 横向居中容器，纵向稍稍往上提 */
+  padding: 1rem 2vw; /* 添加一些内边距以改善文本与容器边缘的间距 */
+  line-height: 1.5; /* 增加行高以提高可读性 */
+  border: 1px solid #ddd;
+  background-size: cover;
+	background-clip: content-box;
+  /* background-color: rgba(255, 250, 205, 0.1); */
+  background-color: rgba(232, 232, 216, 0.1);
+  box-sizing: border-box;
+  box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.paragraph {
+  margin-bottom: 16px;  /* 设置段落间距 */
+  white-space: pre-wrap; /* 保持文本的原格式（包括换行和空格） */
+}
+
+.text-container .paragraph:last-child  {
+  margin-bottom: 0;  /* 取消最后一个段落的margin-bottom */
+}
