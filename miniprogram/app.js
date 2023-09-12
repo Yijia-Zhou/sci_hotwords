@@ -3,21 +3,70 @@ App({
   initGlobalDictInfo()
   {
     console.log('getStorage - dictInfo - fail:')
-    this.globalData.dictInfo =   {"_id":"diff_showcase_test","modes":["识记模式","检验模式"],"dictNames":{"生命科学":
-    {
-        "基础词库":{
+    this.globalData.dictInfo =   {
+      "_id":"2.x",
+      "modes":["识记模式",
+      "检验模式"],
+      "dictNames":{
+        "生命科学":{
+          "基础词库":{
             "paper_count":1.217564E+06,
-            "diff_showcase": ["signal", "researcher", "institute", "displaced", "distal", "deform", "elisa", "resuspend", "homogeneous", "catheter"]
+            "diff_showcase":["signal","researcher", "institute","displaced","distal", "deform","elisa","resuspend","homogeneous","catheter"]},
+          "分子生物学":{
+            "paper_count":75205.0,
+            "diff_showcase":["case", "capacity", "digest", "lncRNA", "vital", "phenyl", "pole","fluid","penetrate","proton"]},
+          "神经&认知":{"paper_count":51713.0,
+                "diff_showcase":["temporal",
+                "assume",
+                "microscope",
+                "glucose",
+                "poly",
+                "excite",
+                "propagate",
+                "dysfunction",
+                "cardiac",
+                "gait"]},
+          "生信&计算":{"paper_count":18965.0,
+                "diff_showcase":["network",
+                "database",
+                "reconstruct",
+                "indices",
+                "discharge",
+                "cortex",
+                "fuzzy",
+                "probe",
+                "primer",
+                "poisson"]}
+          },
+        "医学":{"医学基础":{"paper_count":1.217564E+06,
+          "diff_showcase":["signal",
+          "researcher",
+          "institute",
+          "displaced",
+          "distal",
+          "deform",
+          "elisa",
+          "resuspend",
+          "homogeneous",
+          "catheter"]}
         },
-        "分子生物学":{"paper_count":75205.0,
-        "diff_showcase": ["case", "capacity", "digest", "lncRNA", "vital", "phenyl", "pole", "fluid", "penetrate", "proton"]},
-        "神经&认知":{"paper_count":51713.0,
-        "diff_showcase": ["temporal", "assume", "microscope", "glucose", "poly", "excite", "propagate", "dysfunction", "cardiac", "gait"]
-    },
-        "生信&计算":{"paper_count":18965.0,
-        "diff_showcase": ["network", "database", "reconstruct", "indices", "discharge", "cortex", "fuzzy", "probe", "primer", "poisson"]}
-        }
-        },"daily_target":30.0,"marker":12.0, diff_thresholds:{},tracer:{}}
+        "农学":{
+          "农学基础":{
+            "paper_count":1.217564E+06,
+            "diff_showcase":["signal",
+              "researcher",
+              "institute",
+              "displaced",
+              "distal",
+              "deform",
+              "elisa",
+              "resuspend",
+              "homogeneous",
+              "catheter"]}}
+        },
+      "daily_target":30.0,
+      "marker":16.0
+    }
   },
 
   isSameDay(prevDay, curDay){
@@ -66,7 +115,7 @@ App({
         let globalDictInfo = _this.globalData.dictInfo
         const db = wx.cloud.database()
 
-        db.collection('dictInfo').doc('diff_showcase_test').get().then(res => { 
+        db.collection('dictInfo').doc('2.x').get().then(res => { 
           let remoteData = res.data
           if (remoteData && (!globalDictInfo.marker || globalDictInfo.marker!= remoteData.marker)) {
             /**

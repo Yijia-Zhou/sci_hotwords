@@ -93,8 +93,26 @@ Page({
     if (!app.globalData.hasOwnProperty('dictInfo')) {
       return setTimeout(this.picker_render, 20)
     }
+
+    let clusters = Object.keys(app.globalData.dictInfo.dictNames)
+
+    // 确保这两个特定元素（如果存在）排在前两位
+    const specialItems = ['生命科学', '医学'];
+    clusters.sort((a, b) => {
+      if (specialItems.includes(a) && specialItems.includes(b)) {
+        return specialItems.indexOf(a) - specialItems.indexOf(b);  // 在特定元素之间保持顺序
+      }
+      if (specialItems.includes(a)) {
+        return -1; // a 在 b 之前
+      }
+      if (specialItems.includes(b)) {
+        return 1; // b 在 a 之前
+      }
+      return 0; // 不改变 a 和 b 的相对顺序
+    });
+
     this.setData({
-      clusters: Object.keys(app.globalData.dictInfo.dictNames),
+      clusters: clusters,
       modes: app.globalData.dictInfo.modes,
     })
     
