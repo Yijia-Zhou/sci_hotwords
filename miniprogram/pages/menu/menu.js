@@ -82,7 +82,7 @@ Page({
   },
 
   get_cluster(clusterIdx){
-    return Object.keys(app.globalData.dictInfo.dictNames)[clusterIdx]
+    return this.data.clusters[clusterIdx]
   },
 
   /**
