@@ -70,7 +70,7 @@ Page({
       this.initGlobalTracer(useDict, curDay, this.data.dictionary.getMarkedWordNum())
     }
 
-    wx.setStorageSync({
+    wx.setStorage({
       key: 'dictInfo',
       data: app.globalData.dictInfo
     })
@@ -569,6 +569,7 @@ Page({
     if(this.data.dictionary && Object.keys(this.data.dictionary).length != 0)
     {
       this.data.dictionary.commitData()
+    //   console.log('setStorageSync', app.globalData.dictInfo.useDict)
       wx.setStorageSync(app.globalData.dictInfo.useDict, this.data.dictionary.getDictionary())
       wx.setStorageSync('我的收藏', this.data.dictionary.getFavorDict())
     }
