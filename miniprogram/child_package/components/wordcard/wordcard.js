@@ -29,7 +29,7 @@ Component({
       this.explain_style_process()
       
       // 更新“朗读”内容
-      if (!this.data.noAudio) {
+      if (!this.data.noInternet) {
         try {
           clearTimeout(this.data.audio_timeout)
           this.InnerAudioContext.destroy()
@@ -53,7 +53,7 @@ Component({
     useMode: app.globalData.dictInfo.useMode,
     showChinese: false, //记录检验模式中点击显示释义动作
     showPlay: true,
-    noAudio: Boolean(app.globalData.offline)
+    noInternet: Boolean(app.globalData.offline)
   },
 
   /**
@@ -198,7 +198,7 @@ Component({
       } catch(e) {
         console.log(e)
         this.setData({
-          noAudio: true
+          noInternet: true
         })
       }
     },

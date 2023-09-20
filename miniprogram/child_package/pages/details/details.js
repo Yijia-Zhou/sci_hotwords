@@ -1,4 +1,6 @@
 var app = getApp()
+const db = wx.cloud.database()
+
 function grouping(raw_string, word_list) {
   // 我需要对一个多行字符串raw_string进行分割，得到一个结果列表result, 规则如下：
   // raw_string中的每一行，如果其包含一个单词列表word_list中的单词（大小写模糊），且该单词所处位置与行首中间无中文，则该行成为一个起始行；
@@ -12,12 +14,12 @@ function grouping(raw_string, word_list) {
   lines.forEach(line => {
     // 判断是否包含word_list中的单词
     const found = word_list.some(word => {
-      const re = new RegExp(`^${word}.*`, 'i'); // 大小写模糊匹配
+      const re = new RegExp(`^(?:\\d+\\.|${word}).*`, 'i');  // 匹配以word开头的字符串（大小写不敏感）或以"数字."开头的字符串
       return re.test(line.trim()) && !/[\u4e00-\u9fa5]/.test(line.slice(0, 4));
     });
 
     // 判断是否以"其他"或"其它"开头
-    const isOther = /^其他|^其它|^以上|^这些|^简单|^简要|^概括/.test(line.trim());
+    const isOther = /^其他|^其它|^以上|^这些|^简单|^简要|^概括|^此组|^本组/.test(line.trim());
 
     if (found || isOther) {
       if (currentChunk.length > 0) {
@@ -39,6 +41,7 @@ function grouping(raw_string, word_list) {
 Page({
 
   data: {
+    word: '',
     paragraphs: []
   },
 
@@ -46,18 +49,33 @@ Page({
     wx.navigateBack()
   },
 
-  onShow() {
-    let word_object = app.globalData.current_word_obj
-    let originalText = word_object.gpt
-    let word_list = [word_object._id, ...word_object.deris.map(deri => deri.word)];
-    word_list = word_list.map(word => word.slice(0, -1)); //把word_list 中每个单词的最后一个字符去掉
-    let paragraphs = grouping(originalText, word_list);  // 根据你的分段规则进行拆分
-    this.setData({
-      paragraphs: paragraphs
-    });
+  onLoad() {
     wx.pageScrollTo({
       duration: 0,
       scrollTop: 0
+    })
+  },
+
+  onShow() {
+    let word_object = app.globalData.current_word_obj
+    if (this.data.word == word_object._id) {
+      return
+    }
+
+    this.data.word = word_object._id
+    let useDict = app.globalData.dictInfo.useDict
+    db.collection('details').where({
+      word: this.data.word,
+      wordbank_id: useDict !== '我的收藏' ? useDict : word_object.fromDict
+    }).get().then(res => {
+      let remoteData = res.data[0]
+      let originalText = remoteData.gpt_content
+      let word_list = [word_object._id, ...word_object.deris.map(deri => deri.word)];
+      word_list = word_list.map(word => word.slice(0, -1)); //把word_list 中每个单词的最后一个字符去掉
+      let paragraphs = grouping(originalText, word_list);  // 根据你的分段规则进行拆分
+      this.setData({
+        paragraphs: paragraphs
+      });
     })
   },
 
