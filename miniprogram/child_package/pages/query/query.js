@@ -3,6 +3,11 @@ var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
 const DictionaryLoader = new requestDict.DictionaryLoader()
 
+function getIntersection(arr1, arr2) {
+  const set2 = new Set(arr2);
+  return arr1.filter(item => set2.has(item));
+}
+
 Page({
 
   /**
@@ -39,7 +44,12 @@ Page({
 
       dictionaryOrder[useClusterList[useCluster]] = []
       
-      for(let useDict in useDictList)
+      let downloadedDict = getIntersection(useDictList, wx.getStorageInfoSync().keys)      
+      if (downloadedDict.length == 0) {
+        downloadedDict.push('基础词库')
+      }
+
+      for(let useDict in downloadedDict)
       {
         allDictionary.push.apply(allDictionary, await DictionaryLoader.getDictionarySync(useDictList[useDict])) 
         totalLen += wx.getStorageSync(useDictList[useDict]).length

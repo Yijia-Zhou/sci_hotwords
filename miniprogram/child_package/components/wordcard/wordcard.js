@@ -141,6 +141,7 @@ Component({
      // 将词频信息处理成显示在卡片顶端的文字
     process_fre_text: function () {
       let word = this.properties.word
+      console.log(word)
       let paper_count = app.globalData.dictInfo.dictNames[word.fromCluster][word.fromDict].paper_count
       if (typeof(paper_count) != "number") {
         paper_count = 1217564
