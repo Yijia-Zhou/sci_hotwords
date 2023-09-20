@@ -1,5 +1,10 @@
 @import '../../font-face.wxss';
 
+page {
+  position: relative;
+  padding-bottom: 300rpx;
+}
+
 text {
   font-family: Inter Tight;
 }

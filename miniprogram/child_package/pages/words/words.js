@@ -184,7 +184,7 @@ Page({
     switch (dataDict.getUseMode()) {
       case '识记模式':
         wx.showModal({
-          title: '全部记过一遍啦(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+          title: '全部识记过一遍啦(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
           confirmText: '这就去',
           cancelText: '先不了',
           success (res) {
@@ -202,7 +202,25 @@ Page({
         })
         break
       case '检验模式':
-        reset()
+        wx.showModal({
+          title: '全部检验过一遍啦(^_^) \r\n 是否返回选择其它词库？',
+          confirmText: '这就去',
+          cancelText: '先不了',
+          success (res) {
+            if (res.confirm) {
+              dblog.logAction("allDone_and_return")
+              reset()
+              _this.updateUseMode('识记模式')
+              wx.redirectTo({
+                url: '/pages/menu/menu?no_jump=true',
+              })
+              return 
+            } else if (res.cancel) {
+              dblog.logAction("allDone_and_reset")
+              reset()
+            }
+          }
+        })
         break
     }
   },
@@ -268,7 +286,7 @@ Page({
     console.log("words onLoad start")
     console.log(dictInfo)
 
-    wx.setNavigationBarTitle({title: dictInfo.useCluster + ' - ' + dictInfo.useDict})
+    wx.setNavigationBarTitle({title: dictInfo.useDict})
 
     this.initialDictionary(dictInfo)
   },
@@ -362,7 +380,7 @@ Page({
         else
         {
           wx.showModal({
-            title: '已在本词库内达到今日目标了了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            title: '已达到今日识记目标(^_^) \r\n 试着到检验模式印证一下记忆？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
@@ -390,7 +408,7 @@ Page({
       switch (dataDict.getUseMode()) {
         case '识记模式':
           wx.showModal({
-            title: '又在本词库内学习了'+ dailyTgt +'个单词了，(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            title: '又识记了'+ dailyTgt +'个单词，(^_^) \r\n 继续到检验模式印证一下记忆？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
@@ -407,7 +425,7 @@ Page({
         break
         case '检验模式':
           wx.showModal({
-            title: '又在本词库内检验了'+ dailyTgt  +'个单词了，(^_^) \r\n 要不要到识记模式继续学习？',
+            title: '又检验了'+ dailyTgt  +'个单词的记忆，(^_^) \r\n 回到识记模式继续学习？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
