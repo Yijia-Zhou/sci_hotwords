@@ -40,6 +40,7 @@ Page({
       setTimeout(this.auto_navigate, 0)
     } else {
       this.no_jump = true
+      DictionaryLoader.removeDictionary('我的收藏')
     }
 
     // 记录新用户来源信息
@@ -82,7 +83,7 @@ Page({
   },
 
   get_cluster(clusterIdx){
-    return Object.keys(app.globalData.dictInfo.dictNames)[clusterIdx]
+    return this.data.clusters[clusterIdx]
   },
 
   /**

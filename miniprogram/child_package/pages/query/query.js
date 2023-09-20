@@ -184,7 +184,7 @@ Page({
 
   onReturn() {
     wx.redirectTo({
-      url: '/pages/menu/menu',
+      url: '/pages/menu/menu?no_jump=true',
     })
   },
 

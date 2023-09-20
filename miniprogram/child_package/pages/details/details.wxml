@@ -1,6 +1,6 @@
 <view class="text-container">
     <view wx:for="{{paragraphs}}" wx:key="index" class="paragraph">
-    <text>{{item}}</text>
+        <text style="font-size: 36rpx;">{{item}}</text>
     </view>
 </view>
 
