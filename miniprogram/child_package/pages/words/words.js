@@ -351,7 +351,7 @@ Page({
     {
       let _this = this
       if(dataDict.getUseMode() == '检验模式' && globalDictTracer.isTodayFinished == false 
-         && globalDictTracer.doneCount >= dailyTgt && !dataDict.isCurrentWordLeant())
+         && globalDictTracer.doneCount >= dailyTgt && !dataDict.isNextWordLeant())
       {
         globalDictTracer.isTodayFinished = true
         wx.showModal({
@@ -424,7 +424,7 @@ Page({
           })
         break
         case '检验模式':
-          if(!dataDict.isCurrentWordLeant()){
+          if(!dataDict.isNextWordLeant()){
             wx.showModal({
               title: '又检验完了已经识记的词汇(^_^) \r\n 回到识记模式继续学习？',
               confirmText: '这就去',
@@ -447,12 +447,13 @@ Page({
 
     // dataDict.markWord(true)
 
-    if(dataDict.needTracer())
-    {
-      globalDictTracer.doneCount ++
-      this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
-      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
-    }
+    // if(dataDict.needTracer())
+    // {
+    //   globalDictTracer.doneCount ++
+    //   this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
+    //   wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    // }
+    // 避免影响每日目标&进度系统，doneCount与markWord相关临时移到onNext
 
     this.onNext()
   },
@@ -512,8 +513,16 @@ Page({
 
   onNext: async function () {
     
+    // 避免影响每日目标&进度系统的临时措施
     let dataDict = this.data.dictionary
-    dataDict.markWord(true) // 避免影响每日目标&进度系统的临时措施
+    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()]
+    dataDict.markWord(true) 
+    if(dataDict.needTracer())
+    {
+      globalDictTracer.doneCount ++
+      this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
+      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    }
 
     clearTimeout(this.data.timer_timeout)
     this.data.since_touch_setting += 1
