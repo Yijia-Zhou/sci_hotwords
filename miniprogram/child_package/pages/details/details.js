@@ -20,7 +20,7 @@ function grouping(raw_string, word_list) {
     });
 
     // 判断是否以"其他"或"其它"开头
-    const isOther = /^其他|^其它|^以上|^这些|^简单|^简要|^概括|^此组|^本组/.test(line.trim());
+    const isOther = /^其他|^其它|^以上|^所有|^这些|^简单|^简要|^概括|^此组|^本组/.test(line.trim());
 
     if (found || isOther) {
       if (currentChunk.length > 0) {

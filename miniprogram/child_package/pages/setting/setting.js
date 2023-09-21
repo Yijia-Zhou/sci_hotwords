@@ -80,19 +80,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    try {
+    if (!app.globalData.dictInfo.hasOwnProperty('useDict') || app.globalData.dictInfo.useDict == '我的收藏') {
+        this.setData({show_diff_setting: false})
+    } else {
       this.setData({
         difficulty: app.globalData.dictInfo.diff_thresholds.hasOwnProperty(app.globalData.dictInfo.useDict)
         ? Math.round(app.globalData.dictInfo.diff_thresholds[app.globalData.dictInfo.useDict] * 100)
         : 0
       })
-    } catch(e) {
-      if (e instanceof TypeError) {
-        console.log(e)
-        this.setData({show_diff_setting: false})
-      } else {
-        console.error(e)
-      }
     }
 
     this.setData({
