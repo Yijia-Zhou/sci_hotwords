@@ -12,8 +12,6 @@ App({
           "基础词库":{
             "paper_count":1.217564E+06,
             "diff_showcase":["signal","researcher", "institute","displaced","distal", "deform","elisa","resuspend","homogeneous","catheter"]},
-          "测试用": {"paper_count":1217564,
-            "diff_showcase": ["signal", "researcher", "institute", "displaced", "distal", "deform", "elisa", "resuspend", "homogeneous", "catheter"]},
           "分子生物学":{
             "paper_count":75205.0,
             "diff_showcase":["case", "capacity", "digest", "lncRNA", "vital", "phenyl", "pole","fluid","penetrate","proton"]},
@@ -40,32 +38,6 @@ App({
                 "primer",
                 "poisson"]}
           },
-        "医学":{"医学基础":{"paper_count":1.217564E+06,
-          "diff_showcase":["signal",
-          "researcher",
-          "institute",
-          "displaced",
-          "distal",
-          "deform",
-          "elisa",
-          "resuspend",
-          "homogeneous",
-          "catheter"]}
-        },
-        "农学":{
-          "农学基础":{
-            "paper_count":1.217564E+06,
-            "diff_showcase":["signal",
-              "researcher",
-              "institute",
-              "displaced",
-              "distal",
-              "deform",
-              "elisa",
-              "resuspend",
-              "homogeneous",
-              "catheter"]}
-        }
       },
       "diff_thresholds": {},
       "tracer": {},
