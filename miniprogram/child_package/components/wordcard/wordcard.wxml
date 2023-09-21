@@ -4,12 +4,12 @@
       <text class="main_word" wx:if='{{baseword_len<15}}'>{{word._id}}</text>
       <text class="main_word_smaller" style="font-size: {{1200/baseword_len}}rpx;" wx:else>{{word._id}}</text>
 
-      <view class="small_button_container">
-        <view class="small_button_wrapper" wx:if="{{!noAudio}}" catchtap="{{showPlay ? 'onPlay' : 'onPause'}}">
+      <view class="small_button_container" wx:if="{{!noInternet}}">
+        <view class="small_button_wrapper" catchtap="{{showPlay ? 'onPlay' : 'onPause'}}">
           <text class="small_button" wx:if='{{showPlay}}'>朗读</text>
           <text class="small_button" wx:else>暂停</text>
         </view>
-        <view class="small_button_wrapper" wx:if="{{word.gpt}}" catchtap="onDetails">
+        <view class="small_button_wrapper" wx:if="{{word.has_gpt}}" catchtap="onDetails">
           <text class="small_button">详解</text>
         </view>
       </view>

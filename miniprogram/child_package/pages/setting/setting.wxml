@@ -22,9 +22,9 @@
       </view>
     </view>
     <view class="section">
-      <text class="sub_title">每天的目标是记住多少？</text>
+      <text class="sub_title">每天的目标是学习多少？</text>
       <view class="paragraph">
-        <text>当前每日目标识记量为</text>
+        <text>当前每日目标学习量为</text>
         <picker class="picked_text" bindchange="on_daily_target_change"
           value="{{daily_target_index}}" 
           range="{{daily_target_array}}"

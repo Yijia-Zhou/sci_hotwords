@@ -1,8 +1,8 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
-var reminder = require('../../../utils/reminder.js')
-var display = require('../../../utils/display.js')
+var reminder = require('../../sub_utils/reminder.js')
+var display = require('../../sub_utils/display.js')
 import { NormalDictionary, FavorDictionary } from './dictionary.js'
 const DictionaryLoader = new requestDict.DictionaryLoader()
 
@@ -184,7 +184,7 @@ Page({
     switch (dataDict.getUseMode()) {
       case '识记模式':
         wx.showModal({
-          title: '全部记过一遍啦(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+          title: '全部识记过一遍啦(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
           confirmText: '这就去',
           cancelText: '先不了',
           success (res) {
@@ -202,7 +202,25 @@ Page({
         })
         break
       case '检验模式':
-        reset()
+        wx.showModal({
+          title: '全部检验过一遍啦(^_^) \r\n 是否返回选择其它词库？',
+          confirmText: '这就去',
+          cancelText: '先不了',
+          success (res) {
+            if (res.confirm) {
+              dblog.logAction("allDone_and_return")
+              reset()
+              _this.updateUseMode('识记模式')
+              wx.redirectTo({
+                url: '/pages/menu/menu?no_jump=true',
+              })
+              return 
+            } else if (res.cancel) {
+              dblog.logAction("allDone_and_reset")
+              reset()
+            }
+          }
+        })
         break
     }
   },
@@ -268,7 +286,7 @@ Page({
     console.log("words onLoad start")
     console.log(dictInfo)
 
-    wx.setNavigationBarTitle({title: dictInfo.useCluster + ' - ' + dictInfo.useDict})
+    wx.setNavigationBarTitle({title: dictInfo.useDict})
 
     this.initialDictionary(dictInfo)
   },
@@ -333,7 +351,7 @@ Page({
     {
       let _this = this
       if(dataDict.getUseMode() == '检验模式' && globalDictTracer.isTodayFinished == false 
-         && globalDictTracer.doneCount >= dailyTgt && !dataDict.isCurrentWordLeant())
+         && globalDictTracer.doneCount >= dailyTgt && !dataDict.isNextWordLeant())
       {
         globalDictTracer.isTodayFinished = true
         wx.showModal({
@@ -362,7 +380,7 @@ Page({
         else
         {
           wx.showModal({
-            title: '已在本词库内达到今日目标了了(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            title: '已达到今日识记目标(^_^) \r\n 试着到检验模式印证一下记忆？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
@@ -390,7 +408,7 @@ Page({
       switch (dataDict.getUseMode()) {
         case '识记模式':
           wx.showModal({
-            title: '又在本词库内学习了'+ dailyTgt +'个单词了，(^_^) \r\n 要不要试着到检验模式印证一下记忆？',
+            title: '又识记了'+ dailyTgt +'个单词，(^_^) \r\n 继续到检验模式印证一下记忆？',
             confirmText: '这就去',
             cancelText: '先不了',
             success (res) {
@@ -406,33 +424,36 @@ Page({
           })
         break
         case '检验模式':
-          wx.showModal({
-            title: '又在本词库内检验了'+ dailyTgt  +'个单词了，(^_^) \r\n 要不要到识记模式继续学习？',
-            confirmText: '这就去',
-            cancelText: '先不了',
-            success (res) {
-              if (res.confirm) {
-                _this.updateUseMode('识记模式')
-                _this.onReload()
-                _this.onShow()
-                return 
-              } 
-              else if (res.cancel) {
+          if(!dataDict.isNextWordLeant()){
+            wx.showModal({
+              title: '又检验完了已经识记的词汇(^_^) \r\n 回到识记模式继续学习？',
+              confirmText: '这就去',
+              cancelText: '先不了',
+              success (res) {
+                if (res.confirm) {
+                  _this.updateUseMode('识记模式')
+                  _this.onReload()
+                  _this.onShow()
+                  return 
+                } 
+                else if (res.cancel) {
+                }
               }
-            }
-          })
+            })
+         }
         break
       }
     }
 
-    dataDict.markWord(true)
+    // dataDict.markWord(true)
 
-    if(dataDict.needTracer())
-    {
-      globalDictTracer.doneCount ++
-      this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
-      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
-    }
+    // if(dataDict.needTracer())
+    // {
+    //   globalDictTracer.doneCount ++
+    //   this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
+    //   wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    // }
+    // 避免影响每日目标&进度系统，doneCount与markWord相关临时移到onNext
 
     this.onNext()
   },
@@ -441,7 +462,7 @@ Page({
     dblog.logAction("onToBeDone")
 
     let dataDict = this.data.dictionary
-    dataDict.markWord(false)
+    // dataDict.markWord(false)
 
     if (!dataDict.isWordInFavored(this.data.word)) {
       let _this = this
@@ -491,6 +512,18 @@ Page({
   },
 
   onNext: async function () {
+    
+    // 避免影响每日目标&进度系统的临时措施
+    let dataDict = this.data.dictionary
+    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()]
+    dataDict.markWord(true) 
+    if(dataDict.needTracer())
+    {
+      globalDictTracer.doneCount ++
+      this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
+      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    }
+
     clearTimeout(this.data.timer_timeout)
     this.data.since_touch_setting += 1
     this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})

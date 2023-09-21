@@ -1,5 +1,5 @@
 var app = getApp()
-var display = require('../../../utils/display.js')
+var display = require('../../sub_utils/display.js')
 
 Page({
 
@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    deris: app.globalData.current_word_obj.deris
+    deris: []
   },
 
   onReturn() {

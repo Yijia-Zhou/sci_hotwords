@@ -40,7 +40,6 @@ Page({
       setTimeout(this.auto_navigate, 0)
     } else {
       this.no_jump = true
-      DictionaryLoader.removeDictionary('我的收藏')
     }
 
     // 记录新用户来源信息
@@ -95,6 +94,7 @@ Page({
       return setTimeout(this.picker_render, 20)
     }
 
+    DictionaryLoader.removeDictionary('我的收藏')
     let clusters = Object.keys(app.globalData.dictInfo.dictNames)
 
     // 确保这两个特定元素（如果存在）排在前两位
@@ -134,7 +134,7 @@ Page({
       value: [useCluster, useDictIndex, useModeIndex]
     })
 
-    if (this.data.domains[useDictIndex] == "我的收藏" && this.no_jump) {
+    if (this.data.domains[useDictIndex] == "我的收藏" && !wx.getStorageInfoSync().keys.includes('我的收藏')) {
       this.back2foundermental()
     }
 

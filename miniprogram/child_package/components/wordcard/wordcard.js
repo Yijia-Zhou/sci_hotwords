@@ -1,6 +1,6 @@
 var app = getApp()
 var dblog = require('../../../utils/dblog.js')
-var display = require('../../../utils/display.js')
+var display = require('../../sub_utils/display.js')
 
 Component({
   /**
@@ -29,7 +29,7 @@ Component({
       this.explain_style_process()
       
       // 更新“朗读”内容
-      if (!this.data.noAudio) {
+      if (!this.data.noInternet) {
         try {
           clearTimeout(this.data.audio_timeout)
           this.InnerAudioContext.destroy()
@@ -53,7 +53,7 @@ Component({
     useMode: app.globalData.dictInfo.useMode,
     showChinese: false, //记录检验模式中点击显示释义动作
     showPlay: true,
-    noAudio: Boolean(app.globalData.offline)
+    noInternet: Boolean(app.globalData.offline)
   },
 
   /**
@@ -141,6 +141,7 @@ Component({
      // 将词频信息处理成显示在卡片顶端的文字
     process_fre_text: function () {
       let word = this.properties.word
+      console.log(word)
       let paper_count = app.globalData.dictInfo.dictNames[word.fromCluster][word.fromDict].paper_count
       if (typeof(paper_count) != "number") {
         paper_count = 1217564
@@ -198,7 +199,7 @@ Component({
       } catch(e) {
         console.log(e)
         this.setData({
-          noAudio: true
+          noInternet: true
         })
       }
     },

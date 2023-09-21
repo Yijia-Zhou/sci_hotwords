@@ -247,6 +247,12 @@ export class NormalDictionary extends Dictionary {
     {
         return this.dictionary[this.index]['learnt'] == true
     }
+
+    isNextWordLeant()
+    {
+        console.log('nextword:', this.getNextWord())
+        return this.getNextWord()['learnt'] == true
+    }
 };
 
 export class FavorDictionary extends Dictionary {
