@@ -424,26 +424,28 @@ Page({
           })
         break
         case '检验模式':
-          wx.showModal({
-            title: '又检验了'+ dailyTgt  +'个单词的记忆，(^_^) \r\n 回到识记模式继续学习？',
-            confirmText: '这就去',
-            cancelText: '先不了',
-            success (res) {
-              if (res.confirm) {
-                _this.updateUseMode('识记模式')
-                _this.onReload()
-                _this.onShow()
-                return 
-              } 
-              else if (res.cancel) {
+          if(!dataDict.isCurrentWordLeant()){
+            wx.showModal({
+              title: '又检验完了已经识记的词汇(^_^) \r\n 回到识记模式继续学习？',
+              confirmText: '这就去',
+              cancelText: '先不了',
+              success (res) {
+                if (res.confirm) {
+                  _this.updateUseMode('识记模式')
+                  _this.onReload()
+                  _this.onShow()
+                  return 
+                } 
+                else if (res.cancel) {
+                }
               }
-            }
-          })
+            })
+         }
         break
       }
     }
 
-    dataDict.markWord(true)
+    // dataDict.markWord(true)
 
     if(dataDict.needTracer())
     {
@@ -459,7 +461,7 @@ Page({
     dblog.logAction("onToBeDone")
 
     let dataDict = this.data.dictionary
-    dataDict.markWord(false)
+    // dataDict.markWord(false)
 
     if (!dataDict.isWordInFavored(this.data.word)) {
       let _this = this
@@ -509,6 +511,10 @@ Page({
   },
 
   onNext: async function () {
+    
+    let dataDict = this.data.dictionary
+    dataDict.markWord(true) // 避免影响每日目标&进度系统的临时措施
+
     clearTimeout(this.data.timer_timeout)
     this.data.since_touch_setting += 1
     this.setData({'setting_opacity': Math.max(0.2, 0.8 ** this.data.since_touch_setting)})
