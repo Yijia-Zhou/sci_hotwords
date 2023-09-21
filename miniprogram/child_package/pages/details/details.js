@@ -15,7 +15,7 @@ function grouping(raw_string, word_list) {
   lines.forEach(line => {
     // 判断是否包含word_list中的单词
     const found = word_list.some(word => {
-      const re = new RegExp(`^(?:\\d+\\.|${word}).*`, 'i');  // 匹配以word开头的字符串（大小写不敏感）或以"数字."开头的字符串
+      const re = new RegExp(`^(?:\\d+\\.\\s|["']${word}|${word}).*`, 'i');  // 匹配以word开头的字符串（大小写不敏感，可能前面还有单引号或双引号）或以"数字."开头的字符串
       return re.test(line.trim()) && !/[\u4e00-\u9fa5]/.test(line.slice(0, 4));
     });
 
@@ -65,6 +65,9 @@ Page({
 
     this.data.word = word_object._id
     dblog.logAction("showGPT")
+    wx.showLoading({
+      title: '详解加载中',
+    })
     let useDict = app.globalData.dictInfo.useDict
     db.collection('details').where({
       word: this.data.word,
@@ -78,6 +81,7 @@ Page({
       this.setData({
         paragraphs: paragraphs
       });
+      wx.hideLoading()
     })
   },
 

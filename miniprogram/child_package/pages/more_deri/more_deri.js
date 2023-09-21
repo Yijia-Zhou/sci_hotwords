@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    deris: app.globalData.current_word_obj.deris
+    deris: []
   },
 
   onReturn() {
