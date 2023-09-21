@@ -1,5 +1,5 @@
 var app = getApp()
-var display = require('../../../utils/display.js')
+var display = require('../../sub_utils/display.js')
 
 Page({
 

@@ -1,8 +1,8 @@
 const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
-var reminder = require('../../../utils/reminder.js')
-var display = require('../../../utils/display.js')
+var reminder = require('../../sub_utils/reminder.js')
+var display = require('../../sub_utils/display.js')
 import { NormalDictionary, FavorDictionary } from './dictionary.js'
 const DictionaryLoader = new requestDict.DictionaryLoader()
 

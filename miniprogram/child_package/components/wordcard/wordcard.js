@@ -1,6 +1,6 @@
 var app = getApp()
 var dblog = require('../../../utils/dblog.js')
-var display = require('../../../utils/display.js')
+var display = require('../../sub_utils/display.js')
 
 Component({
   /**

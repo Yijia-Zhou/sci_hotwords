@@ -1,5 +1,5 @@
 var app = getApp()
-var reminder = require('../../../utils/reminder.js')
+var reminder = require('../../sub_utils/reminder.js')
 
 Page({
 
