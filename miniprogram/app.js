@@ -245,12 +245,12 @@ App({
       console.log(res.target)
     }
     let fromOpenId = await this.getOpenId()
-    let title = '生科SCI高频单词 扫清文献阅读障碍'
+    let title = 'SCI高频词汇一网打尽'
     return {
       title: title,
       path: '/pages/menu/menu?fromOpenId='+fromOpenId,
       query: '',
-      imageUrl: '/images/shareImage.png',
+      imageUrl: 'cloud://cloud1-7g9bm8xp2605b212.636c-cloud1-7g9bm8xp2605b212-1310223630/share.png',
     }
   },
 

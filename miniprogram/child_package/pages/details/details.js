@@ -1,5 +1,6 @@
 var app = getApp()
 const db = wx.cloud.database()
+var dblog = require('../../../utils/dblog.js')
 
 function grouping(raw_string, word_list) {
   // 我需要对一个多行字符串raw_string进行分割，得到一个结果列表result, 规则如下：
@@ -63,6 +64,7 @@ Page({
     }
 
     this.data.word = word_object._id
+    dblog.logAction("showGPT")
     let useDict = app.globalData.dictInfo.useDict
     db.collection('details').where({
       word: this.data.word,
