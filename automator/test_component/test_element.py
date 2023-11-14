@@ -1,4 +1,5 @@
 import json
+import re
 
 class WxElement:
     def __init__(self, jsonObject):
@@ -34,7 +35,9 @@ class WxCustomElement(WxElement):
         return '/'+self.pagePath
     
     def getXPath(self):
-        return self.xpath
+        strRegex = re.compile(r"/text.*")
+        subStr = strRegex.sub("", self.xpath)
+        return subStr
     
     def name(self):
         return 'WxCustomElement'
