@@ -7005,6 +7005,15 @@
       "layer": "pageframe"
     },
     {
+      "timeStamp": 124870,
+      "waitfor": 1219,
+      "desc": "",
+      "commandType": "operate",
+      "layer": "native",
+      "command": "confirmModal",
+      "text": "确定"
+    },
+    {
       "tagName": "view",
       "command": "touchstart",
       "target": "/view/wordcard/view/view[1]/view[2]/view[3]",

@@ -3,7 +3,8 @@ import re
 
 class WxElement:
     def __init__(self, jsonObject):
-        self.text = jsonObject['text']
+        if('text' in jsonObject):
+            self.text = jsonObject['text']
         self.cmd  = jsonObject['command']
         self.wait = jsonObject['waitfor']
 
