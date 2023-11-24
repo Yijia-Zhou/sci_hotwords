@@ -12,8 +12,8 @@ $RECYCLE.BIN/
 
 # Node.js
 node_modules/
-*/package-lock.json
-*/package.json
+*ackage-lock.json
+*ackage.json
 
 # 微信开发者工具
 *testResult*
