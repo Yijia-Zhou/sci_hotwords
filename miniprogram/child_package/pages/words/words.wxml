@@ -29,7 +29,7 @@
       <view class="showcase_container_whole">
         <view class="showcase_container_horizon" wx:for="{{[0,1,2,3,4]}}" wx:key="*this">
           <text class="showcase_left" style="font-size: {{diff_showcase_here[item].font}}rpx;">
-            {{diff_showcase_here[item].word}}
+            {{diff_showcase_here[item*2].word}}
           </text>
           <text class="showcase_right" style="font-size: {{diff_showcase_here[item*2+1].font}}rpx;">
             {{diff_showcase_here[item*2+1].word}}
