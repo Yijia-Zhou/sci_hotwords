@@ -23,12 +23,25 @@ class FirstTest(minium.MiniTest):
                         self.assertEqual(page.path, elem.getPagePath())
                         self.assertEqual(True, self.page.element_is_exists(elem.getXPath()))
                         pageElem = self.page.get_element(elem.getXPath())
+                        
                         if(elem.tagName() == 'view' and 'picker-view' in elem.getXPath()):
                             pageElem.tap()
                             pageElem.tap()
+                        elif(elem.tagName() == 'slider'):
+                            pageElem.slide_to(elem.getElemValue())
+                            # value = pageElem.attribute("value")[0]
+                            # self.assertEqual(elem.getElemValue(), value)
                         else:
                             pageElem.tap()
                         time.sleep(2)
+
+                    elif(elem.getElemCmd() == 'change'):
+                        if(elem.tagName() == 'picker'):
+                            pageElem = self.page.get_element(elem.getXPath())
+                            pageElem.trigger("change", {"value": elem.getDetailValue()})
+                        time.sleep(2)
+                    
+
                 elif(elem.name() == 'WxNativeElement'):
                     if(elem.getElemCmd() == 'confirmModal'):
                         self.native.handle_modal(elem.getElemText())
