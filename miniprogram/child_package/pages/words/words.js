@@ -589,6 +589,7 @@ Page({
    */
   onHide: function () {
     console.log("words - onHide")
+    wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
     try {
       clearTimeout(this.data.timer_timeout)
     } catch(e) {
