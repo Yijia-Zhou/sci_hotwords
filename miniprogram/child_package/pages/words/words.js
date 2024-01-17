@@ -353,6 +353,7 @@ Page({
       if(dataDict.getUseMode() == '检验模式' && globalDictTracer.isTodayFinished == false 
          && globalDictTracer.doneCount >= dailyTgt && !dataDict.isNextWordLeant())
       {
+        dataDict.markWord(true) 
         globalDictTracer.isTodayFinished = true
         wx.showModal({
           title: "已检验完所有已学习词汇组",
