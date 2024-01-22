@@ -49,3 +49,7 @@ page {
   overflow-y: hidden; 
   max-height: 80vh; /* 内容高度最高80vh 以免内容太多溢出*/
 }
+
+.section__ctn {
+  text-align: center;
+}

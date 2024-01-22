@@ -20,6 +20,7 @@ Page({
     since_touch_setting: 0,
     setting_opacity: 0.99,
     target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target,
+    showMyFavorModal: false,
     showModal: false,
     difficulty: 0
   },
@@ -339,8 +340,21 @@ Page({
     }
   },
 
+  tipsForFirstOnFavor() {
+    if(app.globalData.tracer.hasOwnProperty('tipsForFirstOnFavor'))
+    {
+      this.setData({
+        'showMyFavorModal' : true
+      })
+      delete app.globalData.tracer.tipsForFirstOnFavor
+      wx.setStorage({key: 'tracer', data: app.globalData.tracer})
+    }
+  },
+
   onFavor() {
     let dataDict = this.data.dictionary
+    
+    this.tipsForFirstOnFavor()
 
     if(dataDict.isCurrentWordInFavored(this.data.word))
     {

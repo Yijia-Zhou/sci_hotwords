@@ -30,4 +30,13 @@
         </view>
     </view>
   </modalView>
+
+  <modalView showModal="{{showMyFavorModal}}" style="padding-top: 0;">
+    <view class='modal-content'>
+      <text class="title">我的收藏提示</text>
+      <view class="section__ctn">
+          <image style="width: 260px; height: 450px; background-color: #eeeeee;" mode="scaleToFill" src="../words/resources/myFavorTips.png"></image>
+      </view>
+    </view>
+  </modalView>
 </view>
