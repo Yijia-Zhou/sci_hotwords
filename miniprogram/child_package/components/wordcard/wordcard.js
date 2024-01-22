@@ -193,8 +193,19 @@ Component({
           words = words + "; " + deris.join("; ")
         }
         this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + encodeURI(words)
+        this.InnerAudioContext.onCanplay(() => {
+          console.log('Canplay! duration: ', this.InnerAudioContext.duration)
+          console.log('Canplay! buffered: ', this.InnerAudioContext.buffered)
+        });
+
+        this.InnerAudioContext.onError((res) => {
+          console.log(res.errMsg)
+          console.log(res.errCode)
+        });
+
         this.InnerAudioContext.onEnded(() => {
           this.data.audio_timeout = setTimeout(this.InnerAudioContext.play, 1000)
+          console.log('Ended! buffered: ', this.InnerAudioContext.buffered)
         })
       } catch(e) {
         console.log(e)
@@ -205,13 +216,40 @@ Component({
     },
 
     do_play_audio() {
+      console.log('do_play_audio')
       this.InnerAudioContext.play()
+      console.log('duration: ', this.InnerAudioContext.duration)
+      console.log('buffered: ', this.InnerAudioContext.buffered)
+      if (this.InnerAudioContext.duration == 0 && this.InnerAudioContext.buffered == 0) {
+        this.data.audio_reload_timeout = setTimeout(() => {
+          console.log('duration: ', this.InnerAudioContext.duration)
+          console.log('buffered: ', this.InnerAudioContext.buffered)
+          console.log('currentTime: ', this.InnerAudioContext.currentTime)
+          if (this.InnerAudioContext.duration && this.InnerAudioContext.buffered !== 0 && this.InnerAudioContext.currentTime == 0 && !this.showPlay) {
+            this.InnerAudioContext.play()
+          } else {
+            console.log('reload InnerAudioContext')
+            this.destroy_audio()
+            this.prepare_audio()
+            this.do_play_audio()
+          }
+        }, 3000)
+      }
     },
 
     destroy_audio() {
       try {
         this.InnerAudioContext.destroy()
+      } catch(e) {
+        console.log(e)
+      }
+      try {
         clearTimeout(this.data.audio_timeout)
+      } catch(e) {
+        console.log(e)
+      }
+      try {
+        clearTimeout(this.data.audio_reload_timeout)
       } catch(e) {
         console.log(e)
       }
