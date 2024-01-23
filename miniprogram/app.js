@@ -40,7 +40,7 @@ App({
           },
       },
       "diff_thresholds": {},
-      "tracer": {},
+      "tracer": {tipsForFirstOnFavor:{}},
       "daily_target":30.0,
       "marker":16.0
     }
@@ -78,7 +78,7 @@ App({
           console.log('diff_thresholds', _this.globalData.dictInfo.diff_thresholds)
         }
         if(!_this.globalData.dictInfo.hasOwnProperty("tracer")){
-          _this.globalData.dictInfo.tracer = {}
+          _this.globalData.dictInfo.tracer = {tipsForFirstOnFavor:{}}
         }
         if (!_this.globalData.dictInfo.hasOwnProperty('daily_target')) {
           _this.globalData.dictInfo.daily_target = 30

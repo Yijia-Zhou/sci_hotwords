@@ -23,7 +23,8 @@ Page({
     since_touch_setting: 0,
     setting_opacity: 0.99,
     target_percent: 0,
-    showModal: false,
+    showMyFavorModal: false,
+    showDiffModal: false,
     difficulty: 0,
     coreNum: 0
   },
@@ -137,7 +138,7 @@ Page({
         })
       }
       this.setData({
-        showModal: true,
+        showDiffModal: true,
         diff_showcase_here: diff_showcase_here
       })
       console.log("initialSetting done")
@@ -483,8 +484,20 @@ Page({
     }
   },
 
+  tipsForFirstOnFavor() {
+    if(app.globalData.dictInfo.tracer.hasOwnProperty('tipsForFirstOnFavor'))
+    {
+      this.setData({
+        'showMyFavorModal' : true
+      })
+      delete app.globalData.dictInfo.tracer.tipsForFirstOnFavor
+      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    }
+  },
+
   onFavor() {
     let dataDict = this.data.dictionary
+    this.tipsForFirstOnFavor()
 
     if(dataDict.isWordInFavored(this.data.word))
     {

@@ -87,3 +87,7 @@ page {
   padding-left: 3%;
   height: 50rpx;
 }
+
+.section__ctn {
+  text-align: center;
+}
