@@ -74,11 +74,7 @@ Component({
       })
     },
     onPause: function () {
-      try {
-        clearTimeout(this.data.audio_timeout)
-      } catch {
-        console.log('no audio_timeout')
-      }
+      this.clear_all_timeout()
       this.InnerAudioContext.pause()
       this.setData({
         showPlay: true,
@@ -196,7 +192,22 @@ Component({
         this.InnerAudioContext.onCanplay(() => {
           console.log('Canplay! duration: ', this.InnerAudioContext.duration)
           console.log('Canplay! buffered: ', this.InnerAudioContext.buffered)
+          console.log('Canplay! currentTime: ', this.InnerAudioContext.currentTime)
         });
+
+        this.InnerAudioContext.onWaiting(() => {
+          console.log('Waiting! duration: ', this.InnerAudioContext.duration)
+          console.log('Waiting! buffered: ', this.InnerAudioContext.buffered)
+          console.log('Waiting! currentTime: ', this.InnerAudioContext.currentTime)
+          this.data.playing = false
+        })
+
+        this.InnerAudioContext.onPlay(() => {
+          console.log('Playing! duration: ', this.InnerAudioContext.duration)
+          console.log('Playing! buffered: ', this.InnerAudioContext.buffered)
+          console.log('Playing! currentTime: ', this.InnerAudioContext.currentTime)
+          this.data.playing = true
+        })
 
         this.InnerAudioContext.onError((res) => {
           console.log(res.errMsg)
@@ -220,20 +231,35 @@ Component({
       this.InnerAudioContext.play()
       console.log('duration: ', this.InnerAudioContext.duration)
       console.log('buffered: ', this.InnerAudioContext.buffered)
-      if (this.InnerAudioContext.duration == 0 && this.InnerAudioContext.buffered == 0) {
+      if (this.InnerAudioContext.duration == 0 && this.InnerAudioContext.buffered == 0 && this.InnerAudioContext.currentTime == 0 && !this.data.playing) {
         this.data.audio_reload_timeout = setTimeout(() => {
-          console.log('duration: ', this.InnerAudioContext.duration)
-          console.log('buffered: ', this.InnerAudioContext.buffered)
-          console.log('currentTime: ', this.InnerAudioContext.currentTime)
-          if (this.InnerAudioContext.duration && this.InnerAudioContext.buffered !== 0 && this.InnerAudioContext.currentTime == 0 && !this.showPlay) {
-            this.InnerAudioContext.play()
-          } else {
-            console.log('reload InnerAudioContext')
-            this.destroy_audio()
-            this.prepare_audio()
-            this.do_play_audio()
-          }
+          this.try_reload_audio()
         }, 3000)
+      }
+    },
+
+    try_reload_audio() {
+      console.log('duration: ', this.InnerAudioContext.duration)
+      console.log('buffered: ', this.InnerAudioContext.buffered)
+      console.log('currentTime: ', this.InnerAudioContext.currentTime)
+      if (!this.data.playing) {
+        console.log('reload InnerAudioContext')
+        this.destroy_audio()
+        this.prepare_audio()
+        this.do_play_audio()
+      }
+    },
+
+    clear_all_timeout() {
+      try {
+        clearTimeout(this.data.audio_timeout)
+      } catch {
+        console.log('no audio_timeout')
+      }
+      try {
+        clearTimeout(this.data.audio_reload_timeout)
+      } catch(e) {
+        console.log(e)
       }
     },
 
@@ -243,16 +269,7 @@ Component({
       } catch(e) {
         console.log(e)
       }
-      try {
-        clearTimeout(this.data.audio_timeout)
-      } catch(e) {
-        console.log(e)
-      }
-      try {
-        clearTimeout(this.data.audio_reload_timeout)
-      } catch(e) {
-        console.log(e)
-      }
+      this.clear_all_timeout()
     }
   },
 
