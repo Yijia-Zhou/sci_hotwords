@@ -229,19 +229,14 @@ Component({
     do_play_audio() {
       console.log('do_play_audio')
       this.InnerAudioContext.play()
-      console.log('duration: ', this.InnerAudioContext.duration)
-      console.log('buffered: ', this.InnerAudioContext.buffered)
-      if (this.InnerAudioContext.duration == 0 && this.InnerAudioContext.buffered == 0 && this.InnerAudioContext.currentTime == 0 && !this.data.playing) {
-        this.data.audio_reload_timeout = setTimeout(() => {
-          this.try_reload_audio()
-        }, 3000)
-      }
+      console.log('this.data.playing: ', this.data.playing)
+      this.data.audio_reload_timeout = setTimeout(() => {
+        this.try_reload_audio()
+      }, 3000)
     },
 
     try_reload_audio() {
-      console.log('duration: ', this.InnerAudioContext.duration)
-      console.log('buffered: ', this.InnerAudioContext.buffered)
-      console.log('currentTime: ', this.InnerAudioContext.currentTime)
+      console.log('this.data.playing: ', this.data.playing)
       if (!this.data.playing) {
         console.log('reload InnerAudioContext')
         this.destroy_audio()
