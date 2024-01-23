@@ -20,7 +20,8 @@ Page({
     since_touch_setting: 0,
     setting_opacity: 0.99,
     target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target,
-    showModal: false,
+    showMyFavorModal: false,
+    showDiffModal: false,
     difficulty: 0
   },
 
@@ -67,7 +68,7 @@ Page({
     {
       app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = 0
       this.setData({
-        showModal: true
+        showDiffModal: true
       })
       console.log("initialSetting done")
     }
@@ -339,8 +340,21 @@ Page({
     }
   },
 
+  tipsForFirstOnFavor() {
+    if(app.globalData.tracer.hasOwnProperty('tipsForFirstOnFavor'))
+    {
+      this.setData({
+        'showMyFavorModal' : true
+      })
+      delete app.globalData.tracer.tipsForFirstOnFavor
+      wx.setStorage({key: 'tracer', data: app.globalData.tracer})
+    }
+  },
+
   onFavor() {
     let dataDict = this.data.dictionary
+    
+    this.tipsForFirstOnFavor()
 
     if(dataDict.isCurrentWordInFavored(this.data.word))
     {

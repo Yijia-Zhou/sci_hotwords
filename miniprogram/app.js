@@ -22,7 +22,8 @@ App({
       fail () {
         _this.globalData.tracer = {
           doneCount: 0,
-          date: date.toLocaleDateString()
+          date: date.toLocaleDateString(),
+          tipsForFirstOnFavor:{}
         }
       },
       complete () {
