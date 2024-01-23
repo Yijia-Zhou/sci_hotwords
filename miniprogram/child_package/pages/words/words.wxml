@@ -20,7 +20,7 @@
   </view>
 
   <!-- modal-->
-  <modalView showModal="{{showModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm'>
+  <modalView showModal="{{showDiffModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm'>
     <view class='modal-content' style="height: 20vh;">
         <view class="section">
           <!-- <text style="font-style: oblique; color: rgba(0, 0, 0, 0.5);">您可以拖动下方滑动条设定您希望的单词难度，之后也可以随时根据学习情况通过“调整设置”按钮进行修改。\n</text> -->

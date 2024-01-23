@@ -21,7 +21,7 @@ Page({
     setting_opacity: 0.99,
     target_percent: 100*app.globalData.tracer.doneCount/app.globalData.dictInfo.daily_target,
     showMyFavorModal: false,
-    showModal: false,
+    showDiffModal: false,
     difficulty: 0
   },
 
@@ -68,7 +68,7 @@ Page({
     {
       app.globalData.dictInfo.dictNames.生命科学[dataDict.getUseDict()].diff_threshold = 0
       this.setData({
-        showModal: true
+        showDiffModal: true
       })
       console.log("initialSetting done")
     }
