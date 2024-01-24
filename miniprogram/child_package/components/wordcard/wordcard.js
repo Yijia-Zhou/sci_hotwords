@@ -177,6 +177,7 @@ Component({
     prepare_audio() {
       // 预备“朗读”功能
       try {
+          this.data.playing = false
         this.InnerAudioContext = wx.createInnerAudioContext()
         this.setData({
           showPlay: true
