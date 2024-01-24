@@ -177,11 +177,8 @@ Component({
     prepare_audio() {
       // 预备“朗读”功能
       try {
-          this.data.playing = false
+        this.data.playing = false
         this.InnerAudioContext = wx.createInnerAudioContext()
-        this.setData({
-          showPlay: true
-        })
         let word_obj = this.properties.word
         // word和deris的前四项合并，以"; "连接，一并朗读
         let words = word_obj._id
@@ -207,6 +204,11 @@ Component({
           console.log('Playing! duration: ', this.InnerAudioContext.duration)
           console.log('Playing! buffered: ', this.InnerAudioContext.buffered)
           console.log('Playing! currentTime: ', this.InnerAudioContext.currentTime)
+          this.data.playing = true
+        })
+
+        this.InnerAudioContext.onTimeUpdate(() => {
+          // console.log('TimeUpdate! currentTime: ', this.InnerAudioContext.currentTime)
           this.data.playing = true
         })
 
@@ -238,11 +240,11 @@ Component({
 
     try_reload_audio() {
       console.log('this.data.playing: ', this.data.playing)
-      if (!this.data.playing) {
+      if (!this.data.playing && !this.data.showPlay) {
         console.log('reload InnerAudioContext')
         this.destroy_audio()
         this.prepare_audio()
-        this.do_play_audio()
+        this.onPlay()
       }
     },
 
