@@ -1,3 +1,5 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "modalView": "../../components/modal/modal"
+  }
 }
