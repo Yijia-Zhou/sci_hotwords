@@ -1,5 +1,6 @@
 var app = getApp()
 var reminder = require('../../sub_utils/reminder.js')
+var display = require('../../sub_utils/display.js')
 
 Page({
 
@@ -9,6 +10,7 @@ Page({
   data: {
     difficulty: undefined,
     show_diff_setting: true,
+    showDiffModal: false,
 
     highschool_filter_array: ["保留它们", "屏蔽它们"],
     highschool_filter_index: app.globalData.dictInfo.no_high_school ? 1 : 0,
@@ -23,6 +25,15 @@ Page({
 
   on_changing_diff: function(e) {
     this.setData({difficulty: e.detail.value})
+  },
+
+  on_showcase: function() {
+    // 加载难度示例
+    let diff_showcase_here = app.globalData.diff_showcase_here
+    this.setData({
+      showDiffModal: true,
+      diff_showcase_here: diff_showcase_here
+    })
   },
 
   on_high_school_change: function(e) {

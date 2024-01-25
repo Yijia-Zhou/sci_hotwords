@@ -205,6 +205,11 @@ Component({
           console.log('Playing! buffered: ', this.InnerAudioContext.buffered)
           console.log('Playing! currentTime: ', this.InnerAudioContext.currentTime)
           this.data.playing = true
+          if (this.data.showPlay) {
+            this.setData({
+              showPlay: false
+            })
+          }
         })
 
         this.InnerAudioContext.onTimeUpdate(() => {
@@ -268,6 +273,11 @@ Component({
         console.log(e)
       }
       this.clear_all_timeout()
+      if (!this.data.showPlay) {
+        this.setData({
+          showPlay: true
+        })
+      }
     }
   },
 

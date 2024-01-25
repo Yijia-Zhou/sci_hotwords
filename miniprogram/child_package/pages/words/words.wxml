@@ -20,7 +20,7 @@
   </view>
 
   <!-- modal-->
-  <modalView showModal="{{showModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm' style="padding-top: 0;">
+  <modalView showModal="{{showDiffModal}}" bindcancel="modalCancel" bindconfirm='modalConfirm' style="padding-top: 0;">
     <view class='modal-content'>
       <text class="title">难度设定</text>
       <text style="text-align: center; font-family: Inter Tight;">欢迎进入难度设定环节！
@@ -42,6 +42,15 @@
       <slider value="{{difficulty}}" bindchanging="on_changing_diff" bindchange="on_changing_diff" block-size="20" max="80" class="slider_diff"/>
       <text style="text-align: center; font-family: Inter Tight;">↑当前忽略本词库中最简单的 {{difficulty}}% 单词↑</text>
 
+    </view>
+  </modalView>
+
+  <modalView showModal="{{showMyFavorModal}}" style="padding-top: 0;">
+    <view class='modal-content'>
+      <text class="title">您可以在这里找到您收藏的词汇</text>
+      <view>
+          <image mode="widthFix" src="cloud://cloud1-7g9bm8xp2605b212.636c-cloud1-7g9bm8xp2605b212-1310223630/myFavorTips2.png"></image>
+      </view>
     </view>
   </modalView>
 </view>

@@ -23,7 +23,8 @@ Page({
     since_touch_setting: 0,
     setting_opacity: 0.99,
     target_percent: 0,
-    showModal: false,
+    showMyFavorModal: false,
+    showDiffModal: false,
     difficulty: 0,
     coreNum: 0
   },
@@ -123,25 +124,30 @@ Page({
     if(dataDict.isFilterEnabled() && !app.globalData.dictInfo.diff_thresholds.hasOwnProperty(dataDict.getUseDict()))
     {
       app.globalData.dictInfo.diff_thresholds[dataDict.getUseDict()] = 0
-      // 加载难度示例
-      let cal_font_size = function (word) {
-        let len = display.count_display_length(word)
-        return Math.min(40, 500/(len+1))
-      }
-      let diff_showcase_here = new Array()
-      let words = app.globalData.dictInfo.dictNames[dataDict.getUseCluster()][dataDict.getUseDict()].diff_showcase
-      for (let i in words) {
-        diff_showcase_here.push({
-          word: words[i],
-          font: cal_font_size(words[i])
-        })
-      }
+      let diff_showcase_here = this.loadDiffShowcase(dataDict)
       this.setData({
-        showModal: true,
+        showDiffModal: true,
         diff_showcase_here: diff_showcase_here
       })
       console.log("initialSetting done")
     }
+  },
+
+  loadDiffShowcase: function(dataDict) {
+    // 加载难度示例
+    let cal_font_size = function (word) {
+      let len = display.count_display_length(word)
+      return Math.min(40, 500/(len+1))
+    }
+    let diff_showcase_here = new Array()
+    let words = app.globalData.dictInfo.dictNames[dataDict.getUseCluster()][dataDict.getUseDict()].diff_showcase
+    for (let i in words) {
+      diff_showcase_here.push({
+        word: words[i],
+        font: cal_font_size(words[i])
+      })
+    }
+    return diff_showcase_here
   },
 
   updateUseMode: function(useMode) {
@@ -332,6 +338,7 @@ Page({
 
   onConfig: function () {
     dblog.logAction("onConfig")
+    app.globalData.diff_showcase_here = this.loadDiffShowcase(this.data.dictionary)
     this.on_modify_setting()
     wx.navigateTo({
       url: '../setting/setting',
@@ -483,8 +490,20 @@ Page({
     }
   },
 
+  tipsForFirstOnFavor() {
+    if(app.globalData.dictInfo.tracer.hasOwnProperty('tipsForFirstOnFavor'))
+    {
+      this.setData({
+        'showMyFavorModal' : true
+      })
+      delete app.globalData.dictInfo.tracer.tipsForFirstOnFavor
+      wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
+    }
+  },
+
   onFavor() {
     let dataDict = this.data.dictionary
+    this.tipsForFirstOnFavor()
 
     if(dataDict.isWordInFavored(this.data.word))
     {
