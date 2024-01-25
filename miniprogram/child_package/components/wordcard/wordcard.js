@@ -265,6 +265,11 @@ Component({
         console.log(e)
       }
       this.clear_all_timeout()
+      if (!this.data.showPlay) {
+        this.setData({
+          showPlay: true
+        })
+      }
     }
   },
 
