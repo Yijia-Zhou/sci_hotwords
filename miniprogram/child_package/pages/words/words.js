@@ -3,7 +3,7 @@ var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
 var reminder = require('../../sub_utils/reminder.js')
 var display = require('../../sub_utils/display.js')
-import { NormalDictionary, FavorDictionary } from './dictionary.js'
+import { NormalDictionary, FavorDictionary, ReviewDictionary } from './dictionary.js'
 const DictionaryLoader = new requestDict.DictionaryLoader()
 
 Page({
@@ -121,9 +121,10 @@ Page({
   {
     //未设定过难度filter 则弹窗询问是否跳转设置页
     let dataDict = this.data.dictionary
-    if(dataDict.isFilterEnabled() && !app.globalData.dictInfo.diff_thresholds.hasOwnProperty(dataDict.getUseDict()))
+    let globalDictInfo = app.globalData.dictInfo    
+    if(dataDict.isFilterEnabled() && !globalDictInfo.diff_thresholds.hasOwnProperty(dataDict.getUseDict()) && dataDict.useMode != "复习模式")
     {
-      app.globalData.dictInfo.diff_thresholds[dataDict.getUseDict()] = 0
+      globalDictInfo.diff_thresholds[dataDict.getUseDict()] = 0
       let diff_showcase_here = this.loadDiffShowcase(dataDict)
       this.setData({
         showDiffModal: true,
@@ -152,7 +153,7 @@ Page({
 
   updateUseMode: function(useMode) {
     this.data.dictionary.updateUseMode(useMode)
-    let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested'}
+    let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested', '复习模式': 'reviewed'}
     this.setData({
       chooseStatus:useModeMap[useMode]
     })
@@ -228,6 +229,30 @@ Page({
           }
         })
         break
+      case '复习模式':
+        wx.showModal({
+          title: '没有可复习单词啦(^_^) \r\n 是否返回学习新的单词？',
+          confirmText: '这就去',
+          cancelText: '先不了',
+          success (res) {
+            if (res.confirm) {
+              dblog.logAction("allDone_and_begin_learn")
+              reset()
+              _this.updateUseMode('识记模式')
+              _this.onLoad()
+              _this.onShow()
+              return
+            } else if (res.cancel) {
+              dblog.logAction("allDone_and_return")
+              reset()
+              _this.updateUseMode('识记模式')
+              wx.redirectTo({
+                url: '/pages/menu/menu?no_jump=true',
+              })
+            }
+          }
+        })
+        break
     }
   },
 
@@ -246,7 +271,13 @@ Page({
     }
     else 
     {
-      this.data.dictionary = new NormalDictionary(dictionary)
+      if(dictInfo.useMode == '复习模式')
+      {
+        this.data.dictionary = new ReviewDictionary(dictionary)
+      }
+      else
+        this.data.dictionary = new NormalDictionary(dictionary)
+      
       let myFavoredDict = wx.getStorageSync('我的收藏')
       if(myFavoredDict)
       {
@@ -470,7 +501,7 @@ Page({
     dblog.logAction("onToBeDone")
 
     let dataDict = this.data.dictionary
-    // dataDict.markWord(false)
+    dataDict.markWord(false)
 
     if (!dataDict.isWordInFavored(this.data.word)) {
       let _this = this

@@ -6,7 +6,8 @@ App({
     this.globalData.dictInfo =   {
       "_id":"2.x",
       "modes":["识记模式",
-      "检验模式"],
+      "检验模式",
+      "复习模式"],
       "dictNames":{
         "生命科学":{
           "基础词库":{
