@@ -511,6 +511,7 @@ Page({
         success (res) {
           if (res.confirm) {
             _this.onFavor()
+            _this.onNext()
           } else if (res.cancel) {
             _this.onNext()
           }
