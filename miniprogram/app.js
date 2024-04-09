@@ -40,8 +40,8 @@ App({
           },
       },
       "diff_thresholds": {},
-      "tracer": {tipsForFirstOnFavor:{}},
-      "daily_target":30.0,
+      "tracer": {"tipsForFirstOnFavor":{}},
+      "daily_target":20.0,
       "marker":16.0
     }
   },
