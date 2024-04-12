@@ -186,7 +186,7 @@ Component({
           let deris = word_obj.deris.slice(0, 4).map(item => item.word)
           words = words + "; " + deris.join("; ")
         }
-        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?audio=' + encodeURI(words)
+        this.InnerAudioContext.src = 'https://dict.youdao.com/dictvoice?type=0&audio=' + encodeURI(words)
         this.InnerAudioContext.onCanplay(() => {
           console.log('Canplay! duration: ', this.InnerAudioContext.duration)
           console.log('Canplay! buffered: ', this.InnerAudioContext.buffered)
@@ -240,7 +240,7 @@ Component({
       console.log('this.data.playing: ', this.data.playing)
       this.data.audio_reload_timeout = setTimeout(() => {
         this.try_reload_audio()
-      }, 3000)
+      }, 1000)
     },
 
     try_reload_audio() {
