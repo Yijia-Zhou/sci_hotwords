@@ -1,3 +1,5 @@
+var supermemo = require('../../../utils/supermemo.js')
+
 class Dictionary {
     constructor(dict, idx) {
         this.dictionary = dict
@@ -21,7 +23,7 @@ class Dictionary {
     }
 
     updateUseMode(useMode) {
-        let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested'}
+        let useModeMap = {'识记模式': 'learnt', '检验模式': 'tested', '复习模式': 'reviewed'}
         this.useMode = useMode
         this.chooseStatus = useModeMap[useMode]
     }
@@ -94,6 +96,16 @@ class Dictionary {
       this.dictionary[this.index][this.chooseStatus] = mark
       if(mark && this.chooseStatus == 'tested') // 如果识记模式中标记了掌握那也回头标一些learnt
         this.dictionary[this.index]['learnt'] = true
+      if(mark && this.chooseStatus == 'learnt' && !this.dictionary[this.index]['reviewedInfo'])
+      {
+        this.dictionary[this.index]['reviewedInfo'] = {
+            interval: 0,
+            repetition: 0,
+            efactor: 2.5,
+            grade: 2,
+            dueDate: new Date().getTime()
+        }
+      }
     }
 
     isDictionaryEmpty() {
@@ -337,5 +349,36 @@ export class FavorDictionary extends Dictionary {
 
     updateWordFrom(word)
     {
+    }
+};
+
+export class ReviewDictionary extends NormalDictionary {
+    checkIfDisplay(word) {
+        let res = true
+        if(this.filter == 'no_high_school'){
+            res = res && this.isWordInfilter(word)
+        }
+        res = res && super.isWordInDiffcultyFilter(word)
+        let reviewedWord = this.dictionary[this.index]['reviewedInfo']
+        return res && reviewedWord &&  (new Date().getTime()) > reviewedWord.dueDate
+    }
+
+    needTracer(){
+        return false
+    }
+
+    practice(reviewedInfo, grade){
+        const { interval, repetition, efactor } = supermemo.supermemo(reviewedInfo, grade);
+
+        const dueDate = new Date().getTime() + interval * 24 * 60 * 60 * 1000
+      
+        return { interval, repetition, efactor, grade, dueDate};
+    }
+
+    markWord(mark) {
+        let score = mark == false ? -1 : 1
+        let reviewedInfo = this.dictionary[this.index]['reviewedInfo']
+        let newGrade = Math.min(reviewedInfo.grade + score, 5)
+        this.dictionary[this.index]['reviewedInfo'] = this.practice(reviewedInfo, newGrade)
     }
 };
