@@ -2,6 +2,58 @@ var app = getApp()
 const db = wx.cloud.database()
 var dblog = require('../../../utils/dblog.js')
 
+function splitTextByWords(text, words) {
+  // 创建一个正则表达式，用来匹配单词列表中的任意单词
+  // 使用 `i` 标志使匹配不区分大小写
+  const wordPattern = '\\b(' + words.sort((a, b) => b.length - a.length).map(word => word.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|') + ')\\b';
+  const regex = new RegExp(wordPattern, 'gi');
+
+  // 使用正则表达式查找所有匹配项及其位置
+  const matches = [];
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    matches.push({
+      value: match[0],
+      index: match.index,
+    });
+  }
+
+  // 创建一个结果数组，存储匹配到的单词和剩余的部分
+  const result = [];
+
+  // 当前处理的文本起始索引
+  let currentIndex = 0;
+
+  // 处理所有匹配项
+  matches.forEach(match => {
+    // 添加匹配项之前的文本
+    if (currentIndex < match.index) 
+      result.push({
+        str : text.substring(currentIndex, match.index),
+        isBold : false,
+      });
+    
+    // 添加匹配项本身
+    result.push({
+        str : match.value,
+        isBold : true,
+    });
+
+    // 更新当前索引
+    currentIndex = match.index + match.value.length;
+  });
+
+  // 添加最后一个匹配项之后的剩余文本
+  if (currentIndex < text.length) {
+    result.push({
+      str : text.substring(currentIndex),
+      isBold : false,
+    });
+  }
+
+  return result;
+}
+
 function grouping(raw_string, word_list) {
   // 我需要对一个多行字符串raw_string进行分割，得到一个结果列表result, 规则如下：
   // raw_string中的每一行，如果其包含一个单词列表word_list中的单词（大小写模糊），且该单词所处位置与行首中间无中文，则该行成为一个起始行；
@@ -76,8 +128,16 @@ Page({
       let remoteData = res.data[0]
       let originalText = remoteData.gpt_content
       let word_list = [word_object._id, ...word_object.deris.map(deri => deri.word)];
+      let original_word_list = word_list
+
       word_list = word_list.map(word => word.slice(0, -1)); //把word_list 中每个单词的最后一个字符去掉
-      let paragraphs = grouping(originalText, word_list);  // 根据你的分段规则进行拆分
+      let descriptions = grouping(originalText, word_list);  // 根据你的分段规则进行拆分
+      
+      let paragraphs = [];
+      descriptions.forEach(item => {
+        paragraphs.push(splitTextByWords(item, original_word_list));
+      })
+      
       this.setData({
         paragraphs: paragraphs
       });
