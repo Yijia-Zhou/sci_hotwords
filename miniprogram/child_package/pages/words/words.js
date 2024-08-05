@@ -237,14 +237,12 @@ Page({
           success (res) {
             if (res.confirm) {
               dblog.logAction("allDone_and_begin_learn")
-              reset()
               _this.updateUseMode('识记模式')
               _this.onLoad()
               _this.onShow()
               return
             } else if (res.cancel) {
               dblog.logAction("allDone_and_return")
-              reset()
               _this.updateUseMode('识记模式')
               wx.redirectTo({
                 url: '/pages/menu/menu?no_jump=true',
