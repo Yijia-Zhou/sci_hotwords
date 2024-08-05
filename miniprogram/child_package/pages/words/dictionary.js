@@ -90,12 +90,34 @@ class Dictionary {
         this.dictionary = dictionary
     }
 
+    practice(reviewedInfo, grade){
+        const { interval, repetition, efactor } = supermemo.supermemo(reviewedInfo, grade);
+
+        const dueDate = new Date().getTime() + interval * 24 * 60 * 60 * 1000
+      
+        return { interval, repetition, efactor, grade, dueDate};
+    }
+
+    markReviewed(mark) {
+        let score = mark == false ? -1 : 1
+        let reviewedInfo = this.dictionary[this.index]['reviewedInfo']
+        let newGrade = Math.min(reviewedInfo.grade + score, 5)
+        this.dictionary[this.index]['reviewedInfo'] = this.practice(reviewedInfo, newGrade)
+    }
+
     markWord(mark) {
       // mark 为一个Boolean值，为是否掌握
       console.log(this.dictionary[this.index])
+      if (this.chooseStatus == 'reviewed') { // 拦截复习模式的mark处理，且复习模式的操作也算检验模式的
+        this.markReviewed(mark)
+        this.dictionary[this.index]['tested'] = true
+        return 
+      }
       this.dictionary[this.index][this.chooseStatus] = mark
-      if(mark && this.chooseStatus == 'tested') // 如果识记模式中标记了掌握那也回头标一些learnt
+      if(mark && this.chooseStatus == 'tested') { // 如果检验模式中标记了掌握那也回头标一些learnt，且检验模式的操作也算复习模式的
         this.dictionary[this.index]['learnt'] = true
+        this.markReviewed(mark)
+      }
       if(mark && this.chooseStatus == 'learnt' && !this.dictionary[this.index]['reviewedInfo'])
       {
         this.dictionary[this.index]['reviewedInfo'] = {
@@ -365,20 +387,5 @@ export class ReviewDictionary extends NormalDictionary {
 
     needTracer(){
         return false
-    }
-
-    practice(reviewedInfo, grade){
-        const { interval, repetition, efactor } = supermemo.supermemo(reviewedInfo, grade);
-
-        const dueDate = new Date().getTime() + interval * 24 * 60 * 60 * 1000
-      
-        return { interval, repetition, efactor, grade, dueDate};
-    }
-
-    markWord(mark) {
-        let score = mark == false ? -1 : 1
-        let reviewedInfo = this.dictionary[this.index]['reviewedInfo']
-        let newGrade = Math.min(reviewedInfo.grade + score, 5)
-        this.dictionary[this.index]['reviewedInfo'] = this.practice(reviewedInfo, newGrade)
     }
 };
