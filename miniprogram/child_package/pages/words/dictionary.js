@@ -90,6 +90,16 @@ class Dictionary {
         this.dictionary = dictionary
     }
 
+    initReviewedInfo() {
+        return {
+            interval: 0,
+            repetition: 0,
+            efactor: 2.5,
+            grade: 2,
+            dueDate: new Date().getTime()
+        }
+    }
+
     practice(reviewedInfo, grade){
         const { interval, repetition, efactor } = supermemo.supermemo(reviewedInfo, grade);
 
@@ -101,6 +111,9 @@ class Dictionary {
     markReviewed(mark) {
         let score = mark == false ? -1 : 1
         let reviewedInfo = this.dictionary[this.index]['reviewedInfo']
+        if (!reviewedInfo) {
+            reviewedInfo = this.initReviewedInfo()
+        }
         let newGrade = Math.min(reviewedInfo.grade + score, 5)
         this.dictionary[this.index]['reviewedInfo'] = this.practice(reviewedInfo, newGrade)
     }
@@ -120,13 +133,7 @@ class Dictionary {
       }
       if(mark && this.chooseStatus == 'learnt' && !this.dictionary[this.index]['reviewedInfo'])
       {
-        this.dictionary[this.index]['reviewedInfo'] = {
-            interval: 0,
-            repetition: 0,
-            efactor: 2.5,
-            grade: 2,
-            dueDate: new Date().getTime()
-        }
+        this.dictionary[this.index]['reviewedInfo'] = this.initReviewedInfo()
       }
     }
 
