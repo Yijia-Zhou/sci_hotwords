@@ -1,6 +1,9 @@
 <view class="text-container">
     <view wx:for="{{paragraphs}}" wx:key="index" class="paragraph">
-        <text style="font-size: 36rpx;">{{item}}</text>
+        <block wx:for="{{paragraphs[index]}}" wx:for-item="sentence" wx:key="idx">
+            <text wx:if='{{sentence.isBold}}' style="font-size: 36rpx;font-weight: bold;">{{sentence.str}}</text>
+            <text wx:else style="font-size: 36rpx;">{{sentence.str}}</text>
+        </block>
     </view>
 </view>
 
