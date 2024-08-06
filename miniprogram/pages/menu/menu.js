@@ -67,6 +67,7 @@ Page({
     let domains_array = Object.keys(app.globalData.dictInfo.dictNames[cluster])
     for (let i in domains_array) {
       if (domains_array[i].includes("基础")) {
+        // 确保名字带“基础”的词库出现在2级菜单第1位
         let temp = domains_array[i]
         domains_array.splice(i, 1)
         domains_array.unshift(temp)
@@ -128,7 +129,7 @@ Page({
     useDictIndex = useDictIndex == -1 ? this.back2foundermental() : useDictIndex
 
     let useModeIndex = this.data.modes.indexOf(app.globalData.dictInfo.useMode)
-    useModeIndex = useModeIndex == -1 ? 0 : useModeIndex
+    useModeIndex = useModeIndex == -1 ? 1 : useModeIndex
 
     this.setData({
       value: [useCluster, useDictIndex, useModeIndex]
@@ -218,16 +219,23 @@ Page({
   onConfirm() {
     app.globalData.dictInfo.useCluster = this.get_cluster(this.data.value[0])
     app.globalData.dictInfo.useDict = this.data.value[1] != -1 ? this.data.domains[this.data.value[1]] : this.data.domains[1]
-    app.globalData.dictInfo.useMode = this.data.modes[this.data.value[2]]
-    console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
     if (app.globalData.dictInfo.useDict=="敬请期待") {
       app.globalData.dictInfo.useDict = "基础词库"
     }
 
-    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
-    wx.navigateTo({
-      url: '/child_package/pages/words/words',
-    })
+    let useMode = this.data.modes[this.data.value[2]]
+    if (useMode == "概览模式") {  
+      wx.navigateTo({
+        url: '/child_package/pages/content/content',
+      })
+    } else {
+      app.globalData.dictInfo.useMode = useMode
+      console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
+
+      wx.navigateTo({
+        url: '/child_package/pages/words/words',
+      })
+    }
   },
 
   onQuery(){
@@ -253,6 +261,13 @@ Page({
     wx.navigateTo({
       url: '/child_package/pages/setting/setting',
     })
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
   },
 
   /**
