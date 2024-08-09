@@ -1,4 +1,4 @@
-var supermemo = require('../../../utils/supermemo.js')
+var supermemo = require('../../sub_utils/supermemo.js')
 
 class Dictionary {
     constructor(dict, idx) {

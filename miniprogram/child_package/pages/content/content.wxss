@@ -1,0 +1,49 @@
+@import '../../sub_utils/font-face.wxss';
+
+page {
+  position: relative;
+  padding-bottom: 300rpx;
+}
+
+text {
+  font-family: Inter Tight;
+}
+
+.word-list {
+  width: 92vw;
+  max-width: 1160px;
+  margin: 3.5vh auto 0 auto;
+  padding: 4rpx 1vw;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  background-color: rgba(232, 232, 216, 0.1);
+  box-shadow: 0 0 30rpx rgba(0, 0, 0, 0.1);
+}
+
+.word-item {
+  padding: 10rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  min-height: 112rpx;
+  justify-content: space-around;
+  margin-bottom: 16rpx;
+  box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.05); 
+  background-color: rgba(232, 232, 216, 0.1); 
+}
+
+.english-words {
+  font-size: 18px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.chinese-meaning {
+  font-size: 16px;
+  color: #555;
+  /* margin-top: 8rpx; */
+  text-align: center;
+}

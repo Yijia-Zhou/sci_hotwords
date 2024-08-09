@@ -1,0 +1,15 @@
+<view class='word-list'>
+    <view 
+        class="word-item" 
+        wx:for="{{wordList}}" 
+        wx:key="index"
+        bindtap='toResult'
+        id="{{item.word_index}}"
+        style="{{item.style}}"
+    >
+        <text class="english-words">{{item.words}}</text>
+        <text class="chinese-meaning">{{item.meaning}}</text>
+    </view>
+</view>
+
+<button type="default" class='btn1 bottom_back_float' catchtap="onReturn" style="width: 61.8vw;">返回</button>

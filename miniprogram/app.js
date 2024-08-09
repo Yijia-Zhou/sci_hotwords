@@ -3,7 +3,7 @@ App({
   initGlobalDictInfo()
   {
     console.log('getStorage - dictInfo - fail:')
-    this.globalData.dictInfo =   {"_id":"2.1","modes":["识记模式","检验模式","复习模式"],"dictNames":{
+    this.globalData.dictInfo = {"_id":"2.2","modes":["概览模式", "识记模式","检验模式","复习模式"],"dictNames":{
         "生命科学":
         {
             "基础词库":{"paper_count":1.217564E+06,"diff_showcase":["signal","researcher","institute","displaced","distal","deform","elisa","resuspend","homogeneous","catheter"]},
@@ -19,7 +19,7 @@ App({
         }
     },
         "diff_thresholds":{},"tracer":{"tipsForFirstOnFavor":{}},"daily_target":20,
-        "marker":21}
+        "marker":22}
   },
 
   isSameDay(prevDay, curDay){
@@ -68,7 +68,7 @@ App({
         let globalDictInfo = _this.globalData.dictInfo
         const db = wx.cloud.database()
 
-        db.collection('dictInfo').doc('2.1').get().then(res => { 
+        db.collection('dictInfo').doc('2.2').get().then(res => { 
           let remoteData = res.data
           if (remoteData && (!globalDictInfo.marker || globalDictInfo.marker!= remoteData.marker)) {
             /**
