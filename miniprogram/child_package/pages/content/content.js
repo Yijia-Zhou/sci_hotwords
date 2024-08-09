@@ -2,6 +2,7 @@ const app = getApp()
 var dblog = require('../../../utils/dblog.js')
 var requestDict = require('../../../utils/requestDict.js')
 const DictionaryLoader = new requestDict.DictionaryLoader()
+import { NormalDictionary} from '../words/dictionary.js'
 var display = require('../../sub_utils/display.js')
 
 Page({
@@ -21,23 +22,77 @@ Page({
       return setTimeout(this.onLoad, 50)
     }
     console.log("content on load")
-    wx.setNavigationBarTitle({title: '目录！'})
+    wx.setNavigationBarTitle({title: app.globalData.dictInfo.useDict+' - 概览'})
     dblog.logAction("onContent")
 
     this.dictionary = await DictionaryLoader.getDictionarySync(app.globalData.dictInfo.useDict)
+    let diff_thresholds = new Number(app.globalData.dictInfo.diff_thresholds[app.globalData.dictInfo.useDict])
     let results = new Array()
     for (let index in this.dictionary) {
       let item = this.dictionary[index]
+
       let words = this.getWordsStr(item)
-      
+      let should_set_opacity = item.difficulty_level < diff_thresholds
       results.push({
         words: words,
-        meaning: item.chosen[0]
+        meaning: item.chosen[0],
+        word_index: index,
+        style: should_set_opacity ? 'opacity: 0.33;' : undefined
       })
     }
+
+    this.markProc(results)
     this.setData({
       wordList: results
     })
+    wx.showLoading({
+      title: '努力加载中~',
+    })
+    setTimeout(this.checkRenderAndHideLoading, 0)
+  },
+
+  async checkRenderAndHideLoading() {
+    const systemInfo = await wx.getSystemInfo()
+    let windowHeight = systemInfo.windowHeight
+    const query = wx.createSelectorQuery()
+    query.selectAll('.word-item').boundingClientRect((rects) => {
+      const count = rects.length;
+      if (count > 50) {
+        console.log('rects: ', rects)
+        wx.hideLoading()
+        // 查找具有特定 data-target_index 的元素
+        const query2 = wx.createSelectorQuery()
+        query2.select("#proc_marker").boundingClientRect(function(res) {
+          // 使用 wx.pageScrollTo 滚动到元素位置
+          console.log('res: ', res)
+          wx.pageScrollTo({
+            scrollTop: res.top + res.height - windowHeight/2,
+            duration: 200
+          })
+        }).exec()
+      } else {
+        setTimeout(this.checkRenderAndHideLoading, 50)
+      }
+    }).exec()
+  },
+
+  markProc(wordList) {
+    let dictionary = new NormalDictionary(this.dictionary)
+    dictionary.updateUseMode(app.globalData.dictInfo.useMode)
+    let curWord = dictionary.selectFirstWord()
+    console.log(curWord)
+    let index = wordList.findIndex(element => element.meaning === curWord.chosen[0]); // 查找当前进度词汇组的索引
+
+    if (index !== -1) {
+      // 在当前进度词汇组前一位插入进度标记
+      let proc_marker = {
+        words: '>>> 这里是您在本词库的学习进度 <<<',
+        meaning: '>>> 点击可进入词库继续学习 <<<',
+        word_index: 'proc_marker',
+        style: "background-color: #07c160;"
+      }
+      wordList.splice(index, 0, proc_marker);
+    }
   },
 
   getWordsStr(word_item) {
@@ -64,7 +119,14 @@ Page({
 
   toResult(e){
     console.log(e.currentTarget)
-    let targetIndex = new Number(e.currentTarget.dataset["target_index"])
+    let targetIndex = e.currentTarget.id
+    if (targetIndex==='proc_marker') {
+      wx.navigateTo({
+        url: '/child_package/pages/words/words',
+      })
+      return
+    }
+    targetIndex = new Number(targetIndex)
     console.log('targetIndex: ', targetIndex)
     let resultWord = this.dictionary[targetIndex]
     resultWord.fromCluster = app.globalData.dictInfo.useCluster
