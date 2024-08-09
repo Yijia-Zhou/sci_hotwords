@@ -26,7 +26,10 @@ Page({
     dblog.logAction("onContent")
 
     this.dictionary = await DictionaryLoader.getDictionarySync(app.globalData.dictInfo.useDict)
-    let diff_thresholds = new Number(app.globalData.dictInfo.diff_thresholds[app.globalData.dictInfo.useDict])
+    let diff_thresholds = app.globalData.dictInfo.diff_thresholds[app.globalData.dictInfo.useDict]
+    if (typeof(diff_thresholds) !== "number") {
+      diff_thresholds = 0
+    }
     let results = new Array()
     for (let index in this.dictionary) {
       let item = this.dictionary[index]
@@ -41,7 +44,7 @@ Page({
       })
     }
 
-    this.markProc(results)
+    this.markProc(results, diff_thresholds)
     this.setData({
       wordList: results
     })
@@ -66,7 +69,7 @@ Page({
           // 使用 wx.pageScrollTo 滚动到元素位置
           console.log('res: ', res)
           wx.pageScrollTo({
-            scrollTop: res.top + res.height - windowHeight/2,
+            scrollTop: res.top + res.height*2 - windowHeight/2,
             duration: 200
           })
         }).exec()
@@ -76,9 +79,16 @@ Page({
     }).exec()
   },
 
-  markProc(wordList) {
+  markProc(wordList, diff_thresholds) {
     let dictionary = new NormalDictionary(this.dictionary)
-    dictionary.updateUseMode(app.globalData.dictInfo.useMode)
+    let useMode = app.globalData.dictInfo.useMode
+    if (useMode == '复习模式' || !useMode) {
+      useMode = '检验模式'
+    }
+    dictionary.updateUseMode(useMode)
+    dictionary.updateDifficultyFilter(diff_thresholds)
+    console.log('useMode: ', useMode)
+    console.log('dictionary: ', dictionary)
     let curWord = dictionary.selectFirstWord()
     console.log(curWord)
     let index = wordList.findIndex(element => element.meaning === curWord.chosen[0]); // 查找当前进度词汇组的索引
@@ -86,7 +96,7 @@ Page({
     if (index !== -1) {
       // 在当前进度词汇组前一位插入进度标记
       let proc_marker = {
-        words: '>>> 这里是您在本词库的学习进度 <<<',
+        words: '>>>>>   您当前学到这里   <<<<<',
         meaning: '>>> 点击可进入词库继续学习 <<<',
         word_index: 'proc_marker',
         style: "background-color: #07c160;"

@@ -16,7 +16,6 @@ Page({
     value: undefined,
     showBtn: true,
     useDictList : [],
-    showQuery: wx.getDeviceInfo().platform == "devtools"
   },
 
   /**
