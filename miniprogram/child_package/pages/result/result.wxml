@@ -4,6 +4,9 @@
     <button type="primary" class='primary_button' bindtap="onFavor" style="width: 61.8vw;">
       {{word.favored ? '取消收藏' : '收藏本词'}}
     </button>
+    <button type="default" class="following_button" bindtap="onGotoDict" style="width: 61.8vw;">
+      前往对应词库
+    </button>
     <button type="default" class="following_button" bindtap="onReturn" style="width: 61.8vw;">
       返回
     </button>
