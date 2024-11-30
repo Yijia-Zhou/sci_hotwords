@@ -52,6 +52,7 @@ Page({
       title: '努力加载中~',
     })
     setTimeout(this.checkRenderAndHideLoading, 0)
+    setTimeout(wx.hideLoading, 1500)  //根据条件hideLoading会在词库过小时失效，此处作为保底
   },
 
   async checkRenderAndHideLoading() {

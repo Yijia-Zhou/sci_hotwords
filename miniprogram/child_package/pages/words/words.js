@@ -466,7 +466,7 @@ Page({
       }
     }
 
-    if(dataDict.needTracer() && dataDict.getMarkedWordNum() > dailyTgt && dataDict.getMarkedWordNum() % dailyTgt == 0)
+    if(dataDict.needTracer() && dataDict.getMarkedWordNum() > dailyTgt && (dataDict.getMarkedWordNum()+1) % dailyTgt == 0)
     {
       this.setCoreWordsBarTitle()
 
@@ -564,7 +564,7 @@ Page({
     let dataDict         = this.data.dictionary
     let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
     let dailyTarget      = app.globalData.dictInfo.daily_target
-    let percent          = globalDictTracer.doneCount % dailyTarget
+    let percent          = (globalDictTracer.doneCount-1) % dailyTarget
     this.setData({target_percent: 100 * percent / dailyTarget})
     console.log("setProgressBar target_percent "+this.data.target_percent)
   },
