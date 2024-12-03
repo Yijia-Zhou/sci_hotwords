@@ -407,13 +407,12 @@ Page({
 
     let dataDict = this.data.dictionary
     let dailyTgt = app.globalData.dictInfo.daily_target
-    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
-
-    console.log(dailyTgt, globalDictTracer)
 
     if(dataDict.needTracer())
     {
       let _this = this
+      let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
+      console.log(dailyTgt, globalDictTracer)
       if(dataDict.getUseMode() == '检验模式' && globalDictTracer.isTodayFinished == false 
          && globalDictTracer.doneCount >= dailyTgt && !dataDict.isNextWordLeant())
       {
@@ -602,10 +601,10 @@ Page({
     
     // 避免影响每日目标&进度系统的临时措施
     let dataDict = this.data.dictionary
-    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
     dataDict.markWord(true) 
     if(dataDict.needTracer())
     {
+      let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
       globalDictTracer.doneCount ++
       this.setProgressBar()
       wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
