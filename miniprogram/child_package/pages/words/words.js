@@ -369,13 +369,12 @@ Page({
     {
       dataDict.initMarkedWordNum()
       this.setCoreWordsBarTitle()
+      this.syncTracerDoneCount()
     }
     
     if (!app.globalData.dictInfo.remind_time) {
       app.globalData.dictInfo.remind_time = '12:25'
     }
-
-    this.syncTracerDoneCount()
   },
 
   configFilter: function (filtername) {
