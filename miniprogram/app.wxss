@@ -128,9 +128,14 @@ button::after {
   align-items: center;
 }
 
-
 .bottom_back_float {
   position: fixed;
   bottom: 143rpx; 
+  left: 19.1vw;
+}
+
+.bottom_second_float {
+  position: fixed;
+  bottom: 251rpx; 
   left: 19.1vw;
 }

@@ -11,7 +11,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    wordList: []
+    wordList: [],
+    deleteList: [],
+    showCtrlZ: false,
+    startX: 0, // 记录触摸开始的X坐标
+    currentWordIndex: null // 当前滑动的word-item索引
   },
 
   /**
@@ -48,6 +52,7 @@ Page({
     this.setData({
       wordList: results
     })
+    this.data.originalWordList = results
     wx.showLoading({
       title: '努力加载中~',
     })
@@ -149,6 +154,69 @@ Page({
     wx.navigateTo({
       url: '../result/result'
     })
+  },
+
+  onTouchStart: function(e) {
+    this.data.startX = e.touches[0].pageX
+    this.data.currentWordIndex = e.currentTarget.id
+  },
+
+  onTouchMove: function(e) {
+    const deltaX = e.touches[0].pageX - this.data.startX;
+    if (deltaX < -50 && this.data.currentWordIndex == e.currentTarget.id) {
+      // 使列表项被滑动并显示删除按钮
+      let index = this.data.wordList.findIndex(item => item.word_index == this.data.currentWordIndex);
+      const wordList = this.data.wordList.map((item, idx) => ({
+        ...item,
+        isActive: idx === index
+      }));
+      this.setData({ wordList });
+    }
+  },
+
+  onTouchEnd: function() {
+    // 滑动结束后一段时间内自动恢复
+    setTimeout(this.onReset, 2000)
+  },
+
+  onReset: function() {
+    const wordList = this.data.wordList.map(item => ({
+      ...item,
+      isActive: false
+    }));
+    this.setData({ wordList });
+  },
+
+  onDelete: function(e) {
+    const id = e.currentTarget.dataset.id;
+    this.data.deleteList.push(id)
+    this.refreshList()
+  },
+
+  onCtrlZ: function() {
+    this.data.deleteList.pop()
+    this.refreshList()
+  },
+
+  refreshList: function() {
+    const wordList = this.data.originalWordList.filter(item => !this.data.deleteList.includes(item.word_index));
+    this.setData({ 
+      wordList: wordList,
+      showCtrlZ: this.data.deleteList.length != 0
+    });
+  },
+
+  onUnload: function() {
+    console.log('this.data.deleteList: ', this.data.deleteList)
+    if (this.data.deleteList) {
+      let toDelList = this.data.deleteList
+      for (let i = toDelList.length - 1; i >= 0; i--) {
+        let toDel = toDelList[i]
+        this.dictionary.splice(toDel, 1)
+      }
+      wx.setStorageSync(app.globalData.dictInfo.useDict, this.dictionary)
+      DictionaryLoader.removeDictionary(app.globalData.dictInfo.useDict)
+    }
   },
 
   /**
