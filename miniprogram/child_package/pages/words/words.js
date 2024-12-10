@@ -50,10 +50,25 @@ Page({
 
   initGlobalTracer(useDict, date)
   {
-    app.globalData.dictInfo.tracer[useDict] = {
+    app.globalData.dictInfo.tracer[useDict] = {}
+  },
+
+  initGlobalTracerSpec(useDict, useMode, date)
+  {
+    app.globalData.dictInfo.tracer[useDict][useMode] = {
       date: date,
-      doneCount: 0,
+      doneCount: 1,
       isTodayFinished: false
+    }
+  },
+
+  syncTracerDoneCount: function() {
+    let globalDictInfo = app.globalData.dictInfo
+    let useDict = this.data.dictionary.getUseDict()
+    
+    if(globalDictInfo.tracer[useDict]["检验模式"].doneCount > globalDictInfo.tracer[useDict]["识记模式"].doneCount)
+    {
+      globalDictInfo.tracer[useDict]["识记模式"].doneCount = globalDictInfo.tracer[useDict]["检验模式"].doneCount
     }
   },
 
@@ -67,9 +82,21 @@ Page({
       this.initGlobalTracer(useDict, curDay, 0)
     }
 
-    if (!this.isSameDay(globalDictInfo.tracer[useDict].date, curDay)) {
-      this.initGlobalTracer(useDict, curDay, this.data.dictionary.getMarkedWordNum())
+    var useModeList = ['识记模式', '检验模式']
+    for( var i in useModeList)
+    {
+      let useMode = useModeList[i]
+      if(!(useMode in globalDictInfo.tracer[useDict]))
+      {
+        this.initGlobalTracerSpec(useDict, useMode, curDay, 0)
+      }
+
+      if (!this.isSameDay(globalDictInfo.tracer[useDict][useMode].date, curDay)) {
+        this.initGlobalTracerSpec(useDict, useMode, curDay, 0)
+      }
     }
+
+    this.syncTracerDoneCount()
 
     wx.setStorage({
       key: 'dictInfo',
@@ -303,7 +330,7 @@ Page({
     console.log(dataDict)
     dblog.logAction("initialDictionary", dictInfo.useDict)
 
-    if(dictInfo.useDict != '我的收藏')
+    if(dataDict.needTracer())
     {
       this.loadTracer()
     }
@@ -342,6 +369,7 @@ Page({
     {
       dataDict.initMarkedWordNum()
       this.setCoreWordsBarTitle()
+      this.syncTracerDoneCount()
     }
     
     if (!app.globalData.dictInfo.remind_time) {
@@ -379,20 +407,19 @@ Page({
 
     let dataDict = this.data.dictionary
     let dailyTgt = app.globalData.dictInfo.daily_target
-    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()]
-
-    console.log(dailyTgt, globalDictTracer)
 
     if(dataDict.needTracer())
     {
       let _this = this
+      let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
+      console.log(dailyTgt, globalDictTracer)
       if(dataDict.getUseMode() == '检验模式' && globalDictTracer.isTodayFinished == false 
          && globalDictTracer.doneCount >= dailyTgt && !dataDict.isNextWordLeant())
       {
         dataDict.markWord(true) 
         globalDictTracer.isTodayFinished = true
         wx.showModal({
-          title: "已检验完所有已学习词汇组",
+          title: "已达成今日检验目标",
           content: "今日份的SCI词汇征服之旅已经完成，合理分配体力才更有可能走完全程哦，明天继续来吧O(∩_∩)O", 
           confirmText: "明天继续",
           showCancel: false,
@@ -404,6 +431,7 @@ Page({
           }
         })
         this.on_modify_setting()
+        this.onNext()
         return
       }
       if(dataDict.getUseMode() == '识记模式' && globalDictTracer.isTodayFinished == false
@@ -412,7 +440,6 @@ Page({
         if(globalDictTracer.doneCount > dailyTgt)
         {
           globalDictTracer.isTodayFinished = true
-          reminder.requestReminder()
         }
         else
         {
@@ -428,7 +455,7 @@ Page({
                 return 
               } else if (res.cancel) {
                 globalDictTracer.isTodayFinished = true
-                this.setCoreWordsBarTitle()
+                _this.setCoreWordsBarTitle()
                 reminder.requestReminder()
               }
             }
@@ -437,7 +464,7 @@ Page({
       }
     }
 
-    if(dataDict.needTracer() && globalDictTracer.isTodayFinished == true && dataDict.getMarkedWordNum() % dailyTgt == 0)
+    if(dataDict.needTracer() && dataDict.getMarkedWordNum() > dailyTgt && (dataDict.getMarkedWordNum()+1) % dailyTgt == 0)
     {
       this.setCoreWordsBarTitle()
 
@@ -531,6 +558,15 @@ Page({
     }
   },
 
+  setProgressBar() {
+    let dataDict         = this.data.dictionary
+    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
+    let dailyTarget      = app.globalData.dictInfo.daily_target
+    let percent          = (globalDictTracer.doneCount-1) % dailyTarget
+    this.setData({target_percent: 100 * percent / dailyTarget})
+    console.log("setProgressBar target_percent "+this.data.target_percent)
+  },
+
   onFavor() {
     let dataDict = this.data.dictionary
     this.tipsForFirstOnFavor()
@@ -565,12 +601,12 @@ Page({
     
     // 避免影响每日目标&进度系统的临时措施
     let dataDict = this.data.dictionary
-    let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()]
     dataDict.markWord(true) 
     if(dataDict.needTracer())
     {
+      let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()][dataDict.getUseMode()]
       globalDictTracer.doneCount ++
-      this.setData({target_percent: 100 * globalDictTracer.doneCount/app.globalData.dictInfo.daily_target})
+      this.setProgressBar()
       wx.setStorage({key: 'dictInfo', data: app.globalData.dictInfo})
     }
 
@@ -608,10 +644,7 @@ Page({
 
     if(dataDict.needTracer())
     {
-      let globalDictTracer = app.globalData.dictInfo.tracer[dataDict.getUseDict()]
-      this.setData({
-        target_percent: 100 * globalDictTracer.doneCount / app.globalData.dictInfo.daily_target
-      })
+      this.setProgressBar()
       this.setCoreWordsBarTitle()
     }
 

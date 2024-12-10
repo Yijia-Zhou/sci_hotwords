@@ -64,17 +64,21 @@ function grouping(raw_string, word_list) {
   const result = [];
   let currentChunk = [];
   
-  lines.forEach(line => {
+  lines.forEach((line, index) => {
+    // 获取上一行的内容、判断上一行是否以冒号(: 或 ：)结尾
+    const previousLine = index > 0 ? lines[index - 1].trim() : '';
+    const isPreviousLineEndingWithColon = /[:：]$/.test(previousLine);
+
     // 判断是否包含word_list中的单词
     const found = word_list.some(word => {
-      const re = new RegExp(`^(?:\\d+\\.\\s|["']${word}|${word}).*`, 'i');  // 匹配以word开头的字符串（大小写不敏感，可能前面还有单引号或双引号）或以"数字."开头的字符串
+      const re = new RegExp(`^(?:\\d+\\.\\s|["'“‘]${word}|${word}).*`, 'i');  // 匹配以word开头的字符串（大小写不敏感，可能前面还有单引号或双引号）或以"数字."开头的字符串
       return re.test(line.trim()) && !/[\u4e00-\u9fa5]/.test(line.slice(0, 4));
     });
 
     // 判断是否以"其他"或"其它"开头
-    const isOther = /^其他|^其它|^以上|^所有|^这些|^简单|^简要|^概括|^此组|^本组/.test(line.trim());
+    const isOther = /^其他|^其它|^以上|^所有|^这些|^简单|^简要|^概括|^此组|^本组|^总结/.test(line.trim());
 
-    if (found || isOther) {
+    if ((found || isOther) && !isPreviousLineEndingWithColon) {
       if (currentChunk.length > 0) {
         result.push(currentChunk.join('\n'));
       }

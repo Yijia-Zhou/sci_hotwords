@@ -1,15 +1,22 @@
 <view class='word-list'>
-    <view 
-        class="word-item" 
-        wx:for="{{wordList}}" 
-        wx:key="index"
-        bindtap='toResult'
-        id="{{item.word_index}}"
-        style="{{item.style}}"
-    >
-        <text class="english-words">{{item.words}}</text>
-        <text class="chinese-meaning">{{item.meaning}}</text>
+  <view class="word-item {{item.isActive ? 'active' : ''}}" 
+    wx:for="{{wordList}}" 
+    wx:key="word_index"
+    id="{{item.word_index}}"
+    style="{{item.style}}"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+  >
+    <view class="word-content">
+      <text class="english-words">{{item.words}}</text>
+      <text class="chinese-meaning">{{item.meaning}}</text>
     </view>
+    <view class="delete-button" bindtap="onDelete" data-id="{{item.word_index}}">
+      删除
+    </view>
+  </view>
 </view>
 
+<button type="default" class='btn1 bottom_second_float' catchtap="onCtrlZ" style="width: 61.8vw;" wx:if="{{showCtrlZ}}">撤销</button>
 <button type="default" class='btn1 bottom_back_float' catchtap="onReturn" style="width: 61.8vw;">返回</button>

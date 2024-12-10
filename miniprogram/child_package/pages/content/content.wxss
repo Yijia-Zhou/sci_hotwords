@@ -21,17 +21,29 @@ text {
 }
 
 .word-item {
-  padding: 10rpx 16rpx;
+  position: relative;
   display: flex;
-  flex-direction: column;
-  width: auto;
+  align-items: center;
+  width: 100%;
   min-height: 112rpx;
-  justify-content: space-around;
   margin-bottom: 16rpx;
-  box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.05); 
-  background-color: rgba(232, 232, 216, 0.1); 
+  box-shadow: 0 0 20rpx rgba(0, 0, 0, 0.05);
+  background-color: rgba(232, 232, 216, 0.1);
+  overflow: hidden;
+  border-radius: 8rpx;
+  transition: transform 0.3s ease-in-out;
 }
 
+/* 内容部分 */
+.word-content {
+  display: flex;
+  flex-direction: column;
+  padding: 10rpx 16rpx;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+/* 英文单词样式 */
 .english-words {
   font-size: 18px;
   font-weight: bold;
@@ -41,9 +53,36 @@ text {
   text-align: center;
 }
 
+/* 中文释义样式 */
 .chinese-meaning {
   font-size: 16px;
   color: #555;
-  /* margin-top: 8rpx; */
   text-align: center;
+}
+
+/* 删除按钮样式 */
+.delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 150rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d9534f; /* 红色按钮 */
+  color: white;
+  font-size: 16px;
+  box-shadow: -2rpx 0 10rpx rgba(0, 0, 0, 0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* 滑动显示删除按钮 */
+.word-item.active {
+  transform: translateX(-150rpx);
+}
+
+.word-item.active .delete-button {
+  transform: translateX(0);
 }

@@ -82,6 +82,19 @@ Page({
     wx.navigateBack()
   },
 
+  onGotoDict : function() {
+    let resultWord = app.globalData.resultWord
+    app.globalData.dictInfo.useCluster = resultWord.fromCluster
+    app.globalData.dictInfo.useDict = resultWord.fromDict
+    app.globalData.dictInfo.useMode = "识记模式"
+    console.log("app.globalData.dictInfo: ", app.globalData.dictInfo)
+
+    wx.setStorageSync('dictInfo', app.globalData.dictInfo)
+    wx.navigateTo({
+      url: '/child_package/pages/words/words',
+    })
+  },
+
   /**
    * 用户点击右上角分享
    */
